@@ -1,0 +1,29 @@
+{
+  "name": "tcc-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/server.js",
+  "scripts": {
+    "start:dev": "tsx --watch ./src/infra/server.ts",
+    "start:prod": "node ./dist/infra/server.js",
+    "build": "tsup ./src",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
+    "test:cov": "vitest run --coverage",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix"
+  },
+  "keywords": [],
+  "author": "Artur Poffo",
+  "license": "ISC",
+  "devDependencies": {
+    "@rocketseat/eslint-config": "^2.1.0",
+    "@types/node": "^20.11.5",
+    "eslint": "^8.56.0",
+    "prisma": "^5.8.1",
+    "tsup": "^8.0.1",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3",
+    "vite-tsconfig-paths": "^4.3.1",
+    "vitest": "^1.2.1"
+  }
+}
