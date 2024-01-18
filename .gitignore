@@ -34,9 +34,10 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
+# RSA Keys
+private-key.pem
+public-key.pem
+
 # Env
 .env
 .env.test
-
-# Docker
-data

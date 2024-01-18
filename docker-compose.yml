@@ -1,8 +1,8 @@
 version: '3.8'
 
 services:
-  find-a-friend-api-pg:
-    container_name: tcc-api
+  code-spark:
+    container_name: code-spark
     image: bitnami/postgresql
     ports:
       - 5432:5432
