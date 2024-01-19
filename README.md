@@ -1,49 +1,57 @@
-# Separação de requisitos
+# Entra21 TCC - CodeSpark
 
-## RFs
+## Functional Requirements
 
-- [ ] Usuário deve poder se cadastrar no sistema como: "Estudante" ou "Instrutor"
-- [ ] Usuário deve conseguir se autenticar após o cadastro
-- [ ] Retornar informações de um usuário
+- [ ] User must be able to register in the system as "Student" or "Instructor."
+- [ ] User must be able to authenticate after registration.
+- [ ] Return information about a user.
 
-- [ ] Instrutores devem conseguir cadastrar cursos na plataforma
-- [ ] Instrutores podem cadastrar módulos a um curso
-- [ ] Instrutores podem adicionar aulas aos módulos
-- [ ] Instrutor responsável pode adicionar "tags" para o seu curso como forma de informar aos estudantes tecnologias presentes no curso
-- [ ] instrutores podem fazer upload de vídeos
-- [ ] Instrutor pode fazer upload de um modelo de certificado para os alunos na conclusão de curso
-- [ ] Retornar informações de um instrutor com os cursos do mesmo
+- [ ] Instructors must be able to register courses on the platform.
+- [ ] Instructors can register modules for a course.
+- [ ] Instructors can add lessons to modules.
+- [ ] Responsible instructor can add "tags" to their course to inform students about technologies present in the course.
+- [ ] Instructors can upload videos.
+- [ ] Instructor can upload a certificate template for students upon course completion.
+- [ ] Return information of an instructor with their courses.
 
-- [ ] Retornar informações de um curso
-- [ ] Retornar informações de um curso com seus estudantes
-- [ ] Retornar informações de um curso com seus módulos e aulas
-- [ ] Streaming de vídeos para assistir as aulas
+- [ ] Return information about a course.
+- [ ] Return information about a course with its students.
+- [ ] Return information about a course with its modules and lessons.
+- [ ] Video streaming to watch the lessons.
 
-- [ ] Estudantes podem se "inscrever" para participar do curso
-- [ ] Estudantes podem marcar aulas como concluídas
-- [ ] Retornar informações de um estudantes com os cursos que está inscrito
-- [ ] Marcar módulos como concluído após estudante ver todas as aulas do mesmo
-- [ ] Após concluir um curso o estudante pode emitir um 
-certificado
+- [ ] Students can "enroll" to participate in the course.
+- [ ] Students can mark lessons as completed.
+- [ ] Return information about a student with the courses they are enrolled in.
+- [ ] Mark modules as completed after the student views all its lessons.
+- [ ] After completing a course, the student can issue a certificate.
 
-- [ ] Após concluir todos os módulos de um curso, esse curso de um estudante deve ser marcado coom concluído
-- [ ] Deve ser possível filtrar cursos pelo nome ou por "tags"
-- [ ] Estudante poder avaliar um determinado curso que ele está fazendo com uma nota de 1 até 5 para depois ter uma note média de cada curso
+- [ ] After completing all modules of a course, that course for a student should be marked as completed.
+- [ ] It should be possible to filter courses by name or "tags."
+- [ ] Students can evaluate a particular course they are taking with a rating from 1 to 5 to later have an average rating for each course.
 
-- [ ] Deve ser possível um instrutor buscar por dados de trafego de um de seus cursos
+- [ ] An instructor should be able to retrieve traffic data for one of their courses.
 
-- [ ] CRUDs de todas as principais entidades: curso, módulo, aula, usuário etc...
+- [ ] CRUDs for all main entities: course, module, lesson, user, etc.
 
-## RNs
+## Business Rules
 
-- [ ] Usuário não deve poder se cadastrar com o mesmo email
-- [ ] Usuário não deve poder se cadastrar com o mesmo cpf
+- [ ] User should not be able to register with the same email.
+- [ ] User should not be able to register with the same CPF.
 
-## RNFs
+## Non-Functional Requirements
 
-- [ ] Upload de arquivos na cloudflare R2
-- [ ] Senha do usuário deve ser criptografada
-- [ ] Dados da aplicação devem ser persistidos em um banco de dados PostgresSQL com docker
-- [ ] Toda listagem de dados deve ser paginada em 20 items por página e ter um atributo de total de items
-- [ ] Usuário deve ser identificado por JWT
-- [ ] O JWT deve usar o algoritmo RS256
+- [ ] File upload on Cloudflare R2.
+- [ ] User's password must be encrypted.
+- [ ] Application data must be persisted in a PostgreSQL database with Docker.
+- [ ] All data listings must be paginated with 20 items per page and have an attribute of total items.
+- [ ] User must be identified by JWT.
+- [ ] JWT must use the RS256 algorithm.
+
+## Initial Entities
+
+- [ ] User - Aggregate (Student/Instructor).
+- [ ] Student.
+- [ ] Instructor.
+- [ ] Course.
+- [ ] Module.
+- [ ] Class.
