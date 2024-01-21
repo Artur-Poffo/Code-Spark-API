@@ -1,12 +1,12 @@
 export abstract class WatchedList<T> {
   public currentItems: T[]
-  private initial: T[]
+  private readonly initial: T[]
   private new: T[]
   private removed: T[]
 
   constructor(initialItems?: T[]) {
-    this.currentItems = initialItems || []
-    this.initial = initialItems || []
+    this.currentItems = initialItems ?? []
+    this.initial = initialItems ?? []
     this.new = []
     this.removed = []
   }
@@ -48,7 +48,7 @@ export abstract class WatchedList<T> {
 
   private removeFromCurrent(item: T): void {
     this.currentItems = this.currentItems.filter(
-      (v) => !this.compareItems(item, v),
+      (v) => !this.compareItems(item, v)
     )
   }
 

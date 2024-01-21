@@ -37,21 +37,98 @@
 
 - [ ] User should not be able to register with the same email.
 - [ ] User should not be able to register with the same CPF.
+- [ ] Only students can enroll for a course.
+- [ ] Only students can rate courses and classes.
+- [ ] Only instructors can register a course.
+- [ ] A specific instructor cannot register a course with the same name
+- [ ] A student should only be able to rate a class and a given course once.
+- [ ] A student can only issue one certificate per course
+- [ ] A student can only enroll for a particular course once
+- [ ] There should not be repeated tags in a course
 
 ## Non-Functional Requirements
 
-- [ ] File upload on Cloudflare R2.
+- [ ] File upload/storage on Cloudflare R2.
 - [ ] User's password must be encrypted.
 - [ ] Application data must be persisted in a PostgreSQL database with Docker.
-- [ ] All data listings must be paginated with 20 items per page and have an attribute of total items.
+- [ ] All data listings must be paginated with 20 items per page and have an attribute of total number of items.
 - [ ] User must be identified by JWT.
 - [ ] JWT must use the RS256 algorithm.
 
-## Initial Entities
+## Initial Entities (Domain)
 
-- [ ] User - Aggregate (Student/Instructor).
-- [ ] Student.
-- [ ] Instructor.
-- [ ] Course.
-- [ ] Module.
-- [ ] Class.
+### It's just an `initial` abstraction, it will be increased, fields type are only primitive
+
+- [ ] User
+- - id: string
+  - name: string
+  - email: string
+  - passwordHash: string
+  - age: number
+  - cpf: string
+  - summary: string
+  - profileImageKey: string | null
+  - bannerImageKey: string | null
+  - registeredAt: date
+
+- [ ] Student
+- - id: string
+  - userId: string
+
+- [ ] Instructor
+- - id: string
+  - userId: string
+
+- [ ] Course
+- - id: string
+  - name: string
+  - description: string
+  - coverImageKey: string
+  - bannerImageKey: string
+  - createdAt: date
+
+- [ ] Tag
+- - id: string
+  - value: string
+
+- [ ] CourseTag
+- - id: string
+  - courseId: string
+  - tagId: string
+
+- [ ] Enrollment
+- - id: string
+  - studentId: string
+  - courseId: string
+  - completedClasses: string[] (Or a watched list 🤔)
+  - completedModules: string[] (Or a watched list 🤔)
+  - ocurredAt: date
+  - completedAt: date | null
+
+- [ ] Rate
+- - id: string
+  - value: number (1 - 5)
+  - userId: string
+  - courseId: string | null
+  - classId: string | null
+  - createdAt: date
+
+- [ ] Module
+- - id: string
+  - name: string
+  - description: string
+  - courseId: string
+
+- [ ] Certificate
+- - id: string
+  - imageKey: string
+  - courseId: string
+  - issuedAt: date
+
+- [ ] Class
+- - id: string
+  - name: string
+  - description: string
+  - duration: string
+  - videoKey: string
+  - moduleId: string
