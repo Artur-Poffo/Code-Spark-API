@@ -59,9 +59,8 @@
 
 ### It's just an `initial` abstraction, it will be increased, fields type are only primitive
 
-- [ ] User
-- - id: string
-  - name: string
+- [x] User
+- - name: string
   - email: string
   - passwordHash: string
   - age: number
@@ -71,15 +70,15 @@
   - bannerImageKey: string | null
   - registeredAt: date
 
-- [ ] Student
-- - id: string
-  - userId: string
+- [x] Student
+- - studentId: string
+  - ...patternData (User)
 
-- [ ] Instructor
-- - id: string
-  - userId: string
+- [x] Instructor
+- - instructorId: string
+  - ...patternData (User)
 
-- [ ] Course
+- [x] Course
 - - id: string
   - name: string
   - description: string
@@ -87,16 +86,16 @@
   - bannerImageKey: string
   - createdAt: date
 
-- [ ] Tag
+- [x] Tag
 - - id: string
   - value: string
 
-- [ ] CourseTag
+- [x] CourseTag
 - - id: string
   - courseId: string
   - tagId: string
 
-- [ ] Enrollment
+- [x] Enrollment
 - - id: string
   - studentId: string
   - courseId: string
@@ -105,7 +104,7 @@
   - ocurredAt: date
   - completedAt: date | null
 
-- [ ] Rate
+- [x] Rate
 - - id: string
   - value: number (1 - 5)
   - userId: string
@@ -113,22 +112,27 @@
   - classId: string | null
   - createdAt: date
 
-- [ ] Module
+- [x] Module
 - - id: string
   - name: string
   - description: string
   - courseId: string
 
-- [ ] Certificate
+- [x] Certificate
 - - id: string
   - imageKey: string
   - courseId: string
+
+- [x] StudentCertificate
+- - id: string
+  - certificateId: string
+  - studentId: string
   - issuedAt: date
 
-- [ ] Class
+- [x] Class
 - - id: string
   - name: string
   - description: string
-  - duration: string
+  - duration: number
   - videoKey: string
   - moduleId: string

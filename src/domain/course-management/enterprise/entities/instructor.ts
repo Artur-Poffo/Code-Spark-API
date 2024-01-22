@@ -2,20 +2,20 @@ import { UniqueEntityID } from "@/core/entities/unique-entity-id";
 import { Optional } from "@/core/types/optional";
 import { User, UserProps } from "./user";
 
-export interface StudentProps extends UserProps {
-  studentId: UniqueEntityID
+export interface InstructorProps extends UserProps {
+  instructorId: UniqueEntityID
 }
 
-export class Student extends User<StudentProps> {
-  get studentId() {
-    return this.props.studentId
+export class Instructor extends User<InstructorProps> {
+  get instructorId() {
+    return this.props.instructorId
   }
 
   static create(
-    props: Optional<StudentProps, 'registeredAt' | 'profileImageKey' | 'bannerImageKey'>,
+    props: Optional<InstructorProps, 'registeredAt' | 'profileImageKey' | 'bannerImageKey'>,
     id?: UniqueEntityID,
   ) {
-    const student = new Student(
+    const instructor = new Instructor(
       {
         ...props,
         profileImageKey: null,
@@ -25,6 +25,6 @@ export class Student extends User<StudentProps> {
       id,
     )
 
-    return student
+    return instructor
   }
 }
