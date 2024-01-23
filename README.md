@@ -2,7 +2,7 @@
 
 ## Functional Requirements
 
-- [ ] User must be able to register in the system as "Student" or "Instructor."
+- [x] User must be able to register in the system as "Student" or "Instructor."
 - [ ] User must be able to authenticate after registration.
 - [ ] Return information about a user.
 
