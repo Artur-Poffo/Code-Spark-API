@@ -8,7 +8,7 @@
 
 - [ ] Instructors must be able to register courses on the platform.
 - [ ] Instructors can register modules for a course.
-- [ ] Instructors can add lessons to modules.
+- [ ] Instructors can add classes to modules.
 - [ ] Responsible instructor can add "tags" to their course to inform students about technologies present in the course.
 - [ ] Instructors can upload videos.
 - [ ] Instructor can upload a certificate template for students upon course completion.
@@ -16,13 +16,13 @@
 
 - [ ] Return information about a course.
 - [ ] Return information about a course with its students.
-- [ ] Return information about a course with its modules and lessons.
-- [ ] Video streaming to watch the lessons.
+- [ ] Return information about a course with its modules and classes.
+- [ ] Video streaming to watch the classes.
 
 - [ ] Students can "enroll" to participate in the course.
-- [ ] Students can mark lessons as completed.
+- [ ] Students can mark classes as completed.
 - [ ] Return information about a student with the courses they are enrolled in.
-- [ ] Mark modules as completed after the student views all its lessons.
+- [ ] Mark modules as completed after the student views all its classes.
 - [ ] After completing a course, the student can issue a certificate.
 
 - [ ] After completing all modules of a course, that course for a student should be marked as completed.
@@ -40,11 +40,11 @@
 - [ ] Only students can enroll for a course.
 - [ ] Only students can rate courses and classes.
 - [ ] Only instructors can register a course.
-- [ ] A specific instructor cannot register a course with the same name
+- [ ] A specific instructor cannot register a course with the same name.
 - [ ] A student should only be able to rate a class and a given course once.
-- [ ] A student can only issue one certificate per course
-- [ ] A student can only enroll for a particular course once
-- [ ] There should not be repeated tags in a course
+- [ ] A student can only issue one certificate per course.
+- [ ] A student can only enroll for a particular course once.
+- [ ] There should not be repeated tags in a course.
 
 ## Non-Functional Requirements
 
@@ -57,11 +57,12 @@
 
 ## Initial Entities (Domain)
 
-### It's just an `initial` abstraction, it will be increased, fields type are only primitive
+> It's just an `initial` abstraction, it will be increased, fields type are only primitive
 
-- [ ] User
-- - id: string
-  - name: string
+### Course-Management Domain
+
+- [x] User
+- - name: string
   - email: string
   - passwordHash: string
   - age: number
@@ -71,15 +72,15 @@
   - bannerImageKey: string | null
   - registeredAt: date
 
-- [ ] Student
-- - id: string
-  - userId: string
+- [x] Student
+- - studentId: string
+  - ...patternData (User)
 
-- [ ] Instructor
-- - id: string
-  - userId: string
+- [x] Instructor
+- - instructorId: string
+  - ...patternData (User)
 
-- [ ] Course
+- [x] Course
 - - id: string
   - name: string
   - description: string
@@ -87,16 +88,16 @@
   - bannerImageKey: string
   - createdAt: date
 
-- [ ] Tag
+- [x] Tag
 - - id: string
   - value: string
 
-- [ ] CourseTag
+- [x] CourseTag
 - - id: string
   - courseId: string
   - tagId: string
 
-- [ ] Enrollment
+- [x] Enrollment
 - - id: string
   - studentId: string
   - courseId: string
@@ -105,7 +106,7 @@
   - ocurredAt: date
   - completedAt: date | null
 
-- [ ] Rate
+- [x] Rate
 - - id: string
   - value: number (1 - 5)
   - userId: string
@@ -113,22 +114,31 @@
   - classId: string | null
   - createdAt: date
 
-- [ ] Module
+- [x] Module
 - - id: string
   - name: string
   - description: string
   - courseId: string
 
-- [ ] Certificate
+- [x] Certificate
 - - id: string
   - imageKey: string
   - courseId: string
+
+- [x] StudentCertificate
+- - id: string
+  - certificateId: string
+  - studentId: string
   - issuedAt: date
 
-- [ ] Class
+- [x] Class
 - - id: string
   - name: string
   - description: string
-  - duration: string
+  - duration: number
   - videoKey: string
   - moduleId: string
+
+  ## Storage Domain
+
+  > For the future....
