@@ -1,9 +1,9 @@
-import { Either, left, right } from "@/core/either"
-import { UseCase } from "@/core/use-cases/use-case"
-import { Student } from "../../enterprise/entities/Student"
-import { HashGenerator } from "../cryptography/hash-generator"
-import { StudentsRepository } from "../repositories/students-repository"
-import { StudentAlreadyExistsError } from "./errors/student-already-exists-error"
+import { left, right, type Either } from '@/core/either'
+import { type UseCase } from '@/core/use-cases/use-case'
+import { Student } from '../../enterprise/entities/student'
+import { type HashGenerator } from '../cryptography/hash-generator'
+import { type StudentsRepository } from '../repositories/students-repository'
+import { StudentAlreadyExistsError } from './errors/student-already-exists-error'
 
 interface RegisterStudentUseCaseRequest {
   name: string
@@ -15,16 +15,16 @@ interface RegisterStudentUseCaseRequest {
 }
 
 type RegisterStudentUseCaseResponse = Either<
-  StudentAlreadyExistsError,
-  {
-    student: Student
-  }
+StudentAlreadyExistsError,
+{
+  student: Student
+}
 >
 
 export class RegisterStudentUseCase implements UseCase<RegisterStudentUseCaseRequest, RegisterStudentUseCaseResponse> {
   constructor(
-    private studentsRepository: StudentsRepository,
-    private hashGenerator: HashGenerator,
+    private readonly studentsRepository: StudentsRepository,
+    private readonly hashGenerator: HashGenerator
   ) { }
 
   async exec({
@@ -50,13 +50,13 @@ export class RegisterStudentUseCase implements UseCase<RegisterStudentUseCaseReq
       passwordHash: hashedPassword,
       age,
       cpf,
-      summary,
+      summary
     })
 
     await this.studentsRepository.create(student)
 
     return right({
-      student,
+      student
     })
   }
 }

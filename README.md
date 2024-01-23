@@ -3,7 +3,7 @@
 ## Functional Requirements
 
 - [x] User must be able to register in the system as "Student" or "Instructor."
-- [ ] User must be able to authenticate after registration.
+- [x] User must be able to authenticate after registration.
 - [ ] Return information about a user.
 
 - [ ] Instructors must be able to register courses on the platform.

@@ -1,5 +1,5 @@
-import { Entity } from "@/core/entities/entity";
-import { UniqueEntityID } from "@/core/entities/unique-entity-id";
+import { Entity } from '@/core/entities/entity'
+import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 export interface ClassProps {
   id: UniqueEntityID
@@ -37,13 +37,13 @@ export class Class extends Entity<ClassProps> {
 
   static create(
     props: ClassProps,
-    id?: UniqueEntityID,
+    id?: UniqueEntityID
   ) {
     const courseClass = new Class(
       {
-        ...props,
+        ...props
       },
-      id,
+      id
     )
 
     return courseClass

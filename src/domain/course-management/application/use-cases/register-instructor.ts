@@ -1,10 +1,11 @@
-import { Either, left, right } from "@/core/either"
-import { UseCase } from "@/core/use-cases/use-case"
-import { Student } from "../../enterprise/entities/Student"
-import { HashGenerator } from "../cryptography/hash-generator"
-import { InstructorRepository } from "../repositories/instructor-repository"
-import { InstructorAlreadyExistsError } from "./errors/instructor-already-exists-error"
-import { StudentAlreadyExistsError } from "./errors/student-already-exists-error"
+import { left, right, type Either } from '@/core/either'
+import { type UseCase } from '@/core/use-cases/use-case'
+import { type Instructor } from '../../enterprise/entities/instructor'
+import { Student } from '../../enterprise/entities/student'
+import { type HashGenerator } from '../cryptography/hash-generator'
+import { type InstructorsRepository } from '../repositories/instructors-repository'
+import { InstructorAlreadyExistsError } from './errors/instructor-already-exists-error'
+import { type StudentAlreadyExistsError } from './errors/student-already-exists-error'
 
 interface RegisterInstructorUseCaseRequest {
   name: string
@@ -16,16 +17,16 @@ interface RegisterInstructorUseCaseRequest {
 }
 
 type RegisterInstructorUseCaseResponse = Either<
-  StudentAlreadyExistsError,
-  {
-    instructor: Student
-  }
+StudentAlreadyExistsError,
+{
+  instructor: Instructor
+}
 >
 
 export class RegisterInstructorUseCase implements UseCase<RegisterInstructorUseCaseRequest, RegisterInstructorUseCaseResponse> {
   constructor(
-    private instructorRepository: InstructorRepository,
-    private hashGenerator: HashGenerator,
+    private readonly instructorRepository: InstructorsRepository,
+    private readonly hashGenerator: HashGenerator
   ) { }
 
   async exec({
@@ -51,13 +52,13 @@ export class RegisterInstructorUseCase implements UseCase<RegisterInstructorUseC
       passwordHash: hashedPassword,
       age,
       cpf,
-      summary,
+      summary
     })
 
     await this.instructorRepository.create(instructor)
 
     return right({
-      instructor,
+      instructor
     })
   }
 }

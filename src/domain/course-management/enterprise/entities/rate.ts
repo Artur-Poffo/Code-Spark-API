@@ -1,6 +1,6 @@
-import { Entity } from "@/core/entities/entity";
-import { UniqueEntityID } from "@/core/entities/unique-entity-id";
-import { Optional } from "@/core/types/optional";
+import { Entity } from '@/core/entities/entity'
+import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { type Optional } from '@/core/types/optional'
 
 export interface RateProps {
   id: UniqueEntityID
@@ -38,14 +38,14 @@ export class Rate extends Entity<RateProps> {
 
   static create(
     props: Optional<RateProps, 'createdAt'>,
-    id?: UniqueEntityID,
+    id?: UniqueEntityID
   ) {
     const rate = new Rate(
       {
         ...props,
         createdAt: props.createdAt ?? new Date()
       },
-      id,
+      id
     )
 
     return rate

@@ -1,5 +1,5 @@
-import { Entity } from "@/core/entities/entity";
-import { UniqueEntityID } from "@/core/entities/unique-entity-id";
+import { Entity } from '@/core/entities/entity'
+import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 export interface ModuleProps {
   id: UniqueEntityID
@@ -27,13 +27,13 @@ export class Module extends Entity<ModuleProps> {
 
   static create(
     props: ModuleProps,
-    id?: UniqueEntityID,
+    id?: UniqueEntityID
   ) {
     const module = new Module(
       {
-        ...props,
+        ...props
       },
-      id,
+      id
     )
 
     return module

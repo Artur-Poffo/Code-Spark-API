@@ -1,5 +1,5 @@
-import { Entity } from "@/core/entities/entity";
-import { UniqueEntityID } from "@/core/entities/unique-entity-id";
+import { Entity } from '@/core/entities/entity'
+import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 export interface TagProps {
   id: UniqueEntityID
@@ -17,13 +17,13 @@ export class Tag extends Entity<TagProps> {
 
   static create(
     props: TagProps,
-    id?: UniqueEntityID,
+    id?: UniqueEntityID
   ) {
     const tag = new Tag(
       {
-        ...props,
+        ...props
       },
-      id,
+      id
     )
 
     return tag
