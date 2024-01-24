@@ -55,6 +55,31 @@ describe('Register instructor use case', () => {
     expect(result.value).toBeInstanceOf(InstructorAlreadyExistsError)
   })
 
+  it('should not be able to register a new instructor with same cpf twice', async () => {
+    const cpf = '111.111.111-11'
+
+    await sut.exec({
+      name: 'John Doe',
+      email: 'johndoe@example.com',
+      password: '12345',
+      summary: 'Summary',
+      age: 20,
+      cpf
+    })
+
+    const result = await sut.exec({
+      name: 'John Doe',
+      email: 'johndoe@example.com',
+      password: '12345',
+      summary: 'Summary',
+      age: 20,
+      cpf
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(InstructorAlreadyExistsError)
+  })
+
   it('should hash instructor password upon registration', async () => {
     await sut.exec({
       name: 'John Doe',

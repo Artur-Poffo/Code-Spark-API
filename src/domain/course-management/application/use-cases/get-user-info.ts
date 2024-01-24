@@ -1,9 +1,9 @@
 import { left, right, type Either } from '@/core/either'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { type UseCase } from '@/core/use-cases/use-case'
-import { InstructorProps } from '../../enterprise/entities/instructor'
-import { StudentProps } from '../../enterprise/entities/student'
-import { User } from '../../enterprise/entities/user'
+import { type InstructorProps } from '../../enterprise/entities/instructor'
+import { type StudentProps } from '../../enterprise/entities/student'
+import { type User } from '../../enterprise/entities/user'
 import { type UsersRepository } from './../repositories/users-repository'
 
 interface GetUserInfoUseCaseRequest {
@@ -11,15 +11,15 @@ interface GetUserInfoUseCaseRequest {
 }
 
 type GetUserInfoUseCaseResponse = Either<
-  ResourceNotFoundError,
-  {
-    user: User<StudentProps | InstructorProps>
-  }
+ResourceNotFoundError,
+{
+  user: User<StudentProps | InstructorProps>
+}
 >
 
 export class GetUserInfoUseCase implements UseCase<GetUserInfoUseCaseRequest, GetUserInfoUseCaseResponse> {
   constructor(
-    private readonly usersRepository: UsersRepository,
+    private readonly usersRepository: UsersRepository
   ) { }
 
   async exec({

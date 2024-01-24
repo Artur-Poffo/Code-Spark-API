@@ -35,10 +35,13 @@ export class RegisterStudentUseCase implements UseCase<RegisterStudentUseCaseReq
     cpf,
     summary
   }: RegisterStudentUseCaseRequest): Promise<RegisterStudentUseCaseResponse> {
-    const studentWithSameEmail =
-      await this.studentsRepository.findByEmail(email)
+    const studentWithSameEmailOrCpf =
+      await Promise.all([
+        this.studentsRepository.findByEmail(email),
+        this.studentsRepository.findByCpf(cpf)
+      ])
 
-    if (studentWithSameEmail) {
+    if (studentWithSameEmailOrCpf[0] ?? studentWithSameEmailOrCpf[1]) {
       return left(new StudentAlreadyExistsError(email))
     }
 

@@ -37,10 +37,13 @@ export class RegisterInstructorUseCase implements UseCase<RegisterInstructorUseC
     cpf,
     summary
   }: RegisterInstructorUseCaseRequest): Promise<RegisterInstructorUseCaseResponse> {
-    const instructorWithSameEmail =
-      await this.instructorRepository.findByEmail(email)
+    const instructorWithSameEmailOrCpf =
+      await Promise.all([
+        this.instructorRepository.findByEmail(email),
+        this.instructorRepository.findByCpf(cpf)
+      ])
 
-    if (instructorWithSameEmail) {
+    if (instructorWithSameEmailOrCpf[0] ?? instructorWithSameEmailOrCpf[1]) {
       return left(new InstructorAlreadyExistsError(email))
     }
 
