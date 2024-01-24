@@ -14,6 +14,16 @@ export class InMemoryInstructorRepository implements InstructorsRepository {
     return instructor
   }
 
+  async findByCpf(cpf: string): Promise<Instructor | null> {
+    const instructor = this.items.find(instructorToCompare => instructorToCompare.cpf === cpf)
+
+    if (!instructor) {
+      return null
+    }
+
+    return instructor
+  }
+
   async create(instructor: Instructor): Promise<Instructor> {
     this.items.push(instructor)
     return instructor

@@ -1,16 +1,16 @@
-import { ResourceNotFoundError } from "@/core/errors/errors/resource-not-found-error"
-import { makeStudent } from "../../../../../test/factories/make-student"
-import { InMemoryInstructorRepository } from "../../../../../test/repositories/in-memory-instructors-repository"
-import { InMemoryStudentsRepository } from "../../../../../test/repositories/in-memory-students-repository"
-import { InMemoryUsersRepository } from "../../../../../test/repositories/in-memory-users-repository"
-import { GetUserInfoUseCase } from "./get-user-info"
+import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
+import { makeStudent } from '../../../../../test/factories/make-student'
+import { InMemoryInstructorRepository } from '../../../../../test/repositories/in-memory-instructors-repository'
+import { InMemoryStudentsRepository } from '../../../../../test/repositories/in-memory-students-repository'
+import { InMemoryUsersRepository } from '../../../../../test/repositories/in-memory-users-repository'
+import { GetUserInfoUseCase } from './get-user-info'
 
 let inMemoryInstructorsRepository: InMemoryInstructorRepository
 let inMemoryStudentsRepository: InMemoryStudentsRepository
 let inMemoryUsersRepository: InMemoryUsersRepository
 let sut: GetUserInfoUseCase
 
-describe("Get user info use case", async () => {
+describe('Get user info use case', async () => {
   beforeEach(() => {
     inMemoryInstructorsRepository = new InMemoryInstructorRepository()
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
