@@ -4,7 +4,7 @@
 
 - [x] User must be able to register in the system as "Student" or "Instructor."
 - [x] User must be able to authenticate after registration.
-- [ ] Return information about a user.
+- [x] Return information about a user.
 
 - [ ] Instructors must be able to register courses on the platform.
 - [ ] Instructors can register modules for a course.
