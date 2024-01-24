@@ -1,10 +1,12 @@
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { makeStudent } from '../../../../../test/factories/make-student'
+import { InMemoryCoursesRepository } from '../../../../../test/repositories/in-memory-courses-repository'
 import { InMemoryInstructorRepository } from '../../../../../test/repositories/in-memory-instructors-repository'
 import { InMemoryStudentsRepository } from '../../../../../test/repositories/in-memory-students-repository'
 import { InMemoryUsersRepository } from '../../../../../test/repositories/in-memory-users-repository'
 import { GetUserInfoUseCase } from './get-user-info'
 
+let inMemoryCoursesRepository: InMemoryCoursesRepository
 let inMemoryInstructorsRepository: InMemoryInstructorRepository
 let inMemoryStudentsRepository: InMemoryStudentsRepository
 let inMemoryUsersRepository: InMemoryUsersRepository
@@ -12,7 +14,8 @@ let sut: GetUserInfoUseCase
 
 describe('Get user info use case', async () => {
   beforeEach(() => {
-    inMemoryInstructorsRepository = new InMemoryInstructorRepository()
+    inMemoryCoursesRepository = new InMemoryCoursesRepository()
+    inMemoryInstructorsRepository = new InMemoryInstructorRepository(inMemoryCoursesRepository)
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
     inMemoryUsersRepository = new InMemoryUsersRepository(inMemoryInstructorsRepository, inMemoryStudentsRepository)
     sut = new GetUserInfoUseCase(inMemoryUsersRepository)
