@@ -3,17 +3,12 @@ import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { type Optional } from '@/core/types/optional'
 
 export interface StudentCertificateProps {
-  id: UniqueEntityID
   certificateId: UniqueEntityID
   studentId: UniqueEntityID
   issuedAt: Date
 }
 
 export class StudentCertificate extends Entity<StudentCertificateProps> {
-  get id() {
-    return this.props.id
-  }
-
   get certificateId() {
     return this.props.certificateId
   }

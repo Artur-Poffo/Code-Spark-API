@@ -2,17 +2,12 @@ import { Entity } from '@/core/entities/entity'
 import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 export interface ModuleProps {
-  id: UniqueEntityID
   name: string
   description: string
   courseId: UniqueEntityID
 }
 
 export class Module extends Entity<ModuleProps> {
-  get id() {
-    return this.props.id
-  }
-
   get name() {
     return this.props.name
   }

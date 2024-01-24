@@ -1,4 +1,4 @@
-# Entra21 TCC - CodeSpark
+# Entra21 TCC - CodeSpark API
 
 ## Functional Requirements
 

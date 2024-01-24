@@ -2,7 +2,6 @@ import { Entity } from '@/core/entities/entity'
 import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 export interface ClassProps {
-  id: UniqueEntityID
   name: string
   description: string
   duration: number
@@ -11,10 +10,6 @@ export interface ClassProps {
 }
 
 export class Class extends Entity<ClassProps> {
-  get id() {
-    return this.props.id
-  }
-
   get name() {
     return this.props.name
   }

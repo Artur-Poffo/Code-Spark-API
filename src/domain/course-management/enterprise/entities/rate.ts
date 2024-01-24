@@ -3,7 +3,6 @@ import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { type Optional } from '@/core/types/optional'
 
 export interface RateProps {
-  id: UniqueEntityID
   value: number
   userId: UniqueEntityID
   courseId?: UniqueEntityID
@@ -12,10 +11,6 @@ export interface RateProps {
 }
 
 export class Rate extends Entity<RateProps> {
-  get id() {
-    return this.props.id
-  }
-
   get value() {
     return this.props.value
   }

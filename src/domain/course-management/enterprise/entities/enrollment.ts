@@ -3,7 +3,6 @@ import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { type Optional } from '@/core/types/optional'
 
 export interface EnrollmentProps {
-  id: UniqueEntityID
   studentId: UniqueEntityID
   courseId: UniqueEntityID
   completedClasses: UniqueEntityID[]
@@ -13,10 +12,6 @@ export interface EnrollmentProps {
 }
 
 export class Enrollment extends Entity<EnrollmentProps> {
-  get id() {
-    return this.props.id
-  }
-
   get studentId() {
     return this.props.studentId
   }
