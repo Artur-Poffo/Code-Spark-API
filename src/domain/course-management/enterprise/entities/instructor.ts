@@ -1,13 +1,13 @@
-import { UniqueEntityID } from "@/core/entities/unique-entity-id";
-import { Optional } from "@/core/types/optional";
-import { User, UserProps } from "./user";
+import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { type Optional } from '@/core/types/optional'
+import { User, type UserProps } from './user'
 
 export interface InstructorProps extends UserProps { }
 
 export class Instructor extends User<InstructorProps> {
   static create(
     props: Optional<InstructorProps, 'registeredAt' | 'profileImageKey' | 'bannerImageKey'>,
-    id?: UniqueEntityID,
+    id?: UniqueEntityID
   ) {
     const instructor = new Instructor(
       {
@@ -16,7 +16,7 @@ export class Instructor extends User<InstructorProps> {
         bannerImageKey: null,
         registeredAt: props.registeredAt ?? new Date()
       },
-      id,
+      id
     )
 
     return instructor

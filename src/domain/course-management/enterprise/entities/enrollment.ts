@@ -1,6 +1,6 @@
-import { Entity } from "@/core/entities/entity";
-import { UniqueEntityID } from "@/core/entities/unique-entity-id";
-import { Optional } from "@/core/types/optional";
+import { Entity } from '@/core/entities/entity'
+import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { type Optional } from '@/core/types/optional'
 
 export interface EnrollmentProps {
   id: UniqueEntityID
@@ -43,7 +43,7 @@ export class Enrollment extends Entity<EnrollmentProps> {
 
   static create(
     props: Optional<EnrollmentProps, 'ocurredAt' | 'completedAt'>,
-    id?: UniqueEntityID,
+    id?: UniqueEntityID
   ) {
     const enrollment = new Enrollment(
       {
@@ -51,7 +51,7 @@ export class Enrollment extends Entity<EnrollmentProps> {
         ocurredAt: props.ocurredAt ?? new Date(),
         completedAt: null
       },
-      id,
+      id
     )
 
     return enrollment

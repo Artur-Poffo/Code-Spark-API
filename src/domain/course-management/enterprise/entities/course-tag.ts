@@ -1,9 +1,9 @@
-import { Entity } from "@/core/entities/entity";
-import { UniqueEntityID } from "@/core/entities/unique-entity-id";
+import { Entity } from '@/core/entities/entity'
+import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 export interface CourseTagProps {
   id: UniqueEntityID
-  courseId: UniqueEntityID,
+  courseId: UniqueEntityID
   tagId: UniqueEntityID
 }
 
@@ -22,13 +22,13 @@ export class CourseTag extends Entity<CourseTagProps> {
 
   static create(
     props: CourseTagProps,
-    id?: UniqueEntityID,
+    id?: UniqueEntityID
   ) {
     const courseTag = new CourseTag(
       {
-        ...props,
+        ...props
       },
-      id,
+      id
     )
 
     return courseTag

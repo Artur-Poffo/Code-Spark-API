@@ -1,7 +1,7 @@
-import { InstructorRepository } from "@/domain/course-management/application/repositories/instructor-repository";
-import { Instructor } from "@/domain/course-management/enterprise/entities/instructor";
+import { type InstructorsRepository } from '@/domain/course-management/application/repositories/instructors-repository'
+import { type Instructor } from '@/domain/course-management/enterprise/entities/instructor'
 
-export class InMemoryInstructorRepository implements InstructorRepository {
+export class InMemoryInstructorRepository implements InstructorsRepository {
   public items: Instructor[] = []
 
   async findByEmail(email: string): Promise<Instructor | null> {

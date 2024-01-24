@@ -1,5 +1,5 @@
-import { Entity } from "@/core/entities/entity";
-import { UniqueEntityID } from "@/core/entities/unique-entity-id";
+import { Entity } from '@/core/entities/entity'
+import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 export interface CertificateProps {
   id: UniqueEntityID
@@ -22,13 +22,13 @@ export class Certificate extends Entity<CertificateProps> {
 
   static create(
     props: CertificateProps,
-    id?: UniqueEntityID,
+    id?: UniqueEntityID
   ) {
     const certificate = new Certificate(
       {
-        ...props,
+        ...props
       },
-      id,
+      id
     )
 
     return certificate

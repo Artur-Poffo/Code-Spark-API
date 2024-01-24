@@ -1,6 +1,6 @@
-import { Entity } from "@/core/entities/entity";
-import { UniqueEntityID } from "@/core/entities/unique-entity-id";
-import { Optional } from "@/core/types/optional";
+import { Entity } from '@/core/entities/entity'
+import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { type Optional } from '@/core/types/optional'
 
 export interface StudentCertificateProps {
   id: UniqueEntityID
@@ -28,14 +28,14 @@ export class StudentCertificate extends Entity<StudentCertificateProps> {
 
   static create(
     props: Optional<StudentCertificateProps, 'issuedAt'>,
-    id?: UniqueEntityID,
+    id?: UniqueEntityID
   ) {
     const studentCertificate = new StudentCertificate(
       {
         ...props,
         issuedAt: props.issuedAt ?? new Date()
       },
-      id,
+      id
     )
 
     return studentCertificate
