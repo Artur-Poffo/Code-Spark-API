@@ -14,7 +14,12 @@ jobs:
         with:
           node-version: 18
 
-      - name: Test the app
+      - name: Install dependencies
         uses: borales/actions-yarn@v4
         with:
-          cmd: test:unit
+          cmd: install # will run `yarn install` command
+
+      - name: Test the API
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: test:unit # test command
