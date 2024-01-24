@@ -11,7 +11,17 @@ export class InMemoryUsersRepository implements UsersRepository {
   constructor(
     private readonly inMemoryInstructorsRepository: InMemoryInstructorRepository,
     private readonly inMemoryStudentsRepository: InMemoryStudentsRepository
-  ) {}
+  ) { }
+
+  async findById(id: string): Promise<User<StudentProps | InstructorProps> | null> {
+    const user = this.items.find(userToCompare => userToCompare.id.toString() === id)
+
+    if (!user) {
+      return null
+    }
+
+    return user
+  }
 
   async findByEmail(email: string): Promise<User<StudentProps | InstructorProps> | null> {
     const user = this.items.find(userToCompare => userToCompare.email === email)
