@@ -6,7 +6,7 @@
 - [x] User must be able to authenticate after registration.
 - [x] Return information about a user.
 
-- [ ] Instructors must be able to register courses on the platform.
+- [x] Instructors must be able to register courses on the platform.
 - [ ] Instructors can register modules for a course.
 - [ ] Instructors can add classes to modules.
 - [ ] Responsible instructor can add "tags" to their course to inform students about technologies present in the course.
@@ -35,12 +35,12 @@
 
 ## Business Rules
 
-- [ ] User should not be able to register with the same email.
-- [ ] User should not be able to register with the same CPF.
+- [x] User should not be able to register with the same email.
+- [x] User should not be able to register with the same CPF.
 - [ ] Only students can enroll for a course.
 - [ ] Only students can rate courses and classes.
-- [ ] Only instructors can register a course.
-- [ ] A specific instructor cannot register a course with the same name.
+- [x] Only instructors can register a course.
+- [x] A specific instructor cannot register a course with the same name.
 - [ ] A student should only be able to rate a class and a given course once.
 - [ ] A student can only issue one certificate per course.
 - [ ] A student can only enroll for a particular course once.
@@ -84,6 +84,7 @@
 - - id: string
   - name: string
   - description: string
+  - instructorId: string
   - coverImageKey: string
   - bannerImageKey: string
   - createdAt: date

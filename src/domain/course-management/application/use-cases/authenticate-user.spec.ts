@@ -2,12 +2,14 @@ import { WrongCredentialsError } from '@/core/errors/errors/wrong-credentials-er
 import { FakeHasher } from '../../../../../test/cryptography/fake-hasher'
 import { makeInstructor } from '../../../../../test/factories/make-instructor'
 import { makeStudent } from '../../../../../test/factories/make-student'
+import { InMemoryCoursesRepository } from '../../../../../test/repositories/in-memory-courses-repository'
 import { InMemoryStudentsRepository } from '../../../../../test/repositories/in-memory-students-repository'
 import { FakeEncrypter } from './../../../../../test/cryptography/fake-encrypter'
 import { InMemoryInstructorRepository } from './../../../../../test/repositories/in-memory-instructors-repository'
 import { InMemoryUsersRepository } from './../../../../../test/repositories/in-memory-users-repository'
 import { AuthenticateUserUseCase } from './authenticate-user'
 
+let inMemoryCoursesRepository: InMemoryCoursesRepository
 let inMemoryInstructorsRepository: InMemoryInstructorRepository
 let inMemoryStudentsRepository: InMemoryStudentsRepository
 let inMemoryUsersRepository: InMemoryUsersRepository
@@ -17,7 +19,8 @@ let sut: AuthenticateUserUseCase
 
 describe('Authenticate user use case', () => {
   beforeEach(() => {
-    inMemoryInstructorsRepository = new InMemoryInstructorRepository()
+    inMemoryCoursesRepository = new InMemoryCoursesRepository()
+    inMemoryInstructorsRepository = new InMemoryInstructorRepository(inMemoryCoursesRepository)
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
     inMemoryUsersRepository = new InMemoryUsersRepository(inMemoryInstructorsRepository, inMemoryStudentsRepository)
     fakeHasher = new FakeHasher()
