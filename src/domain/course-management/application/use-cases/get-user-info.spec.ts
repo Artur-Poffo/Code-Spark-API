@@ -4,8 +4,10 @@ import { InMemoryCoursesRepository } from '../../../../../test/repositories/in-m
 import { InMemoryInstructorRepository } from '../../../../../test/repositories/in-memory-instructors-repository'
 import { InMemoryStudentsRepository } from '../../../../../test/repositories/in-memory-students-repository'
 import { InMemoryUsersRepository } from '../../../../../test/repositories/in-memory-users-repository'
+import { InMemoryModulesRepository } from './../../../../../test/repositories/in-memory-modules-repository'
 import { GetUserInfoUseCase } from './get-user-info'
 
+let inMemoryModulesRepository: InMemoryModulesRepository
 let inMemoryCoursesRepository: InMemoryCoursesRepository
 let inMemoryInstructorsRepository: InMemoryInstructorRepository
 let inMemoryStudentsRepository: InMemoryStudentsRepository
@@ -14,7 +16,8 @@ let sut: GetUserInfoUseCase
 
 describe('Get user info use case', async () => {
   beforeEach(() => {
-    inMemoryCoursesRepository = new InMemoryCoursesRepository()
+    inMemoryModulesRepository = new InMemoryModulesRepository()
+    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository)
     inMemoryInstructorsRepository = new InMemoryInstructorRepository(inMemoryCoursesRepository)
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
     inMemoryUsersRepository = new InMemoryUsersRepository(inMemoryInstructorsRepository, inMemoryStudentsRepository)

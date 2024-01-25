@@ -1,13 +1,13 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { type CoursesRepository } from '@/domain/course-management/application/repositories/courses-repository'
 import { type InstructorsRepository } from '@/domain/course-management/application/repositories/instructors-repository'
 import { InstructorWithCourses } from '@/domain/course-management/enterprise/entities/value-objects/instructor-with-courses'
 import { type Instructor } from './../../src/domain/course-management/enterprise/entities/instructor'
+import { type InMemoryCoursesRepository } from './in-memory-courses-repository'
 
 export class InMemoryInstructorRepository implements InstructorsRepository {
   public items: Instructor[] = []
 
-  constructor(private readonly coursesRepository: CoursesRepository) {}
+  constructor(private readonly inMemoryCoursesRepository: InMemoryCoursesRepository) {}
 
   async findById(id: string): Promise<Instructor | null> {
     const instructor = this.items.find(instructorToCompare => instructorToCompare.id.toString() === id)
@@ -46,7 +46,7 @@ export class InMemoryInstructorRepository implements InstructorsRepository {
       return null
     }
 
-    const courses = await this.coursesRepository.findManyByInstructorId(id)
+    const courses = await this.inMemoryCoursesRepository.findManyByInstructorId(id)
 
     const instructorWithCourses = InstructorWithCourses.create({
       name: instructor.name,

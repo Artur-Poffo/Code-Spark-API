@@ -4,6 +4,6 @@ import { type CompleteCourseEntity } from '../../enterprise/entities/value-objec
 export interface CoursesRepository {
   findById: (id: string) => Promise<Course | null>
   findManyByInstructorId: (instructorId: string) => Promise<Course[]>
-  findManyCoursesCompleteEntity: () => Promise<CompleteCourseEntity[]>
+  findCompleteCourseEntityById: (id: string) => Promise<CompleteCourseEntity | null>
   create: (course: Course) => Promise<Course>
 }

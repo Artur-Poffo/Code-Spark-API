@@ -1,9 +1,13 @@
+import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { ValueObject } from '@/core/entities/value-object'
 import { type Class } from '../class'
 import { type CourseProps } from '../course'
 import { type Module } from '../module'
+import { type Instructor } from './../instructor'
 
 export interface CompleteCourseEntityProps extends CourseProps {
+  instructor: Instructor
+  courseId: UniqueEntityID
   modules: Module[]
   classes: Class[]
 }
@@ -31,6 +35,14 @@ export class CompleteCourseEntity extends ValueObject<CompleteCourseEntityProps>
 
   get createdAt() {
     return this.props.createdAt
+  }
+
+  get instructor() {
+    return this.props.instructor
+  }
+
+  get courseId() {
+    return this.props.courseId
   }
 
   get modules() {

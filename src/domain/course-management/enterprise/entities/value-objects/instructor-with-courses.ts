@@ -1,12 +1,12 @@
 import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { ValueObject } from '@/core/entities/value-object'
 import { type Optional } from '@/core/types/optional'
-import { type CourseProps } from '../course'
+import { type Course } from '../course'
 import { type InstructorProps } from '../instructor'
 
 export interface InstructorWithCoursesProps extends Optional<InstructorProps, 'passwordHash' | 'cpf'> {
   instructorId: UniqueEntityID
-  courses: CourseProps[]
+  courses: Course[]
 }
 
 export class InstructorWithCourses extends ValueObject<InstructorWithCoursesProps> {

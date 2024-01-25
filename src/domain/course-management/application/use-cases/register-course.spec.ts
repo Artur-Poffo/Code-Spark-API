@@ -3,10 +3,12 @@ import { makeInstructor } from '../../../../../test/factories/make-instructor'
 import { makeStudent } from '../../../../../test/factories/make-student'
 import { InMemoryCoursesRepository } from './../../../../../test/repositories/in-memory-courses-repository'
 import { InMemoryInstructorRepository } from './../../../../../test/repositories/in-memory-instructors-repository'
+import { InMemoryModulesRepository } from './../../../../../test/repositories/in-memory-modules-repository'
 import { InMemoryStudentsRepository } from './../../../../../test/repositories/in-memory-students-repository'
 import { CourseAlreadyExistsInThisAccount } from './errors/course-already-exists-in-this-account'
 import { RegisterCourseUseCase } from './register-course'
 
+let inMemoryModulesRepository: InMemoryModulesRepository
 let inMemoryStudentsRepository: InMemoryStudentsRepository
 let inMemoryCoursesRepository: InMemoryCoursesRepository
 let inMemoryInstructorRepository: InMemoryInstructorRepository
@@ -14,8 +16,9 @@ let sut: RegisterCourseUseCase
 
 describe('Register course use case', () => {
   beforeEach(() => {
+    inMemoryModulesRepository = new InMemoryModulesRepository()
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
-    inMemoryCoursesRepository = new InMemoryCoursesRepository()
+    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorRepository)
     inMemoryInstructorRepository = new InMemoryInstructorRepository(inMemoryCoursesRepository)
     sut = new RegisterCourseUseCase(inMemoryCoursesRepository, inMemoryInstructorRepository)
   })

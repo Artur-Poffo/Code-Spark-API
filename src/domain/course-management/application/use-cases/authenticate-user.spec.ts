@@ -6,9 +6,11 @@ import { InMemoryCoursesRepository } from '../../../../../test/repositories/in-m
 import { InMemoryStudentsRepository } from '../../../../../test/repositories/in-memory-students-repository'
 import { FakeEncrypter } from './../../../../../test/cryptography/fake-encrypter'
 import { InMemoryInstructorRepository } from './../../../../../test/repositories/in-memory-instructors-repository'
+import { InMemoryModulesRepository } from './../../../../../test/repositories/in-memory-modules-repository'
 import { InMemoryUsersRepository } from './../../../../../test/repositories/in-memory-users-repository'
 import { AuthenticateUserUseCase } from './authenticate-user'
 
+let inMemoryModulesRepository: InMemoryModulesRepository
 let inMemoryCoursesRepository: InMemoryCoursesRepository
 let inMemoryInstructorsRepository: InMemoryInstructorRepository
 let inMemoryStudentsRepository: InMemoryStudentsRepository
@@ -19,7 +21,8 @@ let sut: AuthenticateUserUseCase
 
 describe('Authenticate user use case', () => {
   beforeEach(() => {
-    inMemoryCoursesRepository = new InMemoryCoursesRepository()
+    inMemoryModulesRepository = new InMemoryModulesRepository()
+    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository)
     inMemoryInstructorsRepository = new InMemoryInstructorRepository(inMemoryCoursesRepository)
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
     inMemoryUsersRepository = new InMemoryUsersRepository(inMemoryInstructorsRepository, inMemoryStudentsRepository)
