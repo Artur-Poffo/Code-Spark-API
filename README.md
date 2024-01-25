@@ -7,7 +7,7 @@
 - [x] Return information about a user.
 
 - [x] Instructors must be able to register courses on the platform.
-- [ ] Instructors can register modules for a course.
+- [x] Instructors can register modules for a course.
 - [ ] Instructors can add classes to modules.
 - [ ] Responsible instructor can add "tags" to their course to inform students about technologies present in the course.
 - [ ] Instructors can upload videos.
