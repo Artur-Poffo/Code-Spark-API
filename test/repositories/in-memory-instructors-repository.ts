@@ -1,6 +1,5 @@
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { type InstructorsRepository } from '@/domain/course-management/application/repositories/instructors-repository'
-import { InstructorWithCourses } from '@/domain/course-management/enterprise/entities/value-objects/instructor-with-courses'
+import { type InstructorWithCoursesDTO } from '@/domain/course-management/enterprise/entities/dtos/instructor-with-courses'
 import { type Instructor } from './../../src/domain/course-management/enterprise/entities/instructor'
 import { type InMemoryCoursesRepository } from './in-memory-courses-repository'
 
@@ -39,7 +38,7 @@ export class InMemoryInstructorRepository implements InstructorsRepository {
     return instructor
   }
 
-  async findInstructorWithCoursesById(id: string): Promise<InstructorWithCourses | null> {
+  async findInstructorWithCoursesById(id: string): Promise<InstructorWithCoursesDTO | null> {
     const instructor = this.items.find(instructorToCompare => instructorToCompare.id.toString() === id)
 
     if (!instructor) {
@@ -48,17 +47,19 @@ export class InMemoryInstructorRepository implements InstructorsRepository {
 
     const courses = await this.inMemoryCoursesRepository.findManyByInstructorId(id)
 
-    const instructorWithCourses = InstructorWithCourses.create({
-      name: instructor.name,
-      email: instructor.email,
-      age: instructor.age,
-      summary: instructor.summary,
-      registeredAt: instructor.registeredAt,
-      bannerImageKey: instructor.bannerImageKey,
-      profileImageKey: instructor.profileImageKey,
-      instructorId: new UniqueEntityID(id),
+    const instructorWithCourses: InstructorWithCoursesDTO = {
+      instructorId: instructor.id,
+      instructor: {
+        name: instructor.name,
+        email: instructor.email,
+        summary: instructor.summary,
+        age: instructor.age,
+        registeredAt: instructor.registeredAt,
+        profileImageKey: instructor.profileImageKey,
+        bannerImageKey: instructor.bannerImageKey
+      },
       courses
-    })
+    }
 
     return instructorWithCourses
   }

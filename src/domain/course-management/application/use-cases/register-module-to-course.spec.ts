@@ -31,6 +31,7 @@ describe('Register module to a course use case', () => {
     const result = await sut.exec({
       name: 'John Doe Module',
       description: 'module registration',
+      moduleNumber: 1,
       courseId: course.id.toString(),
       instructorId: instructor.id.toString()
     })
@@ -50,6 +51,7 @@ describe('Register module to a course use case', () => {
     const result = await sut.exec({
       name: 'John Doe Module',
       description: 'module registration',
+      moduleNumber: 1,
       courseId: 'inexistentCourseId',
       instructorId: instructor.id.toString()
     })
@@ -71,6 +73,7 @@ describe('Register module to a course use case', () => {
     const result = await sut.exec({
       name: 'John Doe Module',
       description: 'module registration',
+      moduleNumber: 1,
       courseId: course.id.toString(),
       instructorId: wrongInstructor.id.toString()
     })
@@ -91,6 +94,7 @@ describe('Register module to a course use case', () => {
     await sut.exec({
       name,
       description: 'module registration',
+      moduleNumber: 1,
       courseId: course.id.toString(),
       instructorId: instructor.id.toString()
     })
@@ -98,6 +102,7 @@ describe('Register module to a course use case', () => {
     const result = await sut.exec({
       name,
       description: 'module registration',
+      moduleNumber: 1,
       courseId: course.id.toString(),
       instructorId: instructor.id.toString()
     })

@@ -17,6 +17,7 @@
 - [ ] Return information about a course.
 - [ ] Return information about a course with its students.
 - [ ] Return information about a course with its modules and classes.
+- [x] Classes and modules must have a field informing their position, e.g. this class is number one, so this is the first class of the course.
 - [ ] Video streaming to watch the classes.
 
 - [ ] Students can "enroll" to participate in the course.
@@ -42,6 +43,7 @@
 - [x] Only instructors can register a course.
 - [x] A specific instructor cannot register a course with the same name.
 - [ ] A student should only be able to rate a class and a given course once.
+- [x] Should not be able to register a module to a specific course with same name twice.
 - [ ] A student can only issue one certificate per course.
 - [ ] A student can only enroll for a particular course once.
 - [ ] There should not be repeated tags in a course.
@@ -49,7 +51,7 @@
 ## Non-Functional Requirements
 
 - [ ] File upload/storage on Cloudflare R2.
-- [ ] User's password must be encrypted.
+- [x] User's password must be encrypted.
 - [ ] Application data must be persisted in a PostgreSQL database with Docker.
 - [ ] All data listings must be paginated with 20 items per page and have an attribute of total number of items.
 - [ ] User must be identified by JWT.
@@ -119,6 +121,7 @@
 - - id: string
   - name: string
   - description: string
+  - moduleNumber: number
   - courseId: string
 
 - [x] Certificate
@@ -138,6 +141,7 @@
   - description: string
   - duration: number
   - videoKey: string
+  - classNumber: number
   - moduleId: string
 
   ## Storage Domain
