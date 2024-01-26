@@ -6,6 +6,7 @@ export interface ClassProps {
   description: string
   duration: number
   videoKey: string
+  classNumber: number
   moduleId: UniqueEntityID
 }
 
@@ -24,6 +25,10 @@ export class Class extends Entity<ClassProps> {
 
   get videoKey() {
     return this.props.videoKey
+  }
+
+  get classNumber() {
+    return this.props.classNumber
   }
 
   get moduleKey() {

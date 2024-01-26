@@ -31,16 +31,16 @@ export class RegisterCourseUseCase implements UseCase<RegisterCourseUseCaseReque
     description,
     instructorId
   }: RegisterCourseUseCaseRequest): Promise<RegisterCourseUseCaseResponse> {
-    const instructor = await this.instructorsRepository.findInstructorWithCoursesById(instructorId)
+    const instructorWithCourses = await this.instructorsRepository.findInstructorWithCoursesById(instructorId)
 
-    if (!instructor) {
+    if (!instructorWithCourses) {
       return left(new ResourceNotFoundError())
     }
 
-    const courseWithSameNameInSameAccount = instructor.courses.find(courseToCompare => courseToCompare.name === name)
+    const courseWithSameNameInSameAccount = instructorWithCourses.courses.find(courseToCompare => courseToCompare.name === name)
 
     if (courseWithSameNameInSameAccount) {
-      return left(new CourseAlreadyExistsInThisAccount(instructor.email))
+      return left(new CourseAlreadyExistsInThisAccount(instructorWithCourses.instructor.email))
     }
 
     const course = Course.create({

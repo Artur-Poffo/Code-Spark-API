@@ -1,5 +1,5 @@
 import { type CoursesRepository } from '@/domain/course-management/application/repositories/courses-repository'
-import { CompleteCourseEntity } from '@/domain/course-management/enterprise/entities/value-objects/complete-course-entity'
+import { type CompleteCourseDTO } from '@/domain/course-management/enterprise/entities/dtos/complete-course'
 import { type Course } from './../../src/domain/course-management/enterprise/entities/course'
 import { type InMemoryInstructorRepository } from './in-memory-instructors-repository'
 import { type InMemoryModulesRepository } from './in-memory-modules-repository'
@@ -23,7 +23,7 @@ export class InMemoryCoursesRepository implements CoursesRepository {
     return this.items.filter(courseToCompare => courseToCompare.instructorId.toString() === instructorId)
   }
 
-  async findCompleteCourseEntityById(id: string): Promise<CompleteCourseEntity | null> {
+  async findCompleteCourseEntityById(id: string): Promise<CompleteCourseDTO | null> {
     const course = this.items.find(courseToCompare => courseToCompare.id.toString() === id)
 
     if (!course) {
@@ -38,20 +38,23 @@ export class InMemoryCoursesRepository implements CoursesRepository {
 
     const courseModules = await this.inMemoryModulesRepository.findManyByCourseId(course.id.toString())
 
-    const completeCourseEntity = CompleteCourseEntity.create({
-      name: course.name,
-      description: course.description,
-      createdAt: course.createdAt,
-      bannerImageKey: course.bannerImageKey,
-      coverImageKey: course.coverImageKey,
-      instructorId: course.instructorId,
-      instructor,
+    const completeCourse: CompleteCourseDTO = {
       courseId: course.id,
-      classes: [], // TODO: update with real course classes
-      modules: courseModules
-    })
+      instructorId: instructor.id,
+      instructor: {
+        name: instructor.name,
+        email: instructor.email,
+        summary: instructor.summary,
+        age: instructor.age,
+        registeredAt: instructor.registeredAt,
+        profileImageKey: instructor.profileImageKey,
+        bannerImageKey: instructor.bannerImageKey
+      },
+      modules: courseModules,
+      classes: []
+    }
 
-    return completeCourseEntity
+    return completeCourse
   }
 
   async create(course: Course): Promise<Course> {

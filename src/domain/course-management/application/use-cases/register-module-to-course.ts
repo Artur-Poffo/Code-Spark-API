@@ -11,6 +11,7 @@ import { ModuleAlreadyExistsInThisCourse } from './errors/module-already-exists-
 interface RegisterModuleToCourseUseCaseRequest {
   name: string
   description: string
+  moduleNumber: number
   courseId: string
   instructorId: string
 }
@@ -31,20 +32,21 @@ export class RegisterModuleToCourseUseCase implements UseCase<RegisterModuleToCo
   async exec({
     name,
     description,
+    moduleNumber,
     courseId,
     instructorId
   }: RegisterModuleToCourseUseCaseRequest): Promise<RegisterModuleToCourseUseCaseResponse> {
-    const course = await this.coursesRepository.findCompleteCourseEntityById(courseId)
+    const completeCourse = await this.coursesRepository.findCompleteCourseEntityById(courseId)
 
-    if (!course) {
+    if (!completeCourse) {
       return left(new ResourceNotFoundError())
     }
 
-    if (course.instructorId.toString() !== instructorId) {
+    if (completeCourse.instructorId.toString() !== instructorId) {
       return left(new NotAllowedError())
     }
 
-    const moduleWithSameNameInSameCourse = course.modules.find(moduleToCompare => moduleToCompare.name === name)
+    const moduleWithSameNameInSameCourse = completeCourse.modules.find(moduleToCompare => moduleToCompare.name === name)
 
     if (moduleWithSameNameInSameCourse) {
       return left(new ModuleAlreadyExistsInThisCourse(name))
@@ -53,6 +55,7 @@ export class RegisterModuleToCourseUseCase implements UseCase<RegisterModuleToCo
     const module = Module.create({
       name,
       description,
+      moduleNumber,
       courseId: new UniqueEntityID(courseId)
     })
 

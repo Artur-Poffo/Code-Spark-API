@@ -4,6 +4,7 @@ import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
 export interface ModuleProps {
   name: string
   description: string
+  moduleNumber: number
   courseId: UniqueEntityID
 }
 
@@ -14,6 +15,10 @@ export class Module extends Entity<ModuleProps> {
 
   get description() {
     return this.props.description
+  }
+
+  get moduleNumber() {
+    return this.props.moduleNumber
   }
 
   get courseId() {
