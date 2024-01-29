@@ -9,6 +9,7 @@ import { InMemoryInstructorRepository } from './../../../../../test/repositories
 import { InMemoryModulesRepository } from './../../../../../test/repositories/in-memory-modules-repository'
 import { AddClassToModuleUseCase } from './add-class-to-module'
 import { ClassAlreadyExistsInThisModule } from './errors/class-already-exists-in-this-module'
+import { ClassNumberIsAlreadyInUse } from './errors/class-number-is-already-in-use'
 
 let inMemoryModulesRepository: InMemoryModulesRepository
 let inMemoryCoursesRepository: InMemoryCoursesRepository
@@ -143,5 +144,42 @@ describe('Add class to a module use case', () => {
 
     expect(result.isLeft()).toBe(true)
     expect(result.value).toBeInstanceOf(ClassAlreadyExistsInThisModule)
+  })
+
+  it('should not be able to add a class to a module in same number/position twice', async () => {
+    const instructor = makeInstructor()
+    await inMemoryInstructorsRepository.create(instructor)
+
+    const course = makeCourse({ instructorId: instructor.id })
+    await inMemoryCoursesRepository.create(course)
+
+    const module = makeModule({
+      courseId: course.id,
+      moduleNumber: 1
+    })
+    await inMemoryModulesRepository.create(module)
+
+    await sut.exec({
+      name: 'John Doe Class 1',
+      description: 'Class description',
+      classNumber: 1, // Add a class to the first position
+      duration: 600,
+      videoKey: 'video-key',
+      instructorId: course.instructorId.toString(),
+      moduleId: module.id.toString()
+    })
+
+    const result = await sut.exec({
+      name: 'John Doe Class 2',
+      description: 'Class description',
+      classNumber: 1, // trying to add a new class for the same position, as the first class
+      duration: 600,
+      videoKey: 'video-key',
+      instructorId: course.instructorId.toString(),
+      moduleId: module.id.toString()
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(ClassNumberIsAlreadyInUse)
   })
 })

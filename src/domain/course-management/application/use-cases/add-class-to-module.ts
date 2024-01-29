@@ -8,6 +8,7 @@ import { type ClassesRepository } from '../repositories/classes-repository'
 import { type CoursesRepository } from '../repositories/courses-repository'
 import { type ModulesRepository } from '../repositories/modules-repository'
 import { ClassAlreadyExistsInThisModule } from './errors/class-already-exists-in-this-module'
+import { ClassNumberIsAlreadyInUse } from './errors/class-number-is-already-in-use'
 
 interface AddClassToModuleUseCaseRequest {
   name: string
@@ -20,7 +21,7 @@ interface AddClassToModuleUseCaseRequest {
 }
 
 type AddClassToModuleUseCaseResponse = Either<
-ResourceNotFoundError | NotAllowedError | ClassAlreadyExistsInThisModule,
+ResourceNotFoundError | NotAllowedError | ClassAlreadyExistsInThisModule | ClassNumberIsAlreadyInUse,
 {
   class: Class
 }
@@ -65,6 +66,12 @@ export class AddClassToModuleUseCase implements UseCase<AddClassToModuleUseCaseR
 
     if (classWithSameNameInSameModule) {
       return left(new ClassAlreadyExistsInThisModule(moduleId))
+    }
+
+    const classWithSamePositionInThisModule = classesInThisModule.find(classToCompare => classToCompare.classNumber === classNumber)
+
+    if (classWithSamePositionInThisModule) {
+      return left(new ClassNumberIsAlreadyInUse(classNumber))
     }
 
     const classToAdd = Class.create({

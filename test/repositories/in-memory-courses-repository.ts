@@ -41,8 +41,10 @@ export class InMemoryCoursesRepository implements CoursesRepository {
       return null
     }
 
-    const courseModules = await this.inMemoryModulesRepository.findManyByCourseId(course.id.toString())
-    const courseClasses = await this.inMemoryClassesRepository.findManyByCourseId(course.id.toString())
+    const courseModulesAndClasses = await Promise.all([
+      this.inMemoryModulesRepository.findManyByCourseId(course.id.toString()),
+      this.inMemoryClassesRepository.findManyByCourseId(course.id.toString())
+    ])
 
     const completeCourse: CompleteCourseDTO = {
       courseId: course.id,
@@ -56,8 +58,8 @@ export class InMemoryCoursesRepository implements CoursesRepository {
         profileImageKey: instructor.profileImageKey,
         bannerImageKey: instructor.bannerImageKey
       },
-      modules: courseModules,
-      classes: courseClasses
+      modules: courseModulesAndClasses[0],
+      classes: courseModulesAndClasses[1]
     }
 
     return completeCourse
