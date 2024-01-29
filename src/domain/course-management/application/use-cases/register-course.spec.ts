@@ -6,7 +6,7 @@ import { InMemoryCoursesRepository } from './../../../../../test/repositories/in
 import { InMemoryInstructorRepository } from './../../../../../test/repositories/in-memory-instructors-repository'
 import { InMemoryModulesRepository } from './../../../../../test/repositories/in-memory-modules-repository'
 import { InMemoryStudentsRepository } from './../../../../../test/repositories/in-memory-students-repository'
-import { CourseAlreadyExistsInThisAccount } from './errors/course-already-exists-in-this-account'
+import { CourseAlreadyExistsInThisAccountError } from './errors/course-already-exists-in-this-account-error'
 import { RegisterCourseUseCase } from './register-course'
 
 let inMemoryModulesRepository: InMemoryModulesRepository
@@ -88,6 +88,6 @@ describe('Register course use case', () => {
     })
 
     expect(result.isLeft()).toBe(true)
-    expect(result.value).toBeInstanceOf(CourseAlreadyExistsInThisAccount)
+    expect(result.value).toBeInstanceOf(CourseAlreadyExistsInThisAccountError)
   })
 })

@@ -6,7 +6,7 @@ import { InMemoryClassesRepository } from '../../../../../test/repositories/in-m
 import { InMemoryCoursesRepository } from './../../../../../test/repositories/in-memory-courses-repository'
 import { InMemoryInstructorRepository } from './../../../../../test/repositories/in-memory-instructors-repository'
 import { InMemoryModulesRepository } from './../../../../../test/repositories/in-memory-modules-repository'
-import { ModuleAlreadyExistsInThisCourse } from './errors/module-already-exists-in-this-course'
+import { ModuleAlreadyExistsInThisCourseError } from './errors/module-already-exists-in-this-course-error'
 import { RegisterModuleToCourseUseCase } from './register-module-to-course'
 
 let inMemoryCoursesRepository: InMemoryCoursesRepository
@@ -111,6 +111,6 @@ describe('Register module to a course use case', () => {
     })
 
     expect(result.isLeft()).toBe(true)
-    expect(result.value).toBeInstanceOf(ModuleAlreadyExistsInThisCourse)
+    expect(result.value).toBeInstanceOf(ModuleAlreadyExistsInThisCourseError)
   })
 })
