@@ -1,6 +1,7 @@
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { makeInstructor } from '../../../../../test/factories/make-instructor'
 import { makeStudent } from '../../../../../test/factories/make-student'
+import { InMemoryClassesRepository } from '../../../../../test/repositories/in-memory-classes-repository'
 import { InMemoryCoursesRepository } from './../../../../../test/repositories/in-memory-courses-repository'
 import { InMemoryInstructorRepository } from './../../../../../test/repositories/in-memory-instructors-repository'
 import { InMemoryModulesRepository } from './../../../../../test/repositories/in-memory-modules-repository'
@@ -9,6 +10,7 @@ import { CourseAlreadyExistsInThisAccount } from './errors/course-already-exists
 import { RegisterCourseUseCase } from './register-course'
 
 let inMemoryModulesRepository: InMemoryModulesRepository
+let inMemoryClassesRepository: InMemoryClassesRepository
 let inMemoryStudentsRepository: InMemoryStudentsRepository
 let inMemoryCoursesRepository: InMemoryCoursesRepository
 let inMemoryInstructorRepository: InMemoryInstructorRepository
@@ -17,8 +19,9 @@ let sut: RegisterCourseUseCase
 describe('Register course use case', () => {
   beforeEach(() => {
     inMemoryModulesRepository = new InMemoryModulesRepository()
+    inMemoryClassesRepository = new InMemoryClassesRepository(inMemoryModulesRepository)
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
-    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorRepository)
+    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryClassesRepository, inMemoryInstructorRepository)
     inMemoryInstructorRepository = new InMemoryInstructorRepository(inMemoryCoursesRepository)
     sut = new RegisterCourseUseCase(inMemoryCoursesRepository, inMemoryInstructorRepository)
   })
