@@ -7,6 +7,7 @@ import { Module } from '../../enterprise/entities/module'
 import { type CoursesRepository } from '../repositories/courses-repository'
 import { type ModulesRepository } from '../repositories/modules-repository'
 import { ModuleAlreadyExistsInThisCourseError } from './errors/module-already-exists-in-this-course-error'
+import { ModuleNumberIsAlreadyInUseError } from './errors/module-number-already-in-use-error'
 
 interface RegisterModuleToCourseUseCaseRequest {
   name: string
@@ -17,7 +18,7 @@ interface RegisterModuleToCourseUseCaseRequest {
 }
 
 type RegisterModuleToCourseUseCaseResponse = Either<
-ResourceNotFoundError | ModuleAlreadyExistsInThisCourseError | NotAllowedError,
+ResourceNotFoundError | ModuleAlreadyExistsInThisCourseError | NotAllowedError | ModuleNumberIsAlreadyInUseError,
 {
   module: Module
 }
@@ -50,6 +51,12 @@ export class RegisterModuleToCourseUseCase implements UseCase<RegisterModuleToCo
 
     if (moduleWithSameNameInSameCourse) {
       return left(new ModuleAlreadyExistsInThisCourseError(name))
+    }
+
+    const moduleWithSamePositionInThisCourse = completeCourse.modules.find(moduleToCompare => moduleToCompare.moduleNumber === moduleNumber)
+
+    if (moduleWithSamePositionInThisCourse) {
+      return left(new ModuleNumberIsAlreadyInUseError(moduleNumber))
     }
 
     const module = Module.create({

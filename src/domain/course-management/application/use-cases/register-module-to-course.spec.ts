@@ -7,6 +7,7 @@ import { InMemoryCoursesRepository } from './../../../../../test/repositories/in
 import { InMemoryInstructorRepository } from './../../../../../test/repositories/in-memory-instructors-repository'
 import { InMemoryModulesRepository } from './../../../../../test/repositories/in-memory-modules-repository'
 import { ModuleAlreadyExistsInThisCourseError } from './errors/module-already-exists-in-this-course-error'
+import { ModuleNumberIsAlreadyInUseError } from './errors/module-number-already-in-use-error'
 import { RegisterModuleToCourseUseCase } from './register-module-to-course'
 
 let inMemoryCoursesRepository: InMemoryCoursesRepository
@@ -112,5 +113,32 @@ describe('Register module to a course use case', () => {
 
     expect(result.isLeft()).toBe(true)
     expect(result.value).toBeInstanceOf(ModuleAlreadyExistsInThisCourseError)
+  })
+
+  it('should not be able to register a module for a specific course in the same position twice', async () => {
+    const instructor = makeInstructor()
+    await inMemoryInstructorRepository.create(instructor)
+
+    const course = makeCourse({ instructorId: instructor.id })
+    await inMemoryCoursesRepository.create(course)
+
+    await sut.exec({
+      name: 'John Doe Module 1',
+      description: 'module registration',
+      moduleNumber: 1, // Add a module to the first position
+      courseId: course.id.toString(),
+      instructorId: instructor.id.toString()
+    })
+
+    const result = await sut.exec({
+      name: 'John Doe Module 2',
+      description: 'module registration',
+      moduleNumber: 1, // trying to add a new module for the same position, as the first module
+      courseId: course.id.toString(),
+      instructorId: instructor.id.toString()
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(ModuleNumberIsAlreadyInUseError)
   })
 })
