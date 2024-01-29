@@ -43,6 +43,9 @@
 - [x] Only instructors can register a course.
 - [x] A specific instructor cannot register a course with the same name.
 - [ ] A student should only be able to rate a class and a given course once.
+- [x] Should not be able to register a course with the same name in same instructor account.
+- [x] Should not be able to register a module to a course with the same name twice.
+- [x] Should not be able to add a class to a module with the same name twice.
 - [x] Should not be able to register a module to a specific course with same name twice.
 - [ ] A student can only issue one certificate per course.
 - [ ] A student can only enroll for a particular course once.
