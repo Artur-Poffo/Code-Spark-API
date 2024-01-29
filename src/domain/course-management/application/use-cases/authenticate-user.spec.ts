@@ -2,6 +2,7 @@ import { WrongCredentialsError } from '@/core/errors/errors/wrong-credentials-er
 import { FakeHasher } from '../../../../../test/cryptography/fake-hasher'
 import { makeInstructor } from '../../../../../test/factories/make-instructor'
 import { makeStudent } from '../../../../../test/factories/make-student'
+import { InMemoryClassesRepository } from '../../../../../test/repositories/in-memory-classes-repository'
 import { InMemoryCoursesRepository } from '../../../../../test/repositories/in-memory-courses-repository'
 import { InMemoryStudentsRepository } from '../../../../../test/repositories/in-memory-students-repository'
 import { FakeEncrypter } from './../../../../../test/cryptography/fake-encrypter'
@@ -11,6 +12,7 @@ import { InMemoryUsersRepository } from './../../../../../test/repositories/in-m
 import { AuthenticateUserUseCase } from './authenticate-user'
 
 let inMemoryModulesRepository: InMemoryModulesRepository
+let inMemoryClassesRepository: InMemoryClassesRepository
 let inMemoryCoursesRepository: InMemoryCoursesRepository
 let inMemoryInstructorsRepository: InMemoryInstructorRepository
 let inMemoryStudentsRepository: InMemoryStudentsRepository
@@ -22,7 +24,8 @@ let sut: AuthenticateUserUseCase
 describe('Authenticate user use case', () => {
   beforeEach(() => {
     inMemoryModulesRepository = new InMemoryModulesRepository()
-    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository)
+    inMemoryClassesRepository = new InMemoryClassesRepository(inMemoryModulesRepository)
+    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryClassesRepository, inMemoryInstructorsRepository)
     inMemoryInstructorsRepository = new InMemoryInstructorRepository(inMemoryCoursesRepository)
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
     inMemoryUsersRepository = new InMemoryUsersRepository(inMemoryInstructorsRepository, inMemoryStudentsRepository)

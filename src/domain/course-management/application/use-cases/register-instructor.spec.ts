@@ -1,4 +1,5 @@
 import { FakeHasher } from '../../../../../test/cryptography/fake-hasher'
+import { InMemoryClassesRepository } from '../../../../../test/repositories/in-memory-classes-repository'
 import { InMemoryCoursesRepository } from '../../../../../test/repositories/in-memory-courses-repository'
 import { InMemoryInstructorRepository } from '../../../../../test/repositories/in-memory-instructors-repository'
 import { InMemoryModulesRepository } from './../../../../../test/repositories/in-memory-modules-repository'
@@ -6,6 +7,7 @@ import { InstructorAlreadyExistsError } from './errors/instructor-already-exists
 import { RegisterInstructorUseCase } from './register-instructor'
 
 let inMemoryModulesRepository: InMemoryModulesRepository
+let inMemoryClassesRepository: InMemoryClassesRepository
 let inMemoryCoursesRepository: InMemoryCoursesRepository
 let inMemoryInstructorsRepository: InMemoryInstructorRepository
 let fakeHasher: FakeHasher
@@ -14,7 +16,8 @@ let sut: RegisterInstructorUseCase
 describe('Register instructor use case', () => {
   beforeEach(() => {
     inMemoryModulesRepository = new InMemoryModulesRepository()
-    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository)
+    inMemoryClassesRepository = new InMemoryClassesRepository(inMemoryModulesRepository)
+    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryClassesRepository, inMemoryInstructorsRepository)
     inMemoryInstructorsRepository = new InMemoryInstructorRepository(inMemoryCoursesRepository)
     fakeHasher = new FakeHasher()
     sut = new RegisterInstructorUseCase(inMemoryInstructorsRepository, fakeHasher)

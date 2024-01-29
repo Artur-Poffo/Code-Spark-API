@@ -2,6 +2,7 @@ import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { makeCourse } from '../../../../../test/factories/make-course'
 import { makeInstructor } from '../../../../../test/factories/make-instructor'
+import { InMemoryClassesRepository } from '../../../../../test/repositories/in-memory-classes-repository'
 import { InMemoryCoursesRepository } from './../../../../../test/repositories/in-memory-courses-repository'
 import { InMemoryInstructorRepository } from './../../../../../test/repositories/in-memory-instructors-repository'
 import { InMemoryModulesRepository } from './../../../../../test/repositories/in-memory-modules-repository'
@@ -9,6 +10,7 @@ import { ModuleAlreadyExistsInThisCourse } from './errors/module-already-exists-
 import { RegisterModuleToCourseUseCase } from './register-module-to-course'
 
 let inMemoryCoursesRepository: InMemoryCoursesRepository
+let inMemoryClassesRepository: InMemoryClassesRepository
 let inMemoryInstructorRepository: InMemoryInstructorRepository
 let inMemoryModulesRepository: InMemoryModulesRepository
 let sut: RegisterModuleToCourseUseCase
@@ -16,8 +18,9 @@ let sut: RegisterModuleToCourseUseCase
 describe('Register module to a course use case', () => {
   beforeEach(() => {
     inMemoryModulesRepository = new InMemoryModulesRepository()
+    inMemoryClassesRepository = new InMemoryClassesRepository(inMemoryModulesRepository)
     inMemoryInstructorRepository = new InMemoryInstructorRepository(inMemoryCoursesRepository)
-    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorRepository)
+    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryClassesRepository, inMemoryInstructorRepository)
     sut = new RegisterModuleToCourseUseCase(inMemoryCoursesRepository, inMemoryModulesRepository)
   })
 

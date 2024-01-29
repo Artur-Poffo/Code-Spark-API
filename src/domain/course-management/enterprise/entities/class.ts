@@ -31,7 +31,7 @@ export class Class extends Entity<ClassProps> {
     return this.props.classNumber
   }
 
-  get moduleKey() {
+  get moduleId() {
     return this.props.moduleId
   }
 
