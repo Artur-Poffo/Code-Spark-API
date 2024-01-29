@@ -5,7 +5,7 @@ import { type UseCase } from '@/core/use-cases/use-case'
 import { Course } from '../../enterprise/entities/course'
 import { type CoursesRepository } from '../repositories/courses-repository'
 import { type InstructorsRepository } from '../repositories/instructors-repository'
-import { CourseAlreadyExistsInThisAccount } from './errors/course-already-exists-in-this-account'
+import { CourseAlreadyExistsInThisAccountError } from './errors/course-already-exists-in-this-account-error'
 
 interface RegisterCourseUseCaseRequest {
   name: string
@@ -14,7 +14,7 @@ interface RegisterCourseUseCaseRequest {
 }
 
 type RegisterCourseUseCaseResponse = Either<
-ResourceNotFoundError | CourseAlreadyExistsInThisAccount,
+ResourceNotFoundError | CourseAlreadyExistsInThisAccountError,
 {
   course: Course
 }
@@ -40,7 +40,7 @@ export class RegisterCourseUseCase implements UseCase<RegisterCourseUseCaseReque
     const courseWithSameNameInSameAccount = instructorWithCourses.courses.find(courseToCompare => courseToCompare.name === name)
 
     if (courseWithSameNameInSameAccount) {
-      return left(new CourseAlreadyExistsInThisAccount(instructorWithCourses.instructor.email))
+      return left(new CourseAlreadyExistsInThisAccountError(instructorWithCourses.instructor.email))
     }
 
     const course = Course.create({

@@ -8,8 +8,8 @@ import { InMemoryCoursesRepository } from '../../../../../test/repositories/in-m
 import { InMemoryInstructorRepository } from './../../../../../test/repositories/in-memory-instructors-repository'
 import { InMemoryModulesRepository } from './../../../../../test/repositories/in-memory-modules-repository'
 import { AddClassToModuleUseCase } from './add-class-to-module'
-import { ClassAlreadyExistsInThisModule } from './errors/class-already-exists-in-this-module'
-import { ClassNumberIsAlreadyInUse } from './errors/class-number-is-already-in-use'
+import { ClassAlreadyExistsInThisModuleError } from './errors/class-already-exists-in-this-module-error'
+import { ClassNumberIsAlreadyInUseError } from './errors/class-number-is-already-in-use-error'
 
 let inMemoryModulesRepository: InMemoryModulesRepository
 let inMemoryCoursesRepository: InMemoryCoursesRepository
@@ -143,7 +143,7 @@ describe('Add class to a module use case', () => {
     })
 
     expect(result.isLeft()).toBe(true)
-    expect(result.value).toBeInstanceOf(ClassAlreadyExistsInThisModule)
+    expect(result.value).toBeInstanceOf(ClassAlreadyExistsInThisModuleError)
   })
 
   it('should not be able to add a class to a module in same number/position twice', async () => {
@@ -180,6 +180,6 @@ describe('Add class to a module use case', () => {
     })
 
     expect(result.isLeft()).toBe(true)
-    expect(result.value).toBeInstanceOf(ClassNumberIsAlreadyInUse)
+    expect(result.value).toBeInstanceOf(ClassNumberIsAlreadyInUseError)
   })
 })

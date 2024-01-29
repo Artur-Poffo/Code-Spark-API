@@ -7,8 +7,8 @@ import { Class } from '../../enterprise/entities/class'
 import { type ClassesRepository } from '../repositories/classes-repository'
 import { type CoursesRepository } from '../repositories/courses-repository'
 import { type ModulesRepository } from '../repositories/modules-repository'
-import { ClassAlreadyExistsInThisModule } from './errors/class-already-exists-in-this-module'
-import { ClassNumberIsAlreadyInUse } from './errors/class-number-is-already-in-use'
+import { ClassAlreadyExistsInThisModuleError } from './errors/class-already-exists-in-this-module-error'
+import { ClassNumberIsAlreadyInUseError } from './errors/class-number-is-already-in-use-error'
 
 interface AddClassToModuleUseCaseRequest {
   name: string
@@ -21,7 +21,7 @@ interface AddClassToModuleUseCaseRequest {
 }
 
 type AddClassToModuleUseCaseResponse = Either<
-ResourceNotFoundError | NotAllowedError | ClassAlreadyExistsInThisModule | ClassNumberIsAlreadyInUse,
+ResourceNotFoundError | NotAllowedError | ClassAlreadyExistsInThisModuleError | ClassNumberIsAlreadyInUseError,
 {
   class: Class
 }
@@ -65,13 +65,13 @@ export class AddClassToModuleUseCase implements UseCase<AddClassToModuleUseCaseR
     const classWithSameNameInSameModule = classesInThisModule.find(classToCompare => classToCompare.name === name)
 
     if (classWithSameNameInSameModule) {
-      return left(new ClassAlreadyExistsInThisModule(moduleId))
+      return left(new ClassAlreadyExistsInThisModuleError(moduleId))
     }
 
     const classWithSamePositionInThisModule = classesInThisModule.find(classToCompare => classToCompare.classNumber === classNumber)
 
     if (classWithSamePositionInThisModule) {
-      return left(new ClassNumberIsAlreadyInUse(classNumber))
+      return left(new ClassNumberIsAlreadyInUseError(classNumber))
     }
 
     const classToAdd = Class.create({
