@@ -14,7 +14,7 @@ describe('Register tag use case', () => {
 
   it('should be able to register a new tag for the application', async () => {
     const result = await sut.exec({
-      tags: 'TypeScript'
+      tags: ['TypeScript']
     })
 
     expect(result.isRight()).toBe(true)
@@ -41,11 +41,11 @@ describe('Register tag use case', () => {
 
   it('should not be able to register a new tag for the application with same value twice', async () => {
     await sut.exec({
-      tags: 'TypeScript'
+      tags: ['TypeScript']
     })
 
     const result = await sut.exec({
-      tags: 'TypeScript'
+      tags: ['TypeScript']
     })
 
     expect(result.isLeft()).toBe(true)

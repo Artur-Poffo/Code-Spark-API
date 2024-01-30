@@ -6,7 +6,7 @@ import { RepeatedTagError } from './errors/repeated-tag-error'
 import { TagAlreadyExistsError } from './errors/tag-already-exists-error'
 
 interface RegisterTagUseCaseRequest {
-  tags: string | string[]
+  tags: string[]
 }
 
 type RegisterTagUseCaseResponse = Either<
@@ -24,7 +24,7 @@ export class RegisterTagUseCase implements UseCase<RegisterTagUseCaseRequest, Re
   async exec({
     tags
   }: RegisterTagUseCaseRequest): Promise<RegisterTagUseCaseResponse> {
-    const tagsToRegister = Array.isArray(tags) ? tags : [tags]
+    const tagsToRegister = tags
 
     const haveRepeatedTags = new Set(tagsToRegister).size !== tagsToRegister.length
 
