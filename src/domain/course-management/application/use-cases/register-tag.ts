@@ -2,16 +2,17 @@ import { left, right, type Either } from '@/core/either'
 import { type UseCase } from '@/core/use-cases/use-case'
 import { Tag } from '../../enterprise/entities/tag'
 import { type TagsRepository } from '../repositories/tags-repository'
+import { RepeatedTagError } from './errors/repeated-tag-error'
 import { TagAlreadyExistsError } from './errors/tag-already-exists-error'
 
 interface RegisterTagUseCaseRequest {
-  value: string
+  tags: string | string[]
 }
 
 type RegisterTagUseCaseResponse = Either<
 TagAlreadyExistsError,
 {
-  tag: Tag
+  tags: Tag[]
 }
 >
 
@@ -21,22 +22,35 @@ export class RegisterTagUseCase implements UseCase<RegisterTagUseCaseRequest, Re
   ) { }
 
   async exec({
-    value
+    tags
   }: RegisterTagUseCaseRequest): Promise<RegisterTagUseCaseResponse> {
-    const tagAlreadyExists = await this.tagsRepository.findByValue(value)
+    const tagsToRegister = Array.isArray(tags) ? tags : [tags]
 
-    if (tagAlreadyExists) {
-      return left(new TagAlreadyExistsError(value))
+    const haveRepeatedTags = new Set(tagsToRegister).size !== tagsToRegister.length
+
+    if (haveRepeatedTags) {
+      return left(new RepeatedTagError())
     }
 
-    const tag = Tag.create({
-      value
-    })
+    const existingTags = await Promise.all(
+      tagsToRegister.map(async (tagValue) => ({
+        tagValue: tagValue.toUpperCase(),
+        exists: !!(await this.tagsRepository.findByValue(tagValue.toUpperCase()))
+      }))
+    )
 
-    await this.tagsRepository.create(tag)
+    const alreadyExists = existingTags.find((tag) => tag.exists)
+
+    if (alreadyExists) {
+      return left(new TagAlreadyExistsError(alreadyExists.tagValue))
+    }
+
+    const newTags = tagsToRegister.map((value) => Tag.create({ value: value.toUpperCase() }))
+
+    await Promise.all(newTags.map(async (tag) => await this.tagsRepository.create(tag)))
 
     return right({
-      tag
+      tags: newTags
     })
   }
 }
