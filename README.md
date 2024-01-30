@@ -10,7 +10,7 @@
 - [x] Instructors can register modules for a course.
 - [x] Instructors can add classes to modules.
 - [x] Should be able to register tags
-- [ ] Responsible instructor can add "tags" to their course to inform students about technologies present in the course.
+- [x] Responsible instructor can add "tags" to their course to inform students about technologies present in the course.
 - [ ] Instructors can upload videos.
 - [ ] Instructor can upload a certificate template for students upon course completion.
 - [ ] Return information of an instructor with their courses.

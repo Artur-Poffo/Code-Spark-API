@@ -43,7 +43,9 @@ export class RegisterModuleToCourseUseCase implements UseCase<RegisterModuleToCo
       return left(new ResourceNotFoundError())
     }
 
-    if (completeCourse.instructorId.toString() !== instructorId) {
+    const instructorIsTheSponsor = completeCourse.instructorId.toString() !== instructorId
+
+    if (instructorIsTheSponsor) {
       return left(new NotAllowedError())
     }
 
