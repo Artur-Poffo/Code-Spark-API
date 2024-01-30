@@ -10,6 +10,7 @@ import { InMemoryInstructorRepository } from '../../../../../test/repositories/i
 import { InMemoryModulesRepository } from '../../../../../test/repositories/in-memory-modules-repository'
 import { InMemoryTagsRepository } from '../../../../../test/repositories/in-memory-tags-repository'
 import { AttachTagToCourseUseCase } from './attach-tag-to-course'
+import { RepeatedTagError } from './errors/repeated-tag-error'
 import { TagAlreadyAttachedError } from './errors/tag-already-attached-error'
 
 let inMemoryCourseTagsRepository: InMemoryCourseTagsRepository
@@ -28,10 +29,10 @@ describe('Attach tag to course use case', () => {
     inMemoryClassesRepository = new InMemoryClassesRepository(inMemoryModulesRepository)
     inMemoryInstructorsRepository = new InMemoryInstructorRepository(inMemoryCoursesRepository)
     inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryClassesRepository, inMemoryInstructorsRepository)
-    sut = new AttachTagToCourseUseCase(inMemoryCourseTagsRepository, inMemoryCoursesRepository)
+    sut = new AttachTagToCourseUseCase(inMemoryCourseTagsRepository, inMemoryTagsRepository, inMemoryCoursesRepository)
   })
 
-  it('should be able to attach a new tag for a course', async () => {
+  it('should be able to attach a tag for a course', async () => {
     const instructor = makeInstructor()
     await inMemoryInstructorsRepository.create(instructor)
 
@@ -42,27 +43,84 @@ describe('Attach tag to course use case', () => {
     await inMemoryTagsRepository.create(tag)
 
     const result = await sut.exec({
+      tagIds: [tag.id.toString()],
       courseId: course.id.toString(),
-      tagId: tag.id.toString(),
       instructorId: course.instructorId.toString()
     })
 
     expect(result.isRight()).toBe(true)
     expect(result.value).toMatchObject({
-      attachedTag: expect.objectContaining({
-        courseId: course.id,
-        tagId: tag.id
-      })
+      attachedTags: expect.arrayContaining([
+        expect.objectContaining({
+          tagId: tag.id,
+          courseId: course.id
+        })
+      ])
     })
   })
 
-  it('should not be able to attach a new tag for a inexistent course', async () => {
+  it('should be able to attach many tags for a course at same time', async () => {
+    const instructor = makeInstructor()
+    await inMemoryInstructorsRepository.create(instructor)
+
+    const course = makeCourse()
+    await inMemoryCoursesRepository.create(course)
+
+    const firstTag = makeTag({ value: 'TYPESCRIPT' })
+    const secondTag = makeTag({ value: 'VUE.JS' })
+
+    const firstTagAndSecondTag = await Promise.all([
+      inMemoryTagsRepository.create(firstTag),
+      inMemoryTagsRepository.create(secondTag)
+    ])
+
+    const result = await sut.exec({
+      tagIds: [firstTagAndSecondTag[0].id.toString(), firstTagAndSecondTag[1].id.toString()],
+      courseId: course.id.toString(),
+      instructorId: course.instructorId.toString()
+    })
+
+    expect(result.isRight()).toBe(true)
+    expect(result.value).toMatchObject({
+      attachedTags: expect.arrayContaining([
+        expect.objectContaining({
+          tagId: firstTagAndSecondTag[0].id,
+          courseId: course.id
+        }),
+        expect.objectContaining({
+          tagId: firstTagAndSecondTag[1].id,
+          courseId: course.id
+        })
+      ])
+    })
+  })
+
+  it('should not be able to attach a inexistent tag for a course', async () => {
+    const instructor = makeInstructor()
+    await inMemoryInstructorsRepository.create(instructor)
+
+    const course = makeCourse()
+    await inMemoryCoursesRepository.create(course)
+
+    const result = await sut.exec({
+      tagIds: ['inexistentTag'],
+      courseId: course.id.toString(),
+      instructorId: course.instructorId.toString()
+    })
+
+    expect(result.isRight()).toBe(true) // OK
+    expect(result.value).toMatchObject({ // But not attach any tag
+      attachedTags: []
+    })
+  })
+
+  it('should not be able to attach a tag for a inexistent course', async () => {
     const tag = makeTag({ value: 'TYPESCRIPT' })
     await inMemoryTagsRepository.create(tag)
 
     const result = await sut.exec({
+      tagIds: [tag.id.toString()],
       courseId: 'inexistentCourse',
-      tagId: tag.id.toString(),
       instructorId: 'inexistentInstructor'
     })
 
@@ -70,7 +128,7 @@ describe('Attach tag to course use case', () => {
     expect(result.value).toBeInstanceOf(ResourceNotFoundError)
   })
 
-  it('should not be able to attach a new tag for a course if the instructor not is the sponsor', async () => {
+  it('should not be able to attach a tag for a course if the instructor not is the sponsor', async () => {
     const sponsor = makeInstructor()
     const wrongInstructor = makeInstructor()
 
@@ -86,8 +144,8 @@ describe('Attach tag to course use case', () => {
     await inMemoryTagsRepository.create(tag)
 
     const result = await sut.exec({
+      tagIds: [tag.id.toString()],
       courseId: course.id.toString(),
-      tagId: tag.id.toString(),
       instructorId: wrongInstructor.id.toString()
     })
 
@@ -106,18 +164,38 @@ describe('Attach tag to course use case', () => {
     await inMemoryTagsRepository.create(tag)
 
     await sut.exec({
+      tagIds: [tag.id.toString()],
       courseId: course.id.toString(),
-      tagId: tag.id.toString(),
       instructorId: course.instructorId.toString()
     })
 
     const result = await sut.exec({
+      tagIds: [tag.id.toString()],
       courseId: course.id.toString(),
-      tagId: tag.id.toString(),
       instructorId: course.instructorId.toString()
     })
 
     expect(result.isLeft()).toBe(true)
     expect(result.value).toBeInstanceOf(TagAlreadyAttachedError)
+  })
+
+  it('should not be able to attach a same tag for a course twice at same time', async () => {
+    const instructor = makeInstructor()
+    await inMemoryInstructorsRepository.create(instructor)
+
+    const course = makeCourse()
+    await inMemoryCoursesRepository.create(course)
+
+    const tag = makeTag({ value: 'TYPESCRIPT' })
+    await inMemoryTagsRepository.create(tag)
+
+    const result = await sut.exec({
+      tagIds: [tag.id.toString(), tag.id.toString()], // Same tag twice
+      courseId: course.id.toString(),
+      instructorId: course.instructorId.toString()
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(RepeatedTagError)
   })
 })

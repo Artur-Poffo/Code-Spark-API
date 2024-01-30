@@ -6,33 +6,42 @@ import { type UseCase } from '@/core/use-cases/use-case'
 import { CourseTag } from '../../enterprise/entities/course-tag'
 import { type CourseTagsRepository } from '../repositories/course-tags-repository'
 import { type CoursesRepository } from '../repositories/courses-repository'
+import { type TagsRepository } from '../repositories/tags-repository'
+import { RepeatedTagError } from './errors/repeated-tag-error'
 import { TagAlreadyAttachedError } from './errors/tag-already-attached-error'
 import { type TagAlreadyExistsError } from './errors/tag-already-exists-error'
 
 interface AttachTagToCourseUseCaseRequest {
+  tagIds: string[]
   courseId: string
-  tagId: string
   instructorId: string
 }
 
 type AttachTagToCourseUseCaseResponse = Either<
 TagAlreadyExistsError,
 {
-  attachedTag: CourseTag
+  attachedTags: CourseTag[]
 }
 >
 
 export class AttachTagToCourseUseCase implements UseCase<AttachTagToCourseUseCaseRequest, AttachTagToCourseUseCaseResponse> {
   constructor(
     private readonly courseTagsRepository: CourseTagsRepository,
+    private readonly tagsRepository: TagsRepository,
     private readonly coursesRepository: CoursesRepository
   ) { }
 
   async exec({
+    tagIds,
     courseId,
-    tagId,
     instructorId
   }: AttachTagToCourseUseCaseRequest): Promise<AttachTagToCourseUseCaseResponse> {
+    const haveRepeatedTagsToAttach = new Set(tagIds).size !== tagIds.length
+
+    if (haveRepeatedTagsToAttach) {
+      return left(new RepeatedTagError())
+    }
+
     const course = await this.coursesRepository.findById(courseId)
 
     if (!course) {
@@ -46,21 +55,38 @@ export class AttachTagToCourseUseCase implements UseCase<AttachTagToCourseUseCas
     }
 
     const courseTags = await this.courseTagsRepository.findManyByCourseId(courseId)
-    const tagIsAlreadyAttached = courseTags.find(courseTag => courseTag.tagId.toString() === tagId)
+    const anyTagIsAlreadyAttached = courseTags.find(courseTag => tagIds.includes(courseTag.tagId.toString()))
 
-    if (tagIsAlreadyAttached) {
-      return left(new TagAlreadyAttachedError({ tagId, courseId }))
+    if (anyTagIsAlreadyAttached) {
+      return left(new TagAlreadyAttachedError({ tagId: anyTagIsAlreadyAttached.tagId.toString(), courseId }))
     }
 
-    const newAttachedTag = CourseTag.create({
-      courseId: new UniqueEntityID(courseId),
-      tagId: new UniqueEntityID(tagId)
-    })
+    const tagsToAttach = await Promise.all(tagIds.map(async (tagId) => {
+      const tagToAttach = await this.tagsRepository.findById(tagId)
 
-    await this.courseTagsRepository.create(newAttachedTag)
+      if (!tagToAttach) {
+        return null
+      }
+
+      const newCourseTag = CourseTag.create({
+        tagId: new UniqueEntityID(tagId),
+        courseId: new UniqueEntityID(courseId)
+      })
+
+      return await this.courseTagsRepository.create(newCourseTag)
+    })
+    )
+
+    const attachedTags = tagsToAttach.filter(attachedTag => attachedTag !== null) as unknown as CourseTag[]
+
+    if (attachedTags.length === 0) {
+      return right({
+        attachedTags: []
+      })
+    }
 
     return right({
-      attachedTag: newAttachedTag
+      attachedTags
     })
   }
 }
