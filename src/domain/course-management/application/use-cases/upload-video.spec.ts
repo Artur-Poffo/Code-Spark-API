@@ -1,13 +1,13 @@
 import { InMemoryVideosRepository } from './../../../../../test/repositories/in-memory-videos-repository'
-import { UploadVideo } from './upload-video'
+import { UploadVideoUseCase } from './upload-video'
 
 let inMemoryVideosRepository: InMemoryVideosRepository
-let sut: UploadVideo
+let sut: UploadVideoUseCase
 
 describe('Add video to class use case', () => {
   beforeEach(() => {
     inMemoryVideosRepository = new InMemoryVideosRepository()
-    sut = new UploadVideo(inMemoryVideosRepository)
+    sut = new UploadVideoUseCase(inMemoryVideosRepository)
   })
 
   it('should be able to upload a video', async () => {

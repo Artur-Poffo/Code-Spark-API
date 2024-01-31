@@ -4,7 +4,7 @@ import { type UseCase } from '@/core/use-cases/use-case'
 import { Video } from '../../enterprise/entities/video'
 import { type VideosRepository } from './../repositories/videos-repository'
 
-interface UploadVideoRequest {
+interface UploadVideoUseCaseRequest {
   videoName: string
   videoType?: 'video/mp4' | 'video/avi'
   body: Buffer
@@ -12,14 +12,14 @@ interface UploadVideoRequest {
   size: number
 }
 
-type UploadVideoResponse = Either<
+type UploadVideoUseCaseResponse = Either<
 ResourceNotFoundError,
 {
   video: Video
 }
 >
 
-export class UploadVideo implements UseCase<UploadVideoRequest, UploadVideoResponse> {
+export class UploadVideoUseCase implements UseCase<UploadVideoUseCaseRequest, UploadVideoUseCaseResponse> {
   constructor(
     private readonly videosRepository: VideosRepository
   ) {}
@@ -30,7 +30,7 @@ export class UploadVideo implements UseCase<UploadVideoRequest, UploadVideoRespo
     body,
     duration,
     size
-  }: UploadVideoRequest): Promise<UploadVideoResponse> {
+  }: UploadVideoUseCaseRequest): Promise<UploadVideoUseCaseResponse> {
     const video = Video.create({
       videoName,
       videoType,
