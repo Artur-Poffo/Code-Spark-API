@@ -11,7 +11,7 @@ export function makeClass(
       name: faker.commerce.productName(),
       description: faker.commerce.productDescription(),
       classNumber: faker.number.int(),
-      classVideoId: override.classVideoId ?? new UniqueEntityID(),
+      videoId: override.videoId ?? new UniqueEntityID(),
       moduleId: override.moduleId ?? new UniqueEntityID(),
       ...override
     },

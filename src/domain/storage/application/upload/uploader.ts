@@ -2,6 +2,7 @@ export interface UploadParams {
   fileName: string
   fileType: string
   body: Buffer
+  size: number
 }
 
 export interface Uploader {
