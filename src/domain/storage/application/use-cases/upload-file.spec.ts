@@ -18,6 +18,7 @@ describe('Upload file use case', () => {
     const result = await sut.exec({
       fileName: 'profile',
       fileType: 'image/jpeg',
+      size: 1024 * 1024, // One megabyte
       body: Buffer.from('body-image')
     })
 
@@ -34,6 +35,7 @@ describe('Upload file use case', () => {
     const result = await sut.exec({
       fileName: 'profile',
       fileType: 'image/svg', // Invalid Mime Type
+      size: 1024 * 1024, // One megabyte
       body: Buffer.from('body-image')
     })
 

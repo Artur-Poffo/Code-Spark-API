@@ -1,20 +1,20 @@
 import { left, right, type Either } from '@/core/either'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { type UseCase } from '@/core/use-cases/use-case'
 import { Class } from '../../enterprise/entities/class'
+import { type ClassVideosRepository } from '../repositories/class-videos-repository'
 import { type ClassesRepository } from '../repositories/classes-repository'
 import { type CoursesRepository } from '../repositories/courses-repository'
 import { type ModulesRepository } from '../repositories/modules-repository'
 import { ClassAlreadyExistsInThisModuleError } from './errors/class-already-exists-in-this-module-error'
 import { ClassNumberIsAlreadyInUseError } from './errors/class-number-is-already-in-use-error'
+import { ClassVideoRequiredError } from './errors/class-video-required-error'
 
 interface AddClassToModuleUseCaseRequest {
   name: string
   description: string
-  duration: number
-  videoKey: string
+  classVideoId: string
   classNumber: number
   moduleId: string
   instructorId: string
@@ -31,15 +31,15 @@ export class AddClassToModuleUseCase implements UseCase<AddClassToModuleUseCaseR
   constructor(
     private readonly classesRepository: ClassesRepository,
     private readonly modulesRepository: ModulesRepository,
-    private readonly coursesRepository: CoursesRepository
+    private readonly coursesRepository: CoursesRepository,
+    private readonly classVideosRepository: ClassVideosRepository
   ) {}
 
   async exec({
     name,
     description,
-    duration,
+    classVideoId,
     classNumber,
-    videoKey,
     moduleId,
     instructorId
   }: AddClassToModuleUseCaseRequest): Promise<AddClassToModuleUseCaseResponse> {
@@ -74,13 +74,18 @@ export class AddClassToModuleUseCase implements UseCase<AddClassToModuleUseCaseR
       return left(new ClassNumberIsAlreadyInUseError(classNumber))
     }
 
+    const classVideo = await this.classVideosRepository.findById(classVideoId)
+
+    if (!classVideo) {
+      return left(new ClassVideoRequiredError())
+    }
+
     const classToAdd = Class.create({
       name,
       description,
-      duration,
-      videoKey,
+      classVideoId: classVideo.id,
       classNumber,
-      moduleId: new UniqueEntityID(moduleId)
+      moduleId: module.id
     })
 
     await this.classesRepository.create(classToAdd)

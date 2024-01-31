@@ -1,17 +1,21 @@
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
+import { makeClassVideo } from '../../../../../test/factories/make-class-video'
 import { makeCourse } from '../../../../../test/factories/make-course'
 import { makeInstructor } from '../../../../../test/factories/make-instructor'
 import { makeModule } from '../../../../../test/factories/make-module'
 import { InMemoryClassesRepository } from '../../../../../test/repositories/in-memory-classes-repository'
 import { InMemoryCoursesRepository } from '../../../../../test/repositories/in-memory-courses-repository'
+import { InMemoryClassVideosRepository } from './../../../../../test/repositories/in-memory-class-videos-repository'
 import { InMemoryInstructorRepository } from './../../../../../test/repositories/in-memory-instructors-repository'
 import { InMemoryModulesRepository } from './../../../../../test/repositories/in-memory-modules-repository'
 import { AddClassToModuleUseCase } from './add-class-to-module'
 import { ClassAlreadyExistsInThisModuleError } from './errors/class-already-exists-in-this-module-error'
 import { ClassNumberIsAlreadyInUseError } from './errors/class-number-is-already-in-use-error'
+import { ClassVideoRequiredError } from './errors/class-video-required-error'
 
 let inMemoryModulesRepository: InMemoryModulesRepository
+let inMemoryClassVideosRepository: InMemoryClassVideosRepository
 let inMemoryCoursesRepository: InMemoryCoursesRepository
 let inMemoryInstructorsRepository: InMemoryInstructorRepository
 let inMemoryClassesRepository: InMemoryClassesRepository
@@ -19,14 +23,52 @@ let sut: AddClassToModuleUseCase
 
 describe('Add class to a module use case', () => {
   beforeEach(() => {
-    inMemoryModulesRepository = new InMemoryModulesRepository()
-    inMemoryClassesRepository = new InMemoryClassesRepository(inMemoryModulesRepository)
+    inMemoryClassVideosRepository = new InMemoryClassVideosRepository()
+    inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
+    inMemoryCoursesRepository = new InMemoryCoursesRepository(
+      inMemoryModulesRepository, inMemoryClassesRepository, inMemoryInstructorsRepository
+    )
     inMemoryInstructorsRepository = new InMemoryInstructorRepository(inMemoryCoursesRepository)
-    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryClassesRepository, inMemoryInstructorsRepository)
-    sut = new AddClassToModuleUseCase(inMemoryClassesRepository, inMemoryModulesRepository, inMemoryCoursesRepository)
+    inMemoryClassesRepository = new InMemoryClassesRepository(inMemoryModulesRepository)
+    sut = new AddClassToModuleUseCase(
+      inMemoryClassesRepository, inMemoryModulesRepository, inMemoryCoursesRepository, inMemoryClassVideosRepository
+    )
   })
 
   it('should be able to add a new class to a module', async () => {
+    const instructor = makeInstructor()
+    await inMemoryInstructorsRepository.create(instructor)
+
+    const course = makeCourse({ instructorId: instructor.id })
+    await inMemoryCoursesRepository.create(course)
+
+    const classVideo = makeClassVideo()
+    await inMemoryClassVideosRepository.create(classVideo)
+
+    const module = makeModule({
+      courseId: course.id,
+      moduleNumber: 1
+    })
+    await inMemoryModulesRepository.create(module)
+
+    const result = await sut.exec({
+      name: 'John Doe Class',
+      description: 'Class description',
+      classNumber: 1,
+      classVideoId: classVideo.id.toString(),
+      instructorId: course.instructorId.toString(),
+      moduleId: module.id.toString()
+    })
+
+    expect(result.isRight()).toBe(true)
+    expect(result.value).toMatchObject({
+      class: expect.objectContaining({
+        name: 'John Doe Class'
+      })
+    })
+  })
+
+  it('should not be able to add a new class to a module with a inexistent video', async () => {
     const instructor = makeInstructor()
     await inMemoryInstructorsRepository.create(instructor)
 
@@ -43,23 +85,21 @@ describe('Add class to a module use case', () => {
       name: 'John Doe Class',
       description: 'Class description',
       classNumber: 1,
-      duration: 600,
-      videoKey: 'video-key',
+      classVideoId: 'inexistentClassVideoId',
       instructorId: course.instructorId.toString(),
       moduleId: module.id.toString()
     })
 
-    expect(result.isRight()).toBe(true)
-    expect(result.value).toMatchObject({
-      class: expect.objectContaining({
-        name: 'John Doe Class'
-      })
-    })
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(ClassVideoRequiredError)
   })
 
   it('should not be able to add a class for a inexistent module', async () => {
     const instructor = makeInstructor()
     await inMemoryInstructorsRepository.create(instructor)
+
+    const classVideo = makeClassVideo()
+    await inMemoryClassVideosRepository.create(classVideo)
 
     const course = makeCourse({ instructorId: instructor.id })
     await inMemoryCoursesRepository.create(course)
@@ -68,8 +108,7 @@ describe('Add class to a module use case', () => {
       name: 'John Doe Class',
       description: 'Class description',
       classNumber: 1,
-      duration: 600,
-      videoKey: 'video-key',
+      classVideoId: classVideo.id.toString(),
       instructorId: course.instructorId.toString(),
       moduleId: 'inexistentModuleId'
     })
@@ -89,6 +128,9 @@ describe('Add class to a module use case', () => {
     const course = makeCourse({ instructorId: sponsor.id })
     await inMemoryCoursesRepository.create(course)
 
+    const classVideo = makeClassVideo()
+    await inMemoryClassVideosRepository.create(classVideo)
+
     const module = makeModule({
       courseId: course.id,
       moduleNumber: 1
@@ -99,8 +141,7 @@ describe('Add class to a module use case', () => {
       name: 'John Doe Class',
       description: 'Class description',
       classNumber: 1,
-      duration: 600,
-      videoKey: 'video-key',
+      classVideoId: classVideo.id.toString(),
       instructorId: wrongInstructor.id.toString(),
       moduleId: module.id.toString()
     })
@@ -116,6 +157,9 @@ describe('Add class to a module use case', () => {
     const course = makeCourse({ instructorId: instructor.id })
     await inMemoryCoursesRepository.create(course)
 
+    const classVideo = makeClassVideo()
+    await inMemoryClassVideosRepository.create(classVideo)
+
     const module = makeModule({
       courseId: course.id,
       moduleNumber: 1
@@ -126,8 +170,7 @@ describe('Add class to a module use case', () => {
       name: 'John Doe Class',
       description: 'Class description',
       classNumber: 1,
-      duration: 600,
-      videoKey: 'video-key',
+      classVideoId: classVideo.id.toString(),
       instructorId: course.instructorId.toString(),
       moduleId: module.id.toString()
     })
@@ -136,8 +179,7 @@ describe('Add class to a module use case', () => {
       name: 'John Doe Class',
       description: 'Class description',
       classNumber: 2,
-      duration: 600,
-      videoKey: 'video-key',
+      classVideoId: classVideo.id.toString(),
       instructorId: course.instructorId.toString(),
       moduleId: module.id.toString()
     })
@@ -153,6 +195,9 @@ describe('Add class to a module use case', () => {
     const course = makeCourse({ instructorId: instructor.id })
     await inMemoryCoursesRepository.create(course)
 
+    const classVideo = makeClassVideo()
+    await inMemoryClassVideosRepository.create(classVideo)
+
     const module = makeModule({
       courseId: course.id,
       moduleNumber: 1
@@ -163,8 +208,7 @@ describe('Add class to a module use case', () => {
       name: 'John Doe Class 1',
       description: 'Class description',
       classNumber: 1, // Add a class to the first position
-      duration: 600,
-      videoKey: 'video-key',
+      classVideoId: classVideo.id.toString(),
       instructorId: course.instructorId.toString(),
       moduleId: module.id.toString()
     })
@@ -173,8 +217,7 @@ describe('Add class to a module use case', () => {
       name: 'John Doe Class 2',
       description: 'Class description',
       classNumber: 1, // trying to add a new class for the same position, as the first class
-      duration: 600,
-      videoKey: 'video-key',
+      classVideoId: classVideo.id.toString(),
       instructorId: course.instructorId.toString(),
       moduleId: module.id.toString()
     })

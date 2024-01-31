@@ -18,7 +18,7 @@ let sut: GetUserInfoUseCase
 
 describe('Get user info use case', async () => {
   beforeEach(() => {
-    inMemoryModulesRepository = new InMemoryModulesRepository()
+    inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
     inMemoryClassesRepository = new InMemoryClassesRepository(inMemoryModulesRepository)
     inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryClassesRepository, inMemoryInstructorsRepository)
     inMemoryInstructorsRepository = new InMemoryInstructorRepository(inMemoryCoursesRepository)

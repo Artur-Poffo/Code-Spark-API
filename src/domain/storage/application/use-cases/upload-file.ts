@@ -9,6 +9,7 @@ interface UploadFileUseCaseRequest {
   fileName: string
   fileType: string
   body: Buffer
+  size: number
 }
 
 type UploadFileUseCaseResponse = Either<
@@ -27,7 +28,8 @@ export class UploadFileUseCase implements UseCase<UploadFileUseCaseRequest, Uplo
   async exec({
     fileName,
     fileType,
-    body
+    body,
+    size
   }: UploadFileUseCaseRequest): Promise<UploadFileUseCaseResponse> {
     if (!/image\/(jpeg|png)|video\/(mp4|avi)/.test(fileType)) {
       return left(new InvalidMimeTypeError(fileType))
@@ -38,7 +40,8 @@ export class UploadFileUseCase implements UseCase<UploadFileUseCaseRequest, Uplo
     const file = File.create({
       fileName,
       fileType,
-      fileKey: key
+      fileKey: key,
+      size
     })
 
     await this.filesRepository.create(file)

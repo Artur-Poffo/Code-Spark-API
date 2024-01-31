@@ -6,6 +6,7 @@ export interface FileProps {
   fileName: string
   fileType: string
   fileKey: string
+  size: number
   storedAt: Date
 }
 

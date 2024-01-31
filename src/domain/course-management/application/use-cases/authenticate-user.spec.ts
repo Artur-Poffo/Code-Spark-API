@@ -23,7 +23,7 @@ let sut: AuthenticateUserUseCase
 
 describe('Authenticate user use case', () => {
   beforeEach(() => {
-    inMemoryModulesRepository = new InMemoryModulesRepository()
+    inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
     inMemoryClassesRepository = new InMemoryClassesRepository(inMemoryModulesRepository)
     inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryClassesRepository, inMemoryInstructorsRepository)
     inMemoryInstructorsRepository = new InMemoryInstructorRepository(inMemoryCoursesRepository)
