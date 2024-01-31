@@ -11,7 +11,7 @@
 - [x] Instructors can add classes to modules.
 - [x] Should be able to register tags
 - [x] Responsible instructor can add "tags" to their course to inform students about technologies present in the course.
-- [ ] Instructors can upload videos.
+- [ ] Instructors can create classes and upload videos to them.
 - [ ] Instructor can upload a certificate template for students upon course completion.
 - [ ] Return information of an instructor with their courses.
 
@@ -150,8 +150,8 @@
 
   ## Storage Domain
 
-  - [ ] File
+  - [x] File
   - - id: string
     - fileName: string
     - filType: string
-    - body: buffer
+    - fileKey: string
