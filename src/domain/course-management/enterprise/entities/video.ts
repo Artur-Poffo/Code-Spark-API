@@ -1,13 +1,17 @@
 import { Entity } from '@/core/entities/entity'
+import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { type Optional } from '@/core/types/optional'
 
 export interface VideoProps {
   videoName: string
-  videoType: string
+  videoType: 'video/mp4' | 'video/avi'
   body: Buffer
   duration: number
+  size: number
+  storedAt: Date
 }
 
-export abstract class Video<Props extends VideoProps> extends Entity<Props> {
+export class Video extends Entity<VideoProps> {
   get videoName() {
     return this.props.videoName
   }
@@ -22,5 +26,21 @@ export abstract class Video<Props extends VideoProps> extends Entity<Props> {
 
   get duration() {
     return this.props.duration
+  }
+
+  static create(
+    props: Optional<VideoProps, 'storedAt' | 'videoType'>,
+    id?: UniqueEntityID
+  ) {
+    const video = new Video(
+      {
+        videoType: props.videoType ?? 'video/mp4',
+        storedAt: props.storedAt ?? new Date(),
+        ...props
+      },
+      id
+    )
+
+    return video
   }
 }

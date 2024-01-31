@@ -1,12 +1,12 @@
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
-import { makeClassVideo } from '../../../../../test/factories/make-class-video'
 import { makeCourse } from '../../../../../test/factories/make-course'
 import { makeInstructor } from '../../../../../test/factories/make-instructor'
 import { makeModule } from '../../../../../test/factories/make-module'
+import { makeVideo } from '../../../../../test/factories/make-video'
 import { InMemoryClassesRepository } from '../../../../../test/repositories/in-memory-classes-repository'
 import { InMemoryCoursesRepository } from '../../../../../test/repositories/in-memory-courses-repository'
-import { InMemoryClassVideosRepository } from './../../../../../test/repositories/in-memory-class-videos-repository'
+import { InMemoryVideosRepository } from '../../../../../test/repositories/in-memory-videos-repository'
 import { InMemoryInstructorRepository } from './../../../../../test/repositories/in-memory-instructors-repository'
 import { InMemoryModulesRepository } from './../../../../../test/repositories/in-memory-modules-repository'
 import { AddClassToModuleUseCase } from './add-class-to-module'
@@ -14,24 +14,27 @@ import { ClassAlreadyExistsInThisModuleError } from './errors/class-already-exis
 import { ClassNumberIsAlreadyInUseError } from './errors/class-number-is-already-in-use-error'
 import { ClassVideoRequiredError } from './errors/class-video-required-error'
 
+let inMemoryVideosRepository: InMemoryVideosRepository
+let inMemoryClassesRepository: InMemoryClassesRepository
 let inMemoryModulesRepository: InMemoryModulesRepository
-let inMemoryClassVideosRepository: InMemoryClassVideosRepository
 let inMemoryCoursesRepository: InMemoryCoursesRepository
 let inMemoryInstructorsRepository: InMemoryInstructorRepository
-let inMemoryClassesRepository: InMemoryClassesRepository
 let sut: AddClassToModuleUseCase
 
 describe('Add class to a module use case', () => {
   beforeEach(() => {
-    inMemoryClassVideosRepository = new InMemoryClassVideosRepository()
+    inMemoryVideosRepository = new InMemoryVideosRepository()
+
     inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
+    inMemoryClassesRepository = new InMemoryClassesRepository(inMemoryModulesRepository)
+    inMemoryInstructorsRepository = new InMemoryInstructorRepository(inMemoryCoursesRepository)
+
     inMemoryCoursesRepository = new InMemoryCoursesRepository(
       inMemoryModulesRepository, inMemoryClassesRepository, inMemoryInstructorsRepository
     )
-    inMemoryInstructorsRepository = new InMemoryInstructorRepository(inMemoryCoursesRepository)
-    inMemoryClassesRepository = new InMemoryClassesRepository(inMemoryModulesRepository)
+
     sut = new AddClassToModuleUseCase(
-      inMemoryClassesRepository, inMemoryModulesRepository, inMemoryCoursesRepository, inMemoryClassVideosRepository
+      inMemoryClassesRepository, inMemoryModulesRepository, inMemoryCoursesRepository, inMemoryVideosRepository
     )
   })
 
@@ -42,8 +45,8 @@ describe('Add class to a module use case', () => {
     const course = makeCourse({ instructorId: instructor.id })
     await inMemoryCoursesRepository.create(course)
 
-    const classVideo = makeClassVideo()
-    await inMemoryClassVideosRepository.create(classVideo)
+    const video = makeVideo()
+    await inMemoryVideosRepository.create(video)
 
     const module = makeModule({
       courseId: course.id,
@@ -55,7 +58,7 @@ describe('Add class to a module use case', () => {
       name: 'John Doe Class',
       description: 'Class description',
       classNumber: 1,
-      classVideoId: classVideo.id.toString(),
+      videoId: video.id.toString(),
       instructorId: course.instructorId.toString(),
       moduleId: module.id.toString()
     })
@@ -85,7 +88,7 @@ describe('Add class to a module use case', () => {
       name: 'John Doe Class',
       description: 'Class description',
       classNumber: 1,
-      classVideoId: 'inexistentClassVideoId',
+      videoId: 'inexistentVideoId',
       instructorId: course.instructorId.toString(),
       moduleId: module.id.toString()
     })
@@ -98,8 +101,8 @@ describe('Add class to a module use case', () => {
     const instructor = makeInstructor()
     await inMemoryInstructorsRepository.create(instructor)
 
-    const classVideo = makeClassVideo()
-    await inMemoryClassVideosRepository.create(classVideo)
+    const video = makeVideo()
+    await inMemoryVideosRepository.create(video)
 
     const course = makeCourse({ instructorId: instructor.id })
     await inMemoryCoursesRepository.create(course)
@@ -108,7 +111,7 @@ describe('Add class to a module use case', () => {
       name: 'John Doe Class',
       description: 'Class description',
       classNumber: 1,
-      classVideoId: classVideo.id.toString(),
+      videoId: video.id.toString(),
       instructorId: course.instructorId.toString(),
       moduleId: 'inexistentModuleId'
     })
@@ -128,8 +131,8 @@ describe('Add class to a module use case', () => {
     const course = makeCourse({ instructorId: sponsor.id })
     await inMemoryCoursesRepository.create(course)
 
-    const classVideo = makeClassVideo()
-    await inMemoryClassVideosRepository.create(classVideo)
+    const video = makeVideo()
+    await inMemoryVideosRepository.create(video)
 
     const module = makeModule({
       courseId: course.id,
@@ -141,7 +144,7 @@ describe('Add class to a module use case', () => {
       name: 'John Doe Class',
       description: 'Class description',
       classNumber: 1,
-      classVideoId: classVideo.id.toString(),
+      videoId: video.id.toString(),
       instructorId: wrongInstructor.id.toString(),
       moduleId: module.id.toString()
     })
@@ -157,8 +160,8 @@ describe('Add class to a module use case', () => {
     const course = makeCourse({ instructorId: instructor.id })
     await inMemoryCoursesRepository.create(course)
 
-    const classVideo = makeClassVideo()
-    await inMemoryClassVideosRepository.create(classVideo)
+    const video = makeVideo()
+    await inMemoryVideosRepository.create(video)
 
     const module = makeModule({
       courseId: course.id,
@@ -170,7 +173,7 @@ describe('Add class to a module use case', () => {
       name: 'John Doe Class',
       description: 'Class description',
       classNumber: 1,
-      classVideoId: classVideo.id.toString(),
+      videoId: video.id.toString(),
       instructorId: course.instructorId.toString(),
       moduleId: module.id.toString()
     })
@@ -179,7 +182,7 @@ describe('Add class to a module use case', () => {
       name: 'John Doe Class',
       description: 'Class description',
       classNumber: 2,
-      classVideoId: classVideo.id.toString(),
+      videoId: video.id.toString(),
       instructorId: course.instructorId.toString(),
       moduleId: module.id.toString()
     })
@@ -195,8 +198,8 @@ describe('Add class to a module use case', () => {
     const course = makeCourse({ instructorId: instructor.id })
     await inMemoryCoursesRepository.create(course)
 
-    const classVideo = makeClassVideo()
-    await inMemoryClassVideosRepository.create(classVideo)
+    const video = makeVideo()
+    await inMemoryVideosRepository.create(video)
 
     const module = makeModule({
       courseId: course.id,
@@ -208,7 +211,7 @@ describe('Add class to a module use case', () => {
       name: 'John Doe Class 1',
       description: 'Class description',
       classNumber: 1, // Add a class to the first position
-      classVideoId: classVideo.id.toString(),
+      videoId: video.id.toString(),
       instructorId: course.instructorId.toString(),
       moduleId: module.id.toString()
     })
@@ -217,7 +220,7 @@ describe('Add class to a module use case', () => {
       name: 'John Doe Class 2',
       description: 'Class description',
       classNumber: 1, // trying to add a new class for the same position, as the first class
-      classVideoId: classVideo.id.toString(),
+      videoId: video.id.toString(),
       instructorId: course.instructorId.toString(),
       moduleId: module.id.toString()
     })

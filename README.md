@@ -141,19 +141,18 @@
 
 - [x] Video
 - - id: string
+  - videoName: string
+  - videoType: 'video/mp4' | 'video/avi'
+  - body: Buffer
   - duration: number
-  - videoKey: string
-
-- [x] classVideo
-- - id: string
-  - ...patternData (Video)
-  - classId: string
+  - size: number
+  - storedAt: Date
 
 - [x] Class
 - - id: string
   - name: string
   - description: string
-  - classVideoId: string
+  - videoId: string
   - classNumber: number
   - moduleId: string
 
@@ -164,3 +163,5 @@
     - fileName: string
     - filType: string
     - fileKey: string
+    - size: number
+    - storedAt: Date
