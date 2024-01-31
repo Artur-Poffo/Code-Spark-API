@@ -150,4 +150,8 @@
 
   ## Storage Domain
 
-  > For the future....
+  - [ ] File
+  - - id: string
+    - fileName: string
+    - filType: string
+    - body: buffer
