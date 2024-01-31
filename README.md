@@ -139,12 +139,21 @@
   - studentId: string
   - issuedAt: date
 
+- [x] Video
+- - id: string
+  - duration: number
+  - videoKey: string
+
+- [x] classVideo
+- - id: string
+  - ...patternData (Video)
+  - classId: string
+
 - [x] Class
 - - id: string
   - name: string
   - description: string
-  - duration: number
-  - videoKey: string
+  - classVideoId: string
   - classNumber: number
   - moduleId: string
 

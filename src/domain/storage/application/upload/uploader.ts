@@ -5,5 +5,5 @@ export interface UploadParams {
 }
 
 export interface Uploader {
-  upload: (params: UploadParams) => Promise<{ url: string }>
+  upload: (params: UploadParams) => Promise<{ key: string }>
 }
