@@ -19,7 +19,8 @@ describe('Upload file use case', () => {
       fileName: 'profile',
       fileType: 'image/jpeg',
       size: 1024 * 1024, // One megabyte
-      body: Buffer.from('body-image')
+      body: Buffer.from('body-image'),
+      storedAt: new Date()
     })
 
     expect(result.isRight()).toBe(true)
@@ -36,7 +37,8 @@ describe('Upload file use case', () => {
       fileName: 'profile',
       fileType: 'image/svg', // Invalid Mime Type
       size: 1024 * 1024, // One megabyte
-      body: Buffer.from('body-image')
+      body: Buffer.from('body-image'),
+      storedAt: new Date()
     })
 
     expect(result.isLeft()).toBe(true)

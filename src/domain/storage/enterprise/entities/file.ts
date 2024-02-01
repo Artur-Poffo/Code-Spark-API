@@ -1,6 +1,5 @@
 import { AggregateRoot } from '@/core/entities/aggregate-root'
 import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { type Optional } from '@/core/types/optional'
 
 export interface FileProps {
   fileName: string
@@ -23,17 +22,20 @@ export class File extends AggregateRoot<FileProps> {
     return this.props.fileKey
   }
 
+  get size() {
+    return this.props.size
+  }
+
   get storedAt() {
     return this.props.storedAt
   }
 
   static create(
-    props: Optional<FileProps, 'storedAt'>,
+    props: FileProps,
     id?: UniqueEntityID
   ) {
     const file = new File(
       {
-        storedAt: props.storedAt ?? new Date(),
         ...props
       },
       id
