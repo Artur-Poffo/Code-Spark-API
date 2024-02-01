@@ -1,7 +1,7 @@
 import { type CoursesRepository } from '@/domain/course-management/application/repositories/courses-repository'
 import { type CompleteCourseDTO } from '@/domain/course-management/enterprise/entities/dtos/complete-course'
 import { type Course } from './../../src/domain/course-management/enterprise/entities/course'
-import { type InMemoryClassesRepository } from './in-memory-classes-repository'
+import { type ModuleWithClassesDTO } from './../../src/domain/course-management/enterprise/entities/dtos/module-with-classes'
 import { type InMemoryInstructorRepository } from './in-memory-instructors-repository'
 import { type InMemoryModulesRepository } from './in-memory-modules-repository'
 
@@ -10,7 +10,6 @@ export class InMemoryCoursesRepository implements CoursesRepository {
 
   constructor(
     private readonly inMemoryModulesRepository: InMemoryModulesRepository,
-    private readonly inMemoryClassesRepository: InMemoryClassesRepository,
     private readonly inMemoryInstructorRepository: InMemoryInstructorRepository
   ) {}
 
@@ -41,10 +40,10 @@ export class InMemoryCoursesRepository implements CoursesRepository {
       return null
     }
 
-    const courseModulesAndClasses = await Promise.all([
-      this.inMemoryModulesRepository.findManyByCourseId(course.id.toString()),
-      this.inMemoryClassesRepository.findManyByCourseId(course.id.toString())
-    ])
+    const courseModules = await this.inMemoryModulesRepository.findManyByCourseId(course.id.toString())
+    const courseModulesAndClasses = await Promise.all(courseModules.map(async courseModule => await this.inMemoryModulesRepository.findModuleWithClassesById(courseModule.id.toString())))
+
+    const nonNullModulesAndClasses: ModuleWithClassesDTO[] = courseModulesAndClasses.filter(courseModuleToCompare => courseModuleToCompare !== null) as ModuleWithClassesDTO[]
 
     const completeCourse: CompleteCourseDTO = {
       courseId: course.id,
@@ -58,8 +57,7 @@ export class InMemoryCoursesRepository implements CoursesRepository {
         profileImageKey: instructor.profileImageKey,
         bannerImageKey: instructor.bannerImageKey
       },
-      modules: courseModulesAndClasses[0],
-      classes: courseModulesAndClasses[1]
+      modules: nonNullModulesAndClasses.length > 0 ? nonNullModulesAndClasses : []
     }
 
     return completeCourse

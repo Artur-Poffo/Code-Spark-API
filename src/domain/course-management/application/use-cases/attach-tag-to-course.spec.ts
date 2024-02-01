@@ -28,7 +28,7 @@ describe('Attach tag to course use case', () => {
     inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
     inMemoryClassesRepository = new InMemoryClassesRepository(inMemoryModulesRepository)
     inMemoryInstructorsRepository = new InMemoryInstructorRepository(inMemoryCoursesRepository)
-    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryClassesRepository, inMemoryInstructorsRepository)
+    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository)
     sut = new AttachTagToCourseUseCase(inMemoryCourseTagsRepository, inMemoryTagsRepository, inMemoryCoursesRepository)
   })
 
