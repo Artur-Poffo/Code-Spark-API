@@ -49,13 +49,13 @@ export class RegisterModuleToCourseUseCase implements UseCase<RegisterModuleToCo
       return left(new NotAllowedError())
     }
 
-    const moduleWithSameNameInSameCourse = completeCourse.modules.find(moduleToCompare => moduleToCompare.name === name)
+    const moduleWithSameNameInSameCourse = completeCourse.modules.find(moduleToCompare => moduleToCompare.module.name === name)
 
     if (moduleWithSameNameInSameCourse) {
       return left(new ModuleAlreadyExistsInThisCourseError(name))
     }
 
-    const moduleWithSamePositionInThisCourse = completeCourse.modules.find(moduleToCompare => moduleToCompare.moduleNumber === moduleNumber)
+    const moduleWithSamePositionInThisCourse = completeCourse.modules.find(moduleToCompare => moduleToCompare.module.moduleNumber === moduleNumber)
 
     if (moduleWithSamePositionInThisCourse) {
       return left(new ModuleNumberIsAlreadyInUseError(moduleNumber))

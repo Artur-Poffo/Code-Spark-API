@@ -4,8 +4,7 @@ import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
 export interface ClassProps {
   name: string
   description: string
-  duration: number
-  videoKey: string
+  videoId: UniqueEntityID
   classNumber: number
   moduleId: UniqueEntityID
 }
@@ -19,12 +18,8 @@ export class Class extends Entity<ClassProps> {
     return this.props.description
   }
 
-  get duration() {
-    return this.props.duration
-  }
-
-  get videoKey() {
-    return this.props.videoKey
+  get videoId() {
+    return this.props.videoId
   }
 
   get classNumber() {

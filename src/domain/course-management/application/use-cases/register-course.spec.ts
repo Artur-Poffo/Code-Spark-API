@@ -18,10 +18,10 @@ let sut: RegisterCourseUseCase
 
 describe('Register course use case', () => {
   beforeEach(() => {
-    inMemoryModulesRepository = new InMemoryModulesRepository()
+    inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
     inMemoryClassesRepository = new InMemoryClassesRepository(inMemoryModulesRepository)
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
-    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryClassesRepository, inMemoryInstructorRepository)
+    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorRepository)
     inMemoryInstructorRepository = new InMemoryInstructorRepository(inMemoryCoursesRepository)
     sut = new RegisterCourseUseCase(inMemoryCoursesRepository, inMemoryInstructorRepository)
   })
