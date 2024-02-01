@@ -11,7 +11,7 @@
 - [x] Instructors can add classes to modules.
 - [x] Should be able to register tags
 - [x] Responsible instructor can add "tags" to their course to inform students about technologies present in the course.
-- [ ] Instructors can create classes and upload videos to them.
+- [x] Instructors can create classes and upload videos to them.
 - [ ] Instructor can upload a certificate template for students upon course completion.
 - [ ] Return information of an instructor with their courses.
 
@@ -50,7 +50,7 @@
 - [x] Should not be able to register a module to a specific course with same name twice.
 - [ ] A student can only issue one certificate per course.
 - [ ] A student can only enroll for a particular course once.
-- [ ] There should not be repeated tags in a course.
+- [x] There should not be repeated tags in a course.
 
 ## Non-Functional Requirements
 

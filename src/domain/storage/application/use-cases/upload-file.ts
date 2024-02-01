@@ -37,7 +37,7 @@ export class UploadFileUseCase implements UseCase<UploadFileUseCaseRequest, Uplo
       return left(new InvalidMimeTypeError(fileType))
     }
 
-    const { key } = await this.uploader.upload({ fileName, fileType, body, size })
+    const { key } = await this.uploader.upload({ fileName, fileType, body, size, storedAt })
 
     const file = File.create({
       fileName,
