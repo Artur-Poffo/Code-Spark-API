@@ -18,8 +18,6 @@ export class OnVideoUploaded implements EventHandler {
   }
 
   private async uploadVideo({ video }: VideoUploadedEvent) {
-    console.log('olá')
-
     await this.uploadFileUseCase.exec({
       fileName: video.videoName,
       fileType: video.videoType,
