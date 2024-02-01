@@ -9,6 +9,7 @@ export interface VideoProps {
   body: Buffer
   duration: number
   size: number
+  videoKey?: string
   storedAt: Date
 }
 
@@ -31,6 +32,14 @@ export class Video extends AggregateRoot<VideoProps> {
 
   get size() {
     return this.props.size
+  }
+
+  get videoKey() {
+    return this.props.videoKey
+  }
+
+  set videoKey(videoKeyToAppend) {
+    this.props.videoKey = videoKeyToAppend
   }
 
   get storedAt() {
