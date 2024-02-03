@@ -128,9 +128,17 @@
   - moduleNumber: number
   - courseId: string
 
+- [x] Image
+- - id: string
+  - imageName: string
+  - imageType: 'image/jpeg' | 'image/png'
+  - body: Buffer
+  - size: number
+  - storedAt: Date
+
 - [x] Certificate
 - - id: string
-  - imageKey: string
+  - imageId: string
   - courseId: string
 
 - [x] StudentCertificate

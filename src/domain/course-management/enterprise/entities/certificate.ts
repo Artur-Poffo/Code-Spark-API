@@ -2,13 +2,13 @@ import { Entity } from '@/core/entities/entity'
 import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 export interface CertificateProps {
-  imageKey: string
+  imageId: UniqueEntityID
   courseId: UniqueEntityID
 }
 
 export class Certificate extends Entity<CertificateProps> {
-  get imageKey() {
-    return this.props.imageKey
+  get imageId() {
+    return this.props.imageId
   }
 
   get courseId() {
