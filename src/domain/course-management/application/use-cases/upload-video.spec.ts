@@ -4,7 +4,7 @@ import { UploadVideoUseCase } from './upload-video'
 let inMemoryVideosRepository: InMemoryVideosRepository
 let sut: UploadVideoUseCase
 
-describe('Add video to class use case', () => {
+describe('Upload video use case', () => {
   beforeEach(() => {
     inMemoryVideosRepository = new InMemoryVideosRepository()
     sut = new UploadVideoUseCase(inMemoryVideosRepository)

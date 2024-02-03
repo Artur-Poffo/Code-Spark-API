@@ -4,7 +4,7 @@ import { UploadImageUseCase } from './upload-image'
 let inMemoryImagesRepository: InMemoryImagesRepository
 let sut: UploadImageUseCase
 
-describe('Add image to class use case', () => {
+describe('Upload image use case', () => {
   beforeEach(() => {
     inMemoryImagesRepository = new InMemoryImagesRepository()
     sut = new UploadImageUseCase(inMemoryImagesRepository)
