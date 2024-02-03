@@ -12,7 +12,7 @@
 - [x] Should be able to register tags
 - [x] Responsible instructor can add "tags" to their course to inform students about technologies present in the course.
 - [x] Instructors can create classes and upload videos to them.
-- [ ] Instructor can upload a certificate template for students upon course completion.
+- [x] Instructor can upload a certificate template for students upon course completion.
 - [ ] Return information of an instructor with their courses.
 
 - [ ] Return information about a course.
@@ -33,7 +33,7 @@
 
 - [ ] An instructor should be able to retrieve traffic data for one of their courses.
 
-- [ ] CRUDs for all main entities: course, module, lesson, user, etc.
+- [ ] CRUDs for all main entities: course, module, class, user, etc.
 
 ## Business Rules
 
