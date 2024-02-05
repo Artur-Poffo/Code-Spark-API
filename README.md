@@ -13,7 +13,7 @@
 - [x] Responsible instructor can add "tags" to their course to inform students about technologies present in the course.
 - [x] Instructors can create classes and upload videos to them.
 - [x] Instructor can upload a certificate template for students upon course completion.
-- [ ] Return information of an instructor with their courses.
+- [x] Return information of an instructor with their courses.
 
 - [ ] Return information about a course.
 - [ ] Return information about a course with its students.
@@ -26,8 +26,8 @@
 - [ ] Return information about a student with the courses they are enrolled in.
 - [ ] Mark modules as completed after the student views all its classes.
 - [ ] After completing a course, the student can issue a certificate.
-
 - [ ] After completing all modules of a course, that course for a student should be marked as completed.
+
 - [ ] It should be possible to filter courses by name or "tags."
 - [ ] Students can evaluate a particular course they are taking with a rating from 1 to 5 to later have an average rating for each course.
 
