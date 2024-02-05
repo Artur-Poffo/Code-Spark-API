@@ -15,7 +15,7 @@
 - [x] Instructor can upload a certificate template for students upon course completion.
 - [x] Return information of an instructor with their courses.
 
-- [ ] Return information about a course.
+- [x] Return information about a course.
 - [ ] Return information about a course with its students.
 - [ ] Return information about a course with its modules and classes.
 - [x] Classes and modules must have a field informing their position, e.g. this class is number one, so this is the first class of the course.
