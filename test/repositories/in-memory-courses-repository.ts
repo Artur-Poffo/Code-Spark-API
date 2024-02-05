@@ -1,5 +1,6 @@
 import { type CoursesRepository } from '@/domain/course-management/application/repositories/courses-repository'
 import { type CompleteCourseDTO } from '@/domain/course-management/enterprise/entities/dtos/complete-course'
+import { type CourseWithStudentsDTO } from '@/domain/course-management/enterprise/entities/dtos/course-with-students'
 import { type Course } from './../../src/domain/course-management/enterprise/entities/course'
 import { type ModuleWithClassesDTO } from './../../src/domain/course-management/enterprise/entities/dtos/module-with-classes'
 import { type InMemoryInstructorRepository } from './in-memory-instructors-repository'
@@ -27,6 +28,27 @@ export class InMemoryCoursesRepository implements CoursesRepository {
     return this.items.filter(courseToCompare => courseToCompare.instructorId.toString() === instructorId)
   }
 
+  async findCourseWithStudentsById(id: string): Promise<CourseWithStudentsDTO | null> {
+    // TODO: Make it work after creating Enrollment entity
+    const course = this.items.find(courseToCompare => courseToCompare.id.toString() === id)
+
+    if (!course) {
+      return null
+    }
+
+    return {
+      course: {
+        id: course.id,
+        name: course.name,
+        description: course.description,
+        coverImageKey: course.coverImageKey,
+        bannerImageKey: course.bannerImageKey,
+        createdAt: course.createdAt
+      },
+      students: []
+    }
+  }
+
   async findCompleteCourseEntityById(id: string): Promise<CompleteCourseDTO | null> {
     const course = this.items.find(courseToCompare => courseToCompare.id.toString() === id)
 
@@ -46,9 +68,16 @@ export class InMemoryCoursesRepository implements CoursesRepository {
     const nonNullModulesAndClasses: ModuleWithClassesDTO[] = courseModulesAndClasses.filter(courseModuleToCompare => courseModuleToCompare !== null) as ModuleWithClassesDTO[]
 
     const completeCourse: CompleteCourseDTO = {
-      courseId: course.id,
-      instructorId: instructor.id,
+      course: {
+        id: course.id,
+        name: course.name,
+        description: course.description,
+        bannerImageKey: course.bannerImageKey,
+        coverImageKey: course.coverImageKey,
+        createdAt: course.createdAt
+      },
       instructor: {
+        id: instructor.id,
         name: instructor.name,
         email: instructor.email,
         summary: instructor.summary,

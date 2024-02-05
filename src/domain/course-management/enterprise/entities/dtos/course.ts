@@ -1,9 +1,10 @@
 import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
 
-export interface ModuleDTO {
+export interface CourseDTO {
   id: UniqueEntityID
   name: string
   description: string
-  moduleNumber: number
-  courseId: UniqueEntityID
+  coverImageKey?: string | null
+  bannerImageKey?: string | null
+  createdAt: Date
 }

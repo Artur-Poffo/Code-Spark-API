@@ -16,12 +16,12 @@
 - [x] Return information of an instructor with their courses.
 
 - [x] Return information about a course.
-- [ ] Return information about a course with its students.
 - [ ] Return information about a course with its modules and classes.
 - [x] Classes and modules must have a field informing their position, e.g. this class is number one, so this is the first class of the course.
 - [ ] Video streaming to watch the classes.
 
 - [ ] Students can "enroll" to participate in the course.
+- [ ] Return information about a course with its students. - Make it work after creating Enrollment entity
 - [ ] Students can mark classes as completed.
 - [ ] Return information about a student with the courses they are enrolled in.
 - [ ] Mark modules as completed after the student views all its classes.

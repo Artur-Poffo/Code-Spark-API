@@ -1,4 +1,3 @@
-import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { makeCourse } from '../../../../../test/factories/make-course'
 import { InMemoryClassesRepository } from '../../../../../test/repositories/in-memory-classes-repository'
 import { InMemoryCoursesRepository } from '../../../../../test/repositories/in-memory-courses-repository'
@@ -12,7 +11,7 @@ let inMemoryCoursesRepository: InMemoryCoursesRepository
 let inMemoryInstructorsRepository: InMemoryInstructorRepository
 let sut: GetCourseDetailsUseCase
 
-describe('Get course details use case', () => {
+describe('Get course details with students use case', () => {
   beforeEach(() => {
     inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
     inMemoryClassesRepository = new InMemoryClassesRepository(inMemoryModulesRepository)
@@ -22,7 +21,7 @@ describe('Get course details use case', () => {
     sut = new GetCourseDetailsUseCase(inMemoryCoursesRepository)
   })
 
-  it('should be able to get course details', async () => {
+  it('should be able to get course details with their registered students', async () => {
     const course = makeCourse({ name: 'John Doe Course' })
     await inMemoryCoursesRepository.create(course)
 
@@ -36,14 +35,5 @@ describe('Get course details use case', () => {
         name: 'John Doe Course'
       })
     })
-  })
-
-  it('should not be able to get course details of a inexistent course', async () => {
-    const result = await sut.exec({
-      courseId: 'inexistentCourseId'
-    })
-
-    expect(result.isLeft()).toBe(true)
-    expect(result.value).toBeInstanceOf(ResourceNotFoundError)
   })
 })

@@ -30,8 +30,8 @@ export class InMemoryModulesRepository implements ModulesRepository {
     const moduleClasses = await this.inMemoryClassesRepository.findManyByModuleId(id)
 
     const moduleWithClasses: ModuleWithClassesDTO = {
-      moduleId: module.id,
       module: {
+        id: module.id,
         name: module.name,
         description: module.description,
         moduleNumber: module.moduleNumber,

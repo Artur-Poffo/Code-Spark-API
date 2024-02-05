@@ -1,6 +1,6 @@
 import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
 
-export interface InstructorDTO {
+export interface StudentDTO {
   id: UniqueEntityID
   name: string
   email: string

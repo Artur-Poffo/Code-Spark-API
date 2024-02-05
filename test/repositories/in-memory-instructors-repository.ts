@@ -48,8 +48,8 @@ export class InMemoryInstructorRepository implements InstructorsRepository {
     const courses = await this.inMemoryCoursesRepository.findManyByInstructorId(id)
 
     const instructorWithCourses: InstructorWithCoursesDTO = {
-      instructorId: instructor.id,
       instructor: {
+        id: instructor.id,
         name: instructor.name,
         email: instructor.email,
         summary: instructor.summary,
