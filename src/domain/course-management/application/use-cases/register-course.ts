@@ -4,7 +4,6 @@ import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-e
 import { type UseCase } from '@/core/use-cases/use-case'
 import { Course } from '../../enterprise/entities/course'
 import { type CoursesRepository } from '../repositories/courses-repository'
-import { type InstructorsRepository } from '../repositories/instructors-repository'
 import { CourseAlreadyExistsInThisAccountError } from './errors/course-already-exists-in-this-account-error'
 
 interface RegisterCourseUseCaseRequest {
@@ -22,8 +21,7 @@ ResourceNotFoundError | CourseAlreadyExistsInThisAccountError,
 
 export class RegisterCourseUseCase implements UseCase<RegisterCourseUseCaseRequest, RegisterCourseUseCaseResponse> {
   constructor(
-    private readonly coursesRepository: CoursesRepository,
-    private readonly instructorsRepository: InstructorsRepository
+    private readonly coursesRepository: CoursesRepository
   ) { }
 
   async exec({
@@ -31,7 +29,7 @@ export class RegisterCourseUseCase implements UseCase<RegisterCourseUseCaseReque
     description,
     instructorId
   }: RegisterCourseUseCaseRequest): Promise<RegisterCourseUseCaseResponse> {
-    const instructorWithCourses = await this.instructorsRepository.findInstructorWithCoursesById(instructorId)
+    const instructorWithCourses = await this.coursesRepository.findInstructorWithCoursesByInstructorId(instructorId)
 
     if (!instructorWithCourses) {
       return left(new ResourceNotFoundError())

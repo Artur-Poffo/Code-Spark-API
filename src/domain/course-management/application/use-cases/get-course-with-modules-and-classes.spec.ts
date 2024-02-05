@@ -9,17 +9,18 @@ import { InMemoryModulesRepository } from '../../../../../test/repositories/in-m
 import { GetCourseWithModulesAndClassesUseCase } from './get-course-with-modules-and-classes'
 
 let inMemoryClassesRepository: InMemoryClassesRepository
+let inMemoryInstructorsRepository: InMemoryInstructorRepository
 let inMemoryModulesRepository: InMemoryModulesRepository
 let inMemoryCoursesRepository: InMemoryCoursesRepository
-let inMemoryInstructorsRepository: InMemoryInstructorRepository
 let sut: GetCourseWithModulesAndClassesUseCase
 
 describe('Get course details with modules and classes use case', () => {
   beforeEach(() => {
+    inMemoryClassesRepository = new InMemoryClassesRepository()
+    inMemoryInstructorsRepository = new InMemoryInstructorRepository()
+
     inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
-    inMemoryClassesRepository = new InMemoryClassesRepository(inMemoryModulesRepository)
     inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository)
-    inMemoryInstructorsRepository = new InMemoryInstructorRepository(inMemoryCoursesRepository)
 
     sut = new GetCourseWithModulesAndClassesUseCase(inMemoryCoursesRepository)
   })

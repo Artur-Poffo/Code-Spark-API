@@ -11,11 +11,11 @@ import { InMemoryModulesRepository } from './../../../../../test/repositories/in
 import { InMemoryUsersRepository } from './../../../../../test/repositories/in-memory-users-repository'
 import { AuthenticateUserUseCase } from './authenticate-user'
 
-let inMemoryModulesRepository: InMemoryModulesRepository
 let inMemoryClassesRepository: InMemoryClassesRepository
-let inMemoryCoursesRepository: InMemoryCoursesRepository
 let inMemoryInstructorsRepository: InMemoryInstructorRepository
 let inMemoryStudentsRepository: InMemoryStudentsRepository
+let inMemoryModulesRepository: InMemoryModulesRepository
+let inMemoryCoursesRepository: InMemoryCoursesRepository
 let inMemoryUsersRepository: InMemoryUsersRepository
 let fakeHasher: FakeHasher
 let fakeEncrypter: FakeEncrypter
@@ -23,14 +23,16 @@ let sut: AuthenticateUserUseCase
 
 describe('Authenticate user use case', () => {
   beforeEach(() => {
-    inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
-    inMemoryClassesRepository = new InMemoryClassesRepository(inMemoryModulesRepository)
-    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository)
-    inMemoryInstructorsRepository = new InMemoryInstructorRepository(inMemoryCoursesRepository)
+    inMemoryClassesRepository = new InMemoryClassesRepository()
+    inMemoryInstructorsRepository = new InMemoryInstructorRepository()
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
-    inMemoryUsersRepository = new InMemoryUsersRepository(inMemoryInstructorsRepository, inMemoryStudentsRepository)
     fakeHasher = new FakeHasher()
     fakeEncrypter = new FakeEncrypter()
+
+    inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
+    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository)
+    inMemoryUsersRepository = new InMemoryUsersRepository(inMemoryInstructorsRepository, inMemoryStudentsRepository)
+
     sut = new AuthenticateUserUseCase(inMemoryUsersRepository, fakeHasher, fakeEncrypter)
   })
 

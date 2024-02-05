@@ -7,20 +7,21 @@ import { InMemoryInstructorRepository } from '../../../../../test/repositories/i
 import { InMemoryModulesRepository } from '../../../../../test/repositories/in-memory-modules-repository'
 import { GetInstructorWithCoursesUseCase } from './get-instructor-with-courses'
 
-let inMemoryModulesRepository: InMemoryModulesRepository
 let inMemoryClassesRepository: InMemoryClassesRepository
-let inMemoryCoursesRepository: InMemoryCoursesRepository
 let inMemoryInstructorsRepository: InMemoryInstructorRepository
+let inMemoryModulesRepository: InMemoryModulesRepository
+let inMemoryCoursesRepository: InMemoryCoursesRepository
 let sut: GetInstructorWithCoursesUseCase
 
 describe('Get instructors with their courses', () => {
   beforeEach(() => {
-    inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
-    inMemoryClassesRepository = new InMemoryClassesRepository(inMemoryModulesRepository)
-    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository)
-    inMemoryInstructorsRepository = new InMemoryInstructorRepository(inMemoryCoursesRepository)
+    inMemoryClassesRepository = new InMemoryClassesRepository()
+    inMemoryInstructorsRepository = new InMemoryInstructorRepository()
 
-    sut = new GetInstructorWithCoursesUseCase(inMemoryInstructorsRepository)
+    inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
+    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository)
+
+    sut = new GetInstructorWithCoursesUseCase(inMemoryCoursesRepository)
   })
 
   it('should be able to get instructor info with their courses', async () => {

@@ -10,18 +10,20 @@ import { ModuleAlreadyExistsInThisCourseError } from './errors/module-already-ex
 import { ModuleNumberIsAlreadyInUseError } from './errors/module-number-already-in-use-error'
 import { RegisterModuleToCourseUseCase } from './register-module-to-course'
 
-let inMemoryCoursesRepository: InMemoryCoursesRepository
 let inMemoryClassesRepository: InMemoryClassesRepository
 let inMemoryInstructorRepository: InMemoryInstructorRepository
+let inMemoryCoursesRepository: InMemoryCoursesRepository
 let inMemoryModulesRepository: InMemoryModulesRepository
 let sut: RegisterModuleToCourseUseCase
 
 describe('Register module to a course use case', () => {
   beforeEach(() => {
+    inMemoryClassesRepository = new InMemoryClassesRepository()
+    inMemoryInstructorRepository = new InMemoryInstructorRepository()
+
     inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
-    inMemoryClassesRepository = new InMemoryClassesRepository(inMemoryModulesRepository)
-    inMemoryInstructorRepository = new InMemoryInstructorRepository(inMemoryCoursesRepository)
     inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorRepository)
+
     sut = new RegisterModuleToCourseUseCase(inMemoryCoursesRepository, inMemoryModulesRepository)
   })
 
