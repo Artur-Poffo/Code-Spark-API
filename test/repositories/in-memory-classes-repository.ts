@@ -17,6 +17,7 @@ export class InMemoryClassesRepository implements ClassesRepository {
     return classToSearch
   }
 
+  // FIXME: Replace this method to course repository, like: findManyClassesById, to fix the circular dependency injection
   async findManyByCourseId(courseId: string): Promise<Class[]> {
     const courseModules = await this.inMemoryModulesRepository.findManyByCourseId(courseId)
     const courseModulesIds = courseModules.map(moduleToMap => moduleToMap.id.toString())
