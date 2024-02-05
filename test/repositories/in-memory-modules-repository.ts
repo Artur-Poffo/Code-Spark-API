@@ -1,4 +1,5 @@
 import { type ModulesRepository } from '@/domain/course-management/application/repositories/modules-repository'
+import { type Class } from '@/domain/course-management/enterprise/entities/class'
 import { type Module } from '@/domain/course-management/enterprise/entities/module'
 import { type ModuleWithClassesDTO } from './../../src/domain/course-management/enterprise/entities/dtos/module-with-classes'
 import { type InMemoryClassesRepository } from './in-memory-classes-repository'
@@ -45,6 +46,23 @@ export class InMemoryModulesRepository implements ModulesRepository {
 
   async findManyByCourseId(courseId: string): Promise<Module[]> {
     return this.items.filter(moduleToCompare => moduleToCompare.courseId.toString() === courseId)
+  }
+
+  async findManyClassesByCourseId(courseId: string): Promise<Class[] | null> {
+    const courseModules = this.items.filter(moduleToCompare => moduleToCompare.courseId.toString() === courseId)
+    const courseModulesWithClasses = await Promise.all(courseModules.map(async moduleToMap => await this.findModuleWithClassesById(moduleToMap.id.toString())))
+
+    const courseClasses: Class[] = []
+
+    courseModulesWithClasses.forEach(moduleWithClassesToMap => {
+      if (moduleWithClassesToMap) {
+        moduleWithClassesToMap.classes.forEach(classToMap => {
+          courseClasses.push(classToMap)
+        })
+      }
+    })
+
+    return courseClasses.length > 0 ? courseClasses : []
   }
 
   async create(module: Module): Promise<Module> {

@@ -6,18 +6,19 @@ import { InMemoryInstructorRepository } from '../../../../../test/repositories/i
 import { InMemoryModulesRepository } from '../../../../../test/repositories/in-memory-modules-repository'
 import { GetCourseDetailsUseCase } from './get-course-details'
 
-let inMemoryModulesRepository: InMemoryModulesRepository
 let inMemoryClassesRepository: InMemoryClassesRepository
-let inMemoryCoursesRepository: InMemoryCoursesRepository
 let inMemoryInstructorsRepository: InMemoryInstructorRepository
+let inMemoryModulesRepository: InMemoryModulesRepository
+let inMemoryCoursesRepository: InMemoryCoursesRepository
 let sut: GetCourseDetailsUseCase
 
 describe('Get course details use case', () => {
   beforeEach(() => {
+    inMemoryClassesRepository = new InMemoryClassesRepository()
+    inMemoryInstructorsRepository = new InMemoryInstructorRepository()
+
     inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
-    inMemoryClassesRepository = new InMemoryClassesRepository(inMemoryModulesRepository)
     inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository)
-    inMemoryInstructorsRepository = new InMemoryInstructorRepository(inMemoryCoursesRepository)
 
     sut = new GetCourseDetailsUseCase(inMemoryCoursesRepository)
   })

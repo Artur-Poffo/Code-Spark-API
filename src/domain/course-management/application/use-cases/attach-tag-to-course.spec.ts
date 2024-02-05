@@ -15,20 +15,22 @@ import { TagAlreadyAttachedError } from './errors/tag-already-attached-error'
 
 let inMemoryCourseTagsRepository: InMemoryCourseTagsRepository
 let inMemoryTagsRepository: InMemoryTagsRepository
+let inMemoryClassesRepository: InMemoryClassesRepository
+let inMemoryInstructorsRepository: InMemoryInstructorRepository
 let inMemoryModulesRepository: InMemoryModulesRepository
 let inMemoryCoursesRepository: InMemoryCoursesRepository
-let inMemoryInstructorsRepository: InMemoryInstructorRepository
-let inMemoryClassesRepository: InMemoryClassesRepository
 let sut: AttachTagToCourseUseCase
 
 describe('Attach tag to course use case', () => {
   beforeEach(() => {
     inMemoryCourseTagsRepository = new InMemoryCourseTagsRepository()
     inMemoryTagsRepository = new InMemoryTagsRepository()
+    inMemoryClassesRepository = new InMemoryClassesRepository()
+    inMemoryInstructorsRepository = new InMemoryInstructorRepository()
+
     inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
-    inMemoryClassesRepository = new InMemoryClassesRepository(inMemoryModulesRepository)
-    inMemoryInstructorsRepository = new InMemoryInstructorRepository(inMemoryCoursesRepository)
     inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository)
+
     sut = new AttachTagToCourseUseCase(inMemoryCourseTagsRepository, inMemoryTagsRepository, inMemoryCoursesRepository)
   })
 

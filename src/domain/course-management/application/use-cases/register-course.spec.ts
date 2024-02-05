@@ -9,21 +9,23 @@ import { InMemoryStudentsRepository } from './../../../../../test/repositories/i
 import { CourseAlreadyExistsInThisAccountError } from './errors/course-already-exists-in-this-account-error'
 import { RegisterCourseUseCase } from './register-course'
 
-let inMemoryModulesRepository: InMemoryModulesRepository
 let inMemoryClassesRepository: InMemoryClassesRepository
-let inMemoryStudentsRepository: InMemoryStudentsRepository
-let inMemoryCoursesRepository: InMemoryCoursesRepository
 let inMemoryInstructorRepository: InMemoryInstructorRepository
+let inMemoryStudentsRepository: InMemoryStudentsRepository
+let inMemoryModulesRepository: InMemoryModulesRepository
+let inMemoryCoursesRepository: InMemoryCoursesRepository
 let sut: RegisterCourseUseCase
 
 describe('Register course use case', () => {
   beforeEach(() => {
-    inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
-    inMemoryClassesRepository = new InMemoryClassesRepository(inMemoryModulesRepository)
+    inMemoryClassesRepository = new InMemoryClassesRepository()
+    inMemoryInstructorRepository = new InMemoryInstructorRepository()
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
+
+    inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
     inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorRepository)
-    inMemoryInstructorRepository = new InMemoryInstructorRepository(inMemoryCoursesRepository)
-    sut = new RegisterCourseUseCase(inMemoryCoursesRepository, inMemoryInstructorRepository)
+
+    sut = new RegisterCourseUseCase(inMemoryCoursesRepository)
   })
 
   it('an instructor must be able to register a new course', async () => {

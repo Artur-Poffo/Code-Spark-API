@@ -16,18 +16,18 @@ import { ClassVideoRequiredError } from './errors/class-video-required-error'
 
 let inMemoryVideosRepository: InMemoryVideosRepository
 let inMemoryClassesRepository: InMemoryClassesRepository
+let inMemoryInstructorsRepository: InMemoryInstructorRepository
 let inMemoryModulesRepository: InMemoryModulesRepository
 let inMemoryCoursesRepository: InMemoryCoursesRepository
-let inMemoryInstructorsRepository: InMemoryInstructorRepository
 let sut: AddClassToModuleUseCase
 
 describe('Add class to a module use case', () => {
   beforeEach(() => {
     inMemoryVideosRepository = new InMemoryVideosRepository()
+    inMemoryClassesRepository = new InMemoryClassesRepository()
+    inMemoryInstructorsRepository = new InMemoryInstructorRepository()
 
-    inMemoryClassesRepository = new InMemoryClassesRepository(inMemoryModulesRepository)
     inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
-    inMemoryInstructorsRepository = new InMemoryInstructorRepository(inMemoryCoursesRepository)
 
     inMemoryCoursesRepository = new InMemoryCoursesRepository(
       inMemoryModulesRepository, inMemoryInstructorsRepository

@@ -11,6 +11,7 @@ describe('Register student use case', () => {
   beforeEach(() => {
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
     fakeHasher = new FakeHasher()
+
     sut = new RegisterStudentUseCase(inMemoryStudentsRepository, fakeHasher)
   })
 

@@ -13,20 +13,21 @@ import { RegisterCertificateForCourseUseCase } from './register-certificate-for-
 
 let inMemoryImagesRepository: InMemoryImagesRepository
 let inMemoryCertificatesRepository: InMemoryCertificatesRepository
-let inMemoryModulesRepository: InMemoryModulesRepository
 let inMemoryClassesRepository: InMemoryClassesRepository
-let inMemoryCoursesRepository: InMemoryCoursesRepository
 let inMemoryInstructorsRepository: InMemoryInstructorRepository
+let inMemoryModulesRepository: InMemoryModulesRepository
+let inMemoryCoursesRepository: InMemoryCoursesRepository
 let sut: RegisterCertificateForCourseUseCase
 
 describe('Register certificate for a course use case', () => {
   beforeEach(() => {
     inMemoryImagesRepository = new InMemoryImagesRepository()
     inMemoryCertificatesRepository = new InMemoryCertificatesRepository()
+    inMemoryClassesRepository = new InMemoryClassesRepository()
+    inMemoryInstructorsRepository = new InMemoryInstructorRepository()
+
     inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
-    inMemoryClassesRepository = new InMemoryClassesRepository(inMemoryModulesRepository)
     inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository)
-    inMemoryInstructorsRepository = new InMemoryInstructorRepository(inMemoryCoursesRepository)
 
     sut = new RegisterCertificateForCourseUseCase(inMemoryCertificatesRepository, inMemoryImagesRepository, inMemoryCoursesRepository)
   })

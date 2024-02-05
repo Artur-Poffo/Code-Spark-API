@@ -1,6 +1,7 @@
 import { type CoursesRepository } from '@/domain/course-management/application/repositories/courses-repository'
 import { type CompleteCourseDTO } from '@/domain/course-management/enterprise/entities/dtos/complete-course'
 import { type CourseWithStudentsDTO } from '@/domain/course-management/enterprise/entities/dtos/course-with-students'
+import { type InstructorWithCoursesDTO } from '@/domain/course-management/enterprise/entities/dtos/instructor-with-courses'
 import { type Course } from './../../src/domain/course-management/enterprise/entities/course'
 import { type ModuleWithClassesDTO } from './../../src/domain/course-management/enterprise/entities/dtos/module-with-classes'
 import { type InMemoryInstructorRepository } from './in-memory-instructors-repository'
@@ -90,6 +91,32 @@ export class InMemoryCoursesRepository implements CoursesRepository {
     }
 
     return completeCourse
+  }
+
+  async findInstructorWithCoursesByInstructorId(instructorId: string): Promise<InstructorWithCoursesDTO | null> {
+    const instructor = await this.inMemoryInstructorRepository.findById(instructorId)
+
+    if (!instructor) {
+      return null
+    }
+
+    const instructorCourses = this.items.filter(courseToCompare => courseToCompare.instructorId.toString() === instructorId)
+
+    const instructorWithCourses: InstructorWithCoursesDTO = {
+      instructor: {
+        id: instructor.id,
+        name: instructor.name,
+        email: instructor.email,
+        summary: instructor.summary,
+        age: instructor.age,
+        profileImageKey: instructor.profileImageKey,
+        bannerImageKey: instructor.bannerImageKey,
+        registeredAt: instructor.registeredAt
+      },
+      courses: instructorCourses
+    }
+
+    return instructorWithCourses
   }
 
   async create(course: Course): Promise<Course> {
