@@ -2,20 +2,14 @@ import { WrongCredentialsError } from '@/core/errors/errors/wrong-credentials-er
 import { FakeHasher } from '../../../../../test/cryptography/fake-hasher'
 import { makeInstructor } from '../../../../../test/factories/make-instructor'
 import { makeStudent } from '../../../../../test/factories/make-student'
-import { InMemoryClassesRepository } from '../../../../../test/repositories/in-memory-classes-repository'
-import { InMemoryCoursesRepository } from '../../../../../test/repositories/in-memory-courses-repository'
 import { InMemoryStudentsRepository } from '../../../../../test/repositories/in-memory-students-repository'
 import { FakeEncrypter } from './../../../../../test/cryptography/fake-encrypter'
 import { InMemoryInstructorRepository } from './../../../../../test/repositories/in-memory-instructors-repository'
-import { InMemoryModulesRepository } from './../../../../../test/repositories/in-memory-modules-repository'
 import { InMemoryUsersRepository } from './../../../../../test/repositories/in-memory-users-repository'
 import { AuthenticateUserUseCase } from './authenticate-user'
 
-let inMemoryClassesRepository: InMemoryClassesRepository
 let inMemoryInstructorsRepository: InMemoryInstructorRepository
 let inMemoryStudentsRepository: InMemoryStudentsRepository
-let inMemoryModulesRepository: InMemoryModulesRepository
-let inMemoryCoursesRepository: InMemoryCoursesRepository
 let inMemoryUsersRepository: InMemoryUsersRepository
 let fakeHasher: FakeHasher
 let fakeEncrypter: FakeEncrypter
@@ -23,14 +17,11 @@ let sut: AuthenticateUserUseCase
 
 describe('Authenticate user use case', () => {
   beforeEach(() => {
-    inMemoryClassesRepository = new InMemoryClassesRepository()
     inMemoryInstructorsRepository = new InMemoryInstructorRepository()
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
     fakeHasher = new FakeHasher()
     fakeEncrypter = new FakeEncrypter()
 
-    inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
-    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository)
     inMemoryUsersRepository = new InMemoryUsersRepository(inMemoryInstructorsRepository, inMemoryStudentsRepository)
 
     sut = new AuthenticateUserUseCase(inMemoryUsersRepository, fakeHasher, fakeEncrypter)

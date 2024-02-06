@@ -2,17 +2,22 @@ import { type CoursesRepository } from '@/domain/course-management/application/r
 import { type CompleteCourseDTO } from '@/domain/course-management/enterprise/entities/dtos/complete-course'
 import { type CourseWithStudentsDTO } from '@/domain/course-management/enterprise/entities/dtos/course-with-students'
 import { type InstructorWithCoursesDTO } from '@/domain/course-management/enterprise/entities/dtos/instructor-with-courses'
+import { type Student } from '@/domain/course-management/enterprise/entities/student'
 import { type Course } from './../../src/domain/course-management/enterprise/entities/course'
 import { type ModuleWithClassesDTO } from './../../src/domain/course-management/enterprise/entities/dtos/module-with-classes'
+import { type InMemoryEnrollmentsRepository } from './in-memory-enrollments-repository'
 import { type InMemoryInstructorRepository } from './in-memory-instructors-repository'
 import { type InMemoryModulesRepository } from './in-memory-modules-repository'
+import { type InMemoryStudentsRepository } from './in-memory-students-repository'
 
 export class InMemoryCoursesRepository implements CoursesRepository {
   public items: Course[] = []
 
   constructor(
     private readonly inMemoryModulesRepository: InMemoryModulesRepository,
-    private readonly inMemoryInstructorRepository: InMemoryInstructorRepository
+    private readonly inMemoryInstructorRepository: InMemoryInstructorRepository,
+    private readonly inMemoryEnrollmentsRepository: InMemoryEnrollmentsRepository,
+    private readonly inMemoryStudentsRepository: InMemoryStudentsRepository
   ) {}
 
   async findById(id: string): Promise<Course | null> {
@@ -30,14 +35,18 @@ export class InMemoryCoursesRepository implements CoursesRepository {
   }
 
   async findCourseWithStudentsById(id: string): Promise<CourseWithStudentsDTO | null> {
-    // TODO: Make it work after creating Enrollment entity
     const course = this.items.find(courseToCompare => courseToCompare.id.toString() === id)
 
     if (!course) {
       return null
     }
 
-    return {
+    const courseEnrollments = await this.inMemoryEnrollmentsRepository.findManyByCourseId(course.id.toString())
+    const registeredStudents = await Promise.all(courseEnrollments.map(async (enrollmentToMap) => await this.inMemoryStudentsRepository.findById(enrollmentToMap.studentId.toString())))
+
+    const nonNullRegisteredStudents: Student[] = registeredStudents.filter(studentToFilter => studentToFilter !== null) as Student[]
+
+    const courseWithStudents: CourseWithStudentsDTO = {
       course: {
         id: course.id,
         name: course.name,
@@ -46,8 +55,10 @@ export class InMemoryCoursesRepository implements CoursesRepository {
         bannerImageKey: course.bannerImageKey,
         createdAt: course.createdAt
       },
-      students: []
+      students: nonNullRegisteredStudents.length > 0 ? nonNullRegisteredStudents : []
     }
+
+    return courseWithStudents
   }
 
   async findCompleteCourseEntityById(id: string): Promise<CompleteCourseDTO | null> {

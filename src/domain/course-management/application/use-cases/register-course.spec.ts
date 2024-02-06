@@ -2,6 +2,7 @@ import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-e
 import { makeInstructor } from '../../../../../test/factories/make-instructor'
 import { makeStudent } from '../../../../../test/factories/make-student'
 import { InMemoryClassesRepository } from '../../../../../test/repositories/in-memory-classes-repository'
+import { InMemoryEnrollmentsRepository } from '../../../../../test/repositories/in-memory-enrollments-repository'
 import { InMemoryCoursesRepository } from './../../../../../test/repositories/in-memory-courses-repository'
 import { InMemoryInstructorRepository } from './../../../../../test/repositories/in-memory-instructors-repository'
 import { InMemoryModulesRepository } from './../../../../../test/repositories/in-memory-modules-repository'
@@ -10,6 +11,7 @@ import { CourseAlreadyExistsInThisAccountError } from './errors/course-already-e
 import { RegisterCourseUseCase } from './register-course'
 
 let inMemoryClassesRepository: InMemoryClassesRepository
+let inMemoryEnrollmentsRepository: InMemoryEnrollmentsRepository
 let inMemoryInstructorRepository: InMemoryInstructorRepository
 let inMemoryStudentsRepository: InMemoryStudentsRepository
 let inMemoryModulesRepository: InMemoryModulesRepository
@@ -21,9 +23,10 @@ describe('Register course use case', () => {
     inMemoryClassesRepository = new InMemoryClassesRepository()
     inMemoryInstructorRepository = new InMemoryInstructorRepository()
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
+    inMemoryEnrollmentsRepository = new InMemoryEnrollmentsRepository()
 
     inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
-    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorRepository)
+    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository)
 
     sut = new RegisterCourseUseCase(inMemoryCoursesRepository)
   })

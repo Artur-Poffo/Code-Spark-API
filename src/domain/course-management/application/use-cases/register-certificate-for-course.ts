@@ -1,5 +1,4 @@
 import { left, right, type Either } from '@/core/either'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { type UseCase } from '@/core/use-cases/use-case'
@@ -56,8 +55,8 @@ export class RegisterCertificateForCourseUseCase implements UseCase<RegisterCert
     }
 
     const certificate = Certificate.create({
-      imageId: new UniqueEntityID(imageId),
-      courseId: new UniqueEntityID(courseId)
+      imageId: image.id,
+      courseId: course.id
     })
 
     await this.certificatesRepository.create(certificate)

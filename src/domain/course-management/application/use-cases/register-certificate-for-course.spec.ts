@@ -5,12 +5,16 @@ import { makeInstructor } from '../../../../../test/factories/make-instructor'
 import { InMemoryCertificatesRepository } from '../../../../../test/repositories/in-memory-certificates-repository'
 import { InMemoryClassesRepository } from '../../../../../test/repositories/in-memory-classes-repository'
 import { InMemoryCoursesRepository } from '../../../../../test/repositories/in-memory-courses-repository'
+import { InMemoryEnrollmentsRepository } from '../../../../../test/repositories/in-memory-enrollments-repository'
 import { InMemoryInstructorRepository } from '../../../../../test/repositories/in-memory-instructors-repository'
 import { InMemoryModulesRepository } from '../../../../../test/repositories/in-memory-modules-repository'
+import { InMemoryStudentsRepository } from '../../../../../test/repositories/in-memory-students-repository'
 import { InMemoryImagesRepository } from './../../../../../test/repositories/in-memory-images-repository'
 import { CourseAlreadyHasACertificateError } from './errors/course-already-has-a-certificate-error'
 import { RegisterCertificateForCourseUseCase } from './register-certificate-for-course'
 
+let inMemoryEnrollmentsRepository: InMemoryEnrollmentsRepository
+let inMemoryStudentsRepository: InMemoryStudentsRepository
 let inMemoryImagesRepository: InMemoryImagesRepository
 let inMemoryCertificatesRepository: InMemoryCertificatesRepository
 let inMemoryClassesRepository: InMemoryClassesRepository
@@ -25,9 +29,11 @@ describe('Register certificate for a course use case', () => {
     inMemoryCertificatesRepository = new InMemoryCertificatesRepository()
     inMemoryClassesRepository = new InMemoryClassesRepository()
     inMemoryInstructorsRepository = new InMemoryInstructorRepository()
+    inMemoryEnrollmentsRepository = new InMemoryEnrollmentsRepository()
+    inMemoryStudentsRepository = new InMemoryStudentsRepository()
 
     inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
-    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository)
+    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository)
 
     sut = new RegisterCertificateForCourseUseCase(inMemoryCertificatesRepository, inMemoryImagesRepository, inMemoryCoursesRepository)
   })

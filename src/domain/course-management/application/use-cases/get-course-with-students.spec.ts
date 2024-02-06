@@ -25,9 +25,9 @@ describe('Get course details with students use case', () => {
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
 
     inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
-    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository)
+    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository)
 
-    sut = new GetCourseWithStudentsUseCase(inMemoryEnrollmentsRepository, inMemoryCoursesRepository, inMemoryStudentsRepository)
+    sut = new GetCourseWithStudentsUseCase(inMemoryCoursesRepository)
   })
 
   it('should be able to get course details with their registered students', async () => {

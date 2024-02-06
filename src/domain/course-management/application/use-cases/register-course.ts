@@ -1,5 +1,4 @@
 import { left, right, type Either } from '@/core/either'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { type UseCase } from '@/core/use-cases/use-case'
 import { Course } from '../../enterprise/entities/course'
@@ -44,7 +43,7 @@ export class RegisterCourseUseCase implements UseCase<RegisterCourseUseCaseReque
     const course = Course.create({
       name,
       description,
-      instructorId: new UniqueEntityID(instructorId)
+      instructorId: instructorWithCourses.instructor.id
     })
 
     await this.coursesRepository.create(course)

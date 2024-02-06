@@ -3,10 +3,14 @@ import { makeCourse } from '../../../../../test/factories/make-course'
 import { makeInstructor } from '../../../../../test/factories/make-instructor'
 import { InMemoryClassesRepository } from '../../../../../test/repositories/in-memory-classes-repository'
 import { InMemoryCoursesRepository } from '../../../../../test/repositories/in-memory-courses-repository'
+import { InMemoryEnrollmentsRepository } from '../../../../../test/repositories/in-memory-enrollments-repository'
 import { InMemoryInstructorRepository } from '../../../../../test/repositories/in-memory-instructors-repository'
 import { InMemoryModulesRepository } from '../../../../../test/repositories/in-memory-modules-repository'
+import { InMemoryStudentsRepository } from '../../../../../test/repositories/in-memory-students-repository'
 import { GetInstructorWithCoursesUseCase } from './get-instructor-with-courses'
 
+let inMemoryEnrollmentsRepository: InMemoryEnrollmentsRepository
+let inMemoryStudentsRepository: InMemoryStudentsRepository
 let inMemoryClassesRepository: InMemoryClassesRepository
 let inMemoryInstructorsRepository: InMemoryInstructorRepository
 let inMemoryModulesRepository: InMemoryModulesRepository
@@ -17,9 +21,11 @@ describe('Get instructors with their courses', () => {
   beforeEach(() => {
     inMemoryClassesRepository = new InMemoryClassesRepository()
     inMemoryInstructorsRepository = new InMemoryInstructorRepository()
+    inMemoryEnrollmentsRepository = new InMemoryEnrollmentsRepository()
+    inMemoryStudentsRepository = new InMemoryStudentsRepository()
 
     inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
-    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository)
+    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository)
 
     sut = new GetInstructorWithCoursesUseCase(inMemoryCoursesRepository)
   })
