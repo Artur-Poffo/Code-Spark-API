@@ -11,7 +11,7 @@ interface GetCourseWithModulesAndClassesUseCaseRequest {
 type GetCourseWithModulesAndClassesUseCaseResponse = Either<
 ResourceNotFoundError,
 {
-  course: CompleteCourseDTO
+  completeCourse: CompleteCourseDTO
 }
 >
 
@@ -30,7 +30,7 @@ export class GetCourseWithModulesAndClassesUseCase implements UseCase<GetCourseW
     }
 
     return right({
-      course: courseWithModulesAndClasses
+      completeCourse: courseWithModulesAndClasses
     })
   }
 }
