@@ -18,9 +18,8 @@
 - [x] Return information about a course.
 - [x] Return information about a course with its modules and classes.
 - [x] Classes and modules must have a field informing their position, e.g. this class is number one, so this is the first class of the course.
-- [ ] Video streaming to watch the classes.
 
-- [ ] Students can "enroll" to participate in the course.
+- [x] Students can "enroll" to participate in the course.
 - [ ] Return information about a course with its students. - Make it work after creating Enrollment entity
 - [ ] Students can mark classes as completed.
 - [ ] Return information about a student with the courses they are enrolled in.
@@ -34,12 +33,13 @@
 - [ ] An instructor should be able to retrieve traffic data for one of their courses.
 
 - [ ] CRUDs for all main entities: course, module, class, user, etc.
+- [ ] Video streaming to watch the classes.
 
 ## Business Rules
 
 - [x] User should not be able to register with the same email.
 - [x] User should not be able to register with the same CPF.
-- [ ] Only students can enroll for a course.
+- [x] Only students can enroll for a course.
 - [ ] Only students can rate courses and classes.
 - [x] Only instructors can register a course.
 - [x] A specific instructor cannot register a course with the same name.
@@ -49,7 +49,7 @@
 - [x] Should not be able to add a class to a module with the same name twice.
 - [x] Should not be able to register a module to a specific course with same name twice.
 - [ ] A student can only issue one certificate per course.
-- [ ] A student can only enroll for a particular course once.
+- [x] A student can only enroll for a particular course once.
 - [x] There should not be repeated tags in a course.
 
 ## Non-Functional Requirements
