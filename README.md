@@ -23,8 +23,8 @@
 - [x] Return information about a course with its students.
 - [ ] Return information about a course with student progress in your modules and classes.
 - [ ] Students can mark classes as completed.
-- [ ] Return information about a student with the courses they are enrolled in.
 - [ ] Mark modules as completed after the student views all its classes.
+- [ ] Return information about a student with the courses they are enrolled in.
 - [ ] After completing all modules of a course, that course for a student should be marked as completed.
 - [ ] After completing a course, the student can issue a certificate.
 
@@ -183,3 +183,5 @@
 - [x] Review use cases and check improvements.
 - [x] Review entities created with IDs, ensuring the usage of `new UniqueEntityId()` only where needed and correct any discrepancies.
 - [x] Evaluate the Enrollment entity and determine if updates are necessary for simpler management of modules and classes.
+
+criar método separado no repo de cursos pra pegar ele completo com o progresso do estudante
