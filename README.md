@@ -195,7 +195,7 @@
 - [x] Classes and modules must have a field informing their position, e.g. this class is number one, so this is the first class of the course.
 
 - [x] Students can "enroll" to participate in the course.
-- [ ] Return information about a course with its students. - Make it work after creating Enrollment entity
+- [x] Return information about a course with its students.
 - [ ] Students can mark classes as completed.
 - [ ] Return information about a student with the courses they are enrolled in.
 - [ ] Mark modules as completed after the student views all its classes.
@@ -348,3 +348,12 @@
     - fileKey: string
     - size: number
     - storedAt: Date
+
+## Potential Refactoring or Updates:
+
+- [x] Implement course repository method.
+- [x] Refactor dependencies in all unit tests.
+- [x] Verify the usage of `Promise.all()` and apply destructuring where applicable.
+- [x] Review use cases and check improvements.
+- [x] Review entities created with IDs, ensuring the usage of `new UniqueEntityId()` only where needed and correct any discrepancies.
+- [ ] Evaluate the Enrollment entity and determine if updates are necessary for simpler management of modules and classes.

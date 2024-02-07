@@ -6,14 +6,18 @@ import { makeTag } from '../../../../../test/factories/make-tag'
 import { InMemoryClassesRepository } from '../../../../../test/repositories/in-memory-classes-repository'
 import { InMemoryCourseTagsRepository } from '../../../../../test/repositories/in-memory-course-tags-repository'
 import { InMemoryCoursesRepository } from '../../../../../test/repositories/in-memory-courses-repository'
+import { InMemoryEnrollmentsRepository } from '../../../../../test/repositories/in-memory-enrollments-repository'
 import { InMemoryInstructorRepository } from '../../../../../test/repositories/in-memory-instructors-repository'
 import { InMemoryModulesRepository } from '../../../../../test/repositories/in-memory-modules-repository'
+import { InMemoryStudentsRepository } from '../../../../../test/repositories/in-memory-students-repository'
 import { InMemoryTagsRepository } from '../../../../../test/repositories/in-memory-tags-repository'
 import { AttachTagToCourseUseCase } from './attach-tag-to-course'
 import { RepeatedTagError } from './errors/repeated-tag-error'
 import { TagAlreadyAttachedError } from './errors/tag-already-attached-error'
 
 let inMemoryCourseTagsRepository: InMemoryCourseTagsRepository
+let inMemoryEnrollmentsRepository: InMemoryEnrollmentsRepository
+let inMemoryStudentsRepository: InMemoryStudentsRepository
 let inMemoryTagsRepository: InMemoryTagsRepository
 let inMemoryClassesRepository: InMemoryClassesRepository
 let inMemoryInstructorsRepository: InMemoryInstructorRepository
@@ -25,11 +29,13 @@ describe('Attach tag to course use case', () => {
   beforeEach(() => {
     inMemoryCourseTagsRepository = new InMemoryCourseTagsRepository()
     inMemoryTagsRepository = new InMemoryTagsRepository()
+    inMemoryStudentsRepository = new InMemoryStudentsRepository()
+    inMemoryEnrollmentsRepository = new InMemoryEnrollmentsRepository()
     inMemoryClassesRepository = new InMemoryClassesRepository()
     inMemoryInstructorsRepository = new InMemoryInstructorRepository()
 
     inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
-    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository)
+    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository)
 
     sut = new AttachTagToCourseUseCase(inMemoryCourseTagsRepository, inMemoryTagsRepository, inMemoryCoursesRepository)
   })

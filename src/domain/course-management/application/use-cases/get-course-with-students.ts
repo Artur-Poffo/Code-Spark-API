@@ -1,7 +1,7 @@
 import { left, right, type Either } from '@/core/either'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { type UseCase } from '@/core/use-cases/use-case'
-import { type Course } from '../../enterprise/entities/course'
+import { type CourseWithStudentsDTO } from '../../enterprise/entities/dtos/course-with-students'
 import { type CoursesRepository } from '../repositories/courses-repository'
 
 interface GetCourseWithStudentsUseCaseRequest {
@@ -11,7 +11,7 @@ interface GetCourseWithStudentsUseCaseRequest {
 type GetCourseWithStudentsUseCaseResponse = Either<
 ResourceNotFoundError,
 {
-  courseWitStudents: Course
+  courseWithStudents: CourseWithStudentsDTO
 }
 >
 
@@ -23,14 +23,20 @@ export class GetCourseWithStudentsUseCase implements UseCase<GetCourseWithStuden
   async exec({
     courseId
   }: GetCourseWithStudentsUseCaseRequest): Promise<GetCourseWithStudentsUseCaseResponse> {
-    const courseWitStudents = await this.coursesRepository.findById(courseId)
+    const course = await this.coursesRepository.findById(courseId)
 
-    if (!courseWitStudents) {
+    if (!course) {
+      return left(new ResourceNotFoundError())
+    }
+
+    const courseWithTheirStudents = await this.coursesRepository.findCourseWithStudentsById(course.id.toString())
+
+    if (!courseWithTheirStudents) {
       return left(new ResourceNotFoundError())
     }
 
     return right({
-      courseWitStudents
+      courseWithStudents: courseWithTheirStudents
     })
   }
 }

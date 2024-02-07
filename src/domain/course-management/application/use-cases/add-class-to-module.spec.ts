@@ -6,6 +6,8 @@ import { makeModule } from '../../../../../test/factories/make-module'
 import { makeVideo } from '../../../../../test/factories/make-video'
 import { InMemoryClassesRepository } from '../../../../../test/repositories/in-memory-classes-repository'
 import { InMemoryCoursesRepository } from '../../../../../test/repositories/in-memory-courses-repository'
+import { InMemoryEnrollmentsRepository } from '../../../../../test/repositories/in-memory-enrollments-repository'
+import { InMemoryStudentsRepository } from '../../../../../test/repositories/in-memory-students-repository'
 import { InMemoryVideosRepository } from '../../../../../test/repositories/in-memory-videos-repository'
 import { InMemoryInstructorRepository } from './../../../../../test/repositories/in-memory-instructors-repository'
 import { InMemoryModulesRepository } from './../../../../../test/repositories/in-memory-modules-repository'
@@ -15,6 +17,8 @@ import { ClassNumberIsAlreadyInUseError } from './errors/class-number-is-already
 import { ClassVideoRequiredError } from './errors/class-video-required-error'
 
 let inMemoryVideosRepository: InMemoryVideosRepository
+let inMemoryEnrollmentsRepository: InMemoryEnrollmentsRepository
+let inMemoryStudentsRepository: InMemoryStudentsRepository
 let inMemoryClassesRepository: InMemoryClassesRepository
 let inMemoryInstructorsRepository: InMemoryInstructorRepository
 let inMemoryModulesRepository: InMemoryModulesRepository
@@ -24,13 +28,15 @@ let sut: AddClassToModuleUseCase
 describe('Add class to a module use case', () => {
   beforeEach(() => {
     inMemoryVideosRepository = new InMemoryVideosRepository()
+    inMemoryStudentsRepository = new InMemoryStudentsRepository()
+    inMemoryEnrollmentsRepository = new InMemoryEnrollmentsRepository()
     inMemoryClassesRepository = new InMemoryClassesRepository()
     inMemoryInstructorsRepository = new InMemoryInstructorRepository()
 
     inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
 
     inMemoryCoursesRepository = new InMemoryCoursesRepository(
-      inMemoryModulesRepository, inMemoryInstructorsRepository
+      inMemoryModulesRepository, inMemoryInstructorsRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository
     )
 
     sut = new AddClassToModuleUseCase(

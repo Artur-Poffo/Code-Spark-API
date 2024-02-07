@@ -1,5 +1,4 @@
 import { left, right, type Either } from '@/core/either'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { type UseCase } from '@/core/use-cases/use-case'
@@ -65,7 +64,7 @@ export class RegisterModuleToCourseUseCase implements UseCase<RegisterModuleToCo
       name,
       description,
       moduleNumber,
-      courseId: new UniqueEntityID(courseId)
+      courseId: completeCourse.course.id
     })
 
     await this.modulesRepository.create(module)

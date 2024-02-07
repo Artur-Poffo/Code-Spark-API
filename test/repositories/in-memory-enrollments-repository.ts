@@ -30,6 +30,10 @@ export class InMemoryEnrollmentsRepository implements EnrollmentsRepository {
     return enrollment
   }
 
+  async findManyByCourseId(courseId: string): Promise<Enrollment[]> {
+    return this.items.filter(enrollmentToFilter => enrollmentToFilter.courseId.toString() === courseId)
+  }
+
   async create(enrollment: Enrollment): Promise<Enrollment> {
     this.items.push(enrollment)
     return enrollment
