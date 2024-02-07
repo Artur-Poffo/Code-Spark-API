@@ -1,5 +1,6 @@
 import { type CoursesRepository } from '@/domain/course-management/application/repositories/courses-repository'
 import { type CompleteCourseDTO } from '@/domain/course-management/enterprise/entities/dtos/complete-course'
+import { type CourseWithModulesDTO } from '@/domain/course-management/enterprise/entities/dtos/course-with-modules'
 import { type CourseWithStudentsDTO } from '@/domain/course-management/enterprise/entities/dtos/course-with-students'
 import { type InstructorWithCoursesDTO } from '@/domain/course-management/enterprise/entities/dtos/instructor-with-courses'
 import { type Student } from '@/domain/course-management/enterprise/entities/student'
@@ -59,6 +60,30 @@ export class InMemoryCoursesRepository implements CoursesRepository {
     }
 
     return courseWithStudents
+  }
+
+  async findCourseWithSModulesById(id: string): Promise<CourseWithModulesDTO | null> {
+    const course = this.items.find(courseToCompare => courseToCompare.id.toString() === id)
+
+    if (!course) {
+      return null
+    }
+
+    const courseModules = await this.inMemoryModulesRepository.findManyByCourseId(course.id.toString())
+
+    const courseWithModules: CourseWithModulesDTO = {
+      course: {
+        id: course.id,
+        name: course.name,
+        description: course.description,
+        coverImageKey: course.coverImageKey,
+        bannerImageKey: course.bannerImageKey,
+        createdAt: course.createdAt
+      },
+      modules: courseModules
+    }
+
+    return courseWithModules
   }
 
   async findCompleteCourseEntityById(id: string): Promise<CompleteCourseDTO | null> {

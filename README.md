@@ -16,7 +16,7 @@
 - [x] Return information of an instructor with their courses.
 
 - [x] Return information about a course.
-- [ ] Return information about a course with its modules.
+- [x] Return information about a course with its modules.
 - [x] Classes and modules must have a field informing their position, e.g. this class is number one, so this is the first class of the course.
 
 - [x] Students can "enroll" to participate in the course.
