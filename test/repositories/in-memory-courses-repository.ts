@@ -3,6 +3,8 @@ import { type CompleteCourseDTO } from '@/domain/course-management/enterprise/en
 import { type CourseWithModulesDTO } from '@/domain/course-management/enterprise/entities/dtos/course-with-modules'
 import { type CourseWithStudentsDTO } from '@/domain/course-management/enterprise/entities/dtos/course-with-students'
 import { type InstructorWithCoursesDTO } from '@/domain/course-management/enterprise/entities/dtos/instructor-with-courses'
+import { type StudentWithCoursesDTO } from '@/domain/course-management/enterprise/entities/dtos/student-with-courses'
+import { type Enrollment } from '@/domain/course-management/enterprise/entities/enrollment'
 import { type Student } from '@/domain/course-management/enterprise/entities/student'
 import { type Course } from './../../src/domain/course-management/enterprise/entities/course'
 import { type ModuleWithClassesDTO } from './../../src/domain/course-management/enterprise/entities/dtos/module-with-classes'
@@ -153,6 +155,38 @@ export class InMemoryCoursesRepository implements CoursesRepository {
     }
 
     return instructorWithCourses
+  }
+
+  async findStudentWithCoursesByStudentId(studentId: string): Promise<StudentWithCoursesDTO | null> {
+    const student = await this.inMemoryStudentsRepository.findById(studentId)
+
+    if (!student) {
+      return null
+    }
+
+    const studentEnrollments: Enrollment[] = await this.inMemoryEnrollmentsRepository.findManyByStudentId(studentId)
+
+    const studentCourses = await Promise.all(studentEnrollments.map(async (studentEnrollmentToMap) => {
+      return this.items.find(courseToCompare => studentEnrollmentToMap.courseId.toString() === courseToCompare.id.toString())
+    }))
+
+    const nonNullStudentCourses: Course[] = studentCourses.filter(courseToFilter => courseToFilter !== null) as Course[]
+
+    const studentsWithCourses: StudentWithCoursesDTO = {
+      student: {
+        id: student.id,
+        name: student.name,
+        email: student.email,
+        summary: student.summary,
+        age: student.age,
+        profileImageKey: student.profileImageKey,
+        bannerImageKey: student.bannerImageKey,
+        registeredAt: student.registeredAt
+      },
+      courses: nonNullStudentCourses.length > 0 ? nonNullStudentCourses : []
+    }
+
+    return studentsWithCourses
   }
 
   async create(course: Course): Promise<Course> {

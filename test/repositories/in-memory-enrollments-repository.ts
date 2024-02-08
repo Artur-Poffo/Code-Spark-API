@@ -41,6 +41,10 @@ export class InMemoryEnrollmentsRepository implements EnrollmentsRepository {
     return this.items.filter(enrollmentToFilter => enrollmentToFilter.courseId.toString() === courseId)
   }
 
+  async findManyByStudentId(studentId: string): Promise<Enrollment[]> {
+    return this.items.filter(enrollmentToFilter => enrollmentToFilter.studentId.toString() === studentId)
+  }
+
   async markClassAsCompleted(classId: string, enrollment: Enrollment): Promise<Enrollment | null> {
     const classToFind = await this.inMemoryClassesRepository.findById(classId)
 

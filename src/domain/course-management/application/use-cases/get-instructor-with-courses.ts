@@ -11,7 +11,7 @@ interface GetInstructorWithCoursesUseCaseRequest {
 type GetInstructorWithCoursesUseCaseResponse = Either<
 ResourceNotFoundError,
 {
-  instructor: InstructorWithCoursesDTO
+  instructorWithCourses: InstructorWithCoursesDTO
 }
 >
 
@@ -30,7 +30,7 @@ export class GetInstructorWithCoursesUseCase implements UseCase<GetInstructorWit
     }
 
     return right({
-      instructor: instructorWithCourses
+      instructorWithCourses
     })
   }
 }

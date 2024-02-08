@@ -1,13 +1,15 @@
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { makeCourse } from '../../../../../test/factories/make-course'
+import { makeEnrollment } from '../../../../../test/factories/make-enrollment'
 import { makeInstructor } from '../../../../../test/factories/make-instructor'
+import { makeStudent } from '../../../../../test/factories/make-student'
 import { InMemoryClassesRepository } from '../../../../../test/repositories/in-memory-classes-repository'
 import { InMemoryCoursesRepository } from '../../../../../test/repositories/in-memory-courses-repository'
 import { InMemoryEnrollmentsRepository } from '../../../../../test/repositories/in-memory-enrollments-repository'
 import { InMemoryInstructorRepository } from '../../../../../test/repositories/in-memory-instructors-repository'
 import { InMemoryModulesRepository } from '../../../../../test/repositories/in-memory-modules-repository'
 import { InMemoryStudentsRepository } from '../../../../../test/repositories/in-memory-students-repository'
-import { GetInstructorWithCoursesUseCase } from './get-instructor-with-courses'
+import { GetStudentWithCoursesUseCase } from './get-student-with-courses'
 
 let inMemoryEnrollmentsRepository: InMemoryEnrollmentsRepository
 let inMemoryStudentsRepository: InMemoryStudentsRepository
@@ -15,9 +17,9 @@ let inMemoryClassesRepository: InMemoryClassesRepository
 let inMemoryInstructorsRepository: InMemoryInstructorRepository
 let inMemoryModulesRepository: InMemoryModulesRepository
 let inMemoryCoursesRepository: InMemoryCoursesRepository
-let sut: GetInstructorWithCoursesUseCase
+let sut: GetStudentWithCoursesUseCase
 
-describe('Get instructors with their courses', () => {
+describe('Get student with their courses', () => {
   beforeEach(() => {
     inMemoryClassesRepository = new InMemoryClassesRepository()
     inMemoryInstructorsRepository = new InMemoryInstructorRepository()
@@ -30,10 +32,10 @@ describe('Get instructors with their courses', () => {
     )
     inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository)
 
-    sut = new GetInstructorWithCoursesUseCase(inMemoryCoursesRepository)
+    sut = new GetStudentWithCoursesUseCase(inMemoryCoursesRepository)
   })
 
-  it('should be able to get instructor info with their courses', async () => {
+  it('should be able to get a student info with their courses', async () => {
     const instructor = makeInstructor()
     await inMemoryInstructorsRepository.create(instructor)
 
@@ -45,25 +47,39 @@ describe('Get instructors with their courses', () => {
       inMemoryCoursesRepository.create(secondCourse)
     ])
 
+    const student = makeStudent()
+    await inMemoryStudentsRepository.create(student)
+
+    const firstEnrollment = makeEnrollment({ courseId: firstCourse.id, studentId: student.id })
+    const secondEnrollment = makeEnrollment({ courseId: secondCourse.id, studentId: student.id })
+
+    await Promise.all([
+      inMemoryEnrollmentsRepository.create(firstEnrollment),
+      inMemoryEnrollmentsRepository.create(secondEnrollment)
+    ])
+
     const result = await sut.exec({
-      instructorId: instructor.id.toString()
+      studentId: student.id.toString()
     })
 
     expect(result.isRight()).toBe(true)
     expect(result.value).toMatchObject({
-      instructorWithCourses: expect.objectContaining({
+      studentWithCourses: expect.objectContaining({
         courses: expect.arrayContaining([
           expect.objectContaining({
             name: 'First Course'
+          }),
+          expect.objectContaining({
+            name: 'Second Course'
           })
         ])
       })
     })
   })
 
-  it('should not be able to get a inexistent instructor info with their courses', async () => {
+  it('should not be able to get a inexistent student info with their courses', async () => {
     const result = await sut.exec({
-      instructorId: 'inexistentInstructorId'
+      studentId: 'inexistentStudentId'
     })
 
     expect(result.isLeft()).toBe(true)

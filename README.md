@@ -21,11 +21,10 @@
 
 - [x] Students can "enroll" to participate in the course.
 - [x] Return information about a course with its students.
-- [ ] Return information about a course with student progress in your modules and classes.
 - [x] Students can mark classes as completed.
 - [x] Mark modules as completed after the student views all its classes.
 - [x] After completing all modules of a course, that course for a student should be marked as completed.
-- [ ] Return information about a student with the courses they are enrolled in.
+- [x] Return information about a student with the courses they are enrolled in.
 - [ ] After completing a course, the student can issue a certificate.
 
 - [ ] It should be possible to filter courses by name or "tags."
@@ -34,6 +33,8 @@
 - [ ] An instructor should be able to retrieve traffic data for one of their courses.
 
 - [ ] CRUDs for all main entities: course, module, class, user, etc.
+
+- [ ] Return information about a course with student progress in your modules and classes.
 - [ ] Video streaming to watch the classes.
 
 ## Business Rules

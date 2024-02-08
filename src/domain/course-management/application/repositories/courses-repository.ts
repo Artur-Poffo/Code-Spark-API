@@ -3,6 +3,7 @@ import { type CompleteCourseDTO } from '../../enterprise/entities/dtos/complete-
 import { type CourseWithModulesDTO } from '../../enterprise/entities/dtos/course-with-modules'
 import { type CourseWithStudentsDTO } from '../../enterprise/entities/dtos/course-with-students'
 import { type InstructorWithCoursesDTO } from '../../enterprise/entities/dtos/instructor-with-courses'
+import { type StudentWithCoursesDTO } from './../../enterprise/entities/dtos/student-with-courses'
 
 export interface CoursesRepository {
   findById: (id: string) => Promise<Course | null>
@@ -11,5 +12,6 @@ export interface CoursesRepository {
   findCourseWithSModulesById: (id: string) => Promise<CourseWithModulesDTO | null>
   findCompleteCourseEntityById: (id: string) => Promise<CompleteCourseDTO | null>
   findInstructorWithCoursesByInstructorId: (instructorId: string) => Promise<InstructorWithCoursesDTO | null>
+  findStudentWithCoursesByStudentId: (studentId: string) => Promise<StudentWithCoursesDTO | null>
   create: (course: Course) => Promise<Course>
 }
