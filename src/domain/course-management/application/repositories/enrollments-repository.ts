@@ -6,6 +6,7 @@ export interface EnrollmentsRepository {
   findManyByCourseId: (courseId: string) => Promise<Enrollment[]>
   markClassAsCompleted: (classId: string, enrollment: Enrollment) => Promise<Enrollment | null>
   markModuleAsCompleted: (moduleId: string, enrollment: Enrollment) => Promise<Enrollment | null>
+  markAsCompleted: (enrollment: Enrollment) => Promise<Enrollment>
   create: (enrollment: Enrollment) => Promise<Enrollment>
   save: (classToSave: Enrollment) => Promise<void>
 }

@@ -36,6 +36,10 @@ export class Enrollment extends Entity<EnrollmentProps> {
     return this.props.completedAt
   }
 
+  set completedAt(completedAt) {
+    this.props.completedAt = completedAt
+  }
+
   static create(
     props: Optional<EnrollmentProps, 'ocurredAt' | 'completedAt' | 'completedModules' | 'completedClasses'>,
     id?: UniqueEntityID
