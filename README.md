@@ -25,7 +25,7 @@
 - [x] Mark modules as completed after the student views all its classes.
 - [x] After completing all modules of a course, that course for a student should be marked as completed.
 - [x] Return information about a student with the courses they are enrolled in.
-- [ ] After completing a course, the student can issue a certificate.
+- [x] After completing a course, the student can issue a certificate.
 
 - [ ] It should be possible to filter courses by name or "tags."
 - [ ] Students can evaluate a particular course they are taking with a rating from 1 to 5 to later have an average rating for each course.
