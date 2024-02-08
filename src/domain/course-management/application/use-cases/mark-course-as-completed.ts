@@ -7,6 +7,7 @@ import { type CoursesRepository } from '../repositories/courses-repository'
 import { type EnrollmentsRepository } from '../repositories/enrollments-repository'
 import { type StudentsRepository } from '../repositories/students-repository'
 import { type ModulesRepository } from './../repositories/modules-repository'
+import { AllModulesInTheCourseMustBeMarkedAsCompleted } from './errors/all-modules-in-the-course-must-be-marked-as-completed'
 
 interface MarkCourseAsCompletedUseCaseRequest {
   enrollmentId: string
@@ -60,7 +61,7 @@ export class MarkCourseAsCompletedUseCase implements UseCase<MarkCourseAsComplet
     })
 
     if (!allModulesOfThisCourseIsCompleted) {
-      return left(new ResourceNotFoundError())
+      return left(new AllModulesInTheCourseMustBeMarkedAsCompleted(completeCourse.course.name))
     }
 
     await this.enrollmentsRepository.markAsCompleted(enrollment)
