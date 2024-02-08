@@ -5,7 +5,7 @@ import { type ModuleWithClassesDTO } from './../../enterprise/entities/dtos/modu
 export interface ModulesRepository {
   findById: (id: string) => Promise<Module | null>
   findManyByCourseId: (id: string) => Promise<Module[]>
-  findManyClassesByCourseId: (courseId: string) => Promise<Class[] | null>
+  findManyClassesByCourseId: (courseId: string) => Promise<Class[]>
   findModuleWithClassesById: (id: string) => Promise<ModuleWithClassesDTO | null>
   create: (module: Module) => Promise<Module>
 }

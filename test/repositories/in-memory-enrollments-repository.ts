@@ -1,4 +1,4 @@
-import { type EnrollmentsRepository } from '@/domain/course-management/application/repositories/enrollments'
+import { type EnrollmentsRepository } from '@/domain/course-management/application/repositories/enrollments-repository'
 import { type Enrollment } from '@/domain/course-management/enterprise/entities/enrollment'
 
 export class InMemoryEnrollmentsRepository implements EnrollmentsRepository {
@@ -37,5 +37,10 @@ export class InMemoryEnrollmentsRepository implements EnrollmentsRepository {
   async create(enrollment: Enrollment): Promise<Enrollment> {
     this.items.push(enrollment)
     return enrollment
+  }
+
+  async save(enrollment: Enrollment): Promise<void> {
+    const enrollmentIndex = this.items.indexOf(enrollment)
+    this.items[enrollmentIndex] = enrollment
   }
 }

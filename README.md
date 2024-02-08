@@ -22,7 +22,7 @@
 - [x] Students can "enroll" to participate in the course.
 - [x] Return information about a course with its students.
 - [ ] Return information about a course with student progress in your modules and classes.
-- [ ] Students can mark classes as completed.
+- [x] Students can mark classes as completed.
 - [ ] Mark modules as completed after the student views all its classes.
 - [ ] Return information about a student with the courses they are enrolled in.
 - [ ] After completing all modules of a course, that course for a student should be marked as completed.
