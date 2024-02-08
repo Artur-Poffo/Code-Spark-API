@@ -1,5 +1,5 @@
 {
-  "name": "code-spark-api",
+  "name": "@codespark/server",
   "version": "1.0.0",
   "description": "Entra21 course final paper",
   "main": "./dist/infra/server.js",

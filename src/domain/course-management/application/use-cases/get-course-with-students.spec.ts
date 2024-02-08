@@ -19,12 +19,15 @@ let sut: GetCourseWithStudentsUseCase
 
 describe('Get course details with students use case', () => {
   beforeEach(() => {
-    inMemoryEnrollmentsRepository = new InMemoryEnrollmentsRepository()
     inMemoryClassesRepository = new InMemoryClassesRepository()
     inMemoryInstructorsRepository = new InMemoryInstructorRepository()
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
 
     inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
+
+    inMemoryEnrollmentsRepository = new InMemoryEnrollmentsRepository(
+      inMemoryClassesRepository, inMemoryModulesRepository
+    )
     inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository)
 
     sut = new GetCourseWithStudentsUseCase(inMemoryCoursesRepository)

@@ -29,12 +29,14 @@ describe('Add class to a module use case', () => {
   beforeEach(() => {
     inMemoryVideosRepository = new InMemoryVideosRepository()
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
-    inMemoryEnrollmentsRepository = new InMemoryEnrollmentsRepository()
     inMemoryClassesRepository = new InMemoryClassesRepository()
     inMemoryInstructorsRepository = new InMemoryInstructorRepository()
 
     inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
 
+    inMemoryEnrollmentsRepository = new InMemoryEnrollmentsRepository(
+      inMemoryClassesRepository, inMemoryModulesRepository
+    )
     inMemoryCoursesRepository = new InMemoryCoursesRepository(
       inMemoryModulesRepository, inMemoryInstructorsRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository
     )

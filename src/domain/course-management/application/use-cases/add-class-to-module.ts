@@ -61,11 +61,7 @@ export class AddClassToModuleUseCase implements UseCase<AddClassToModuleUseCaseR
       return left(new NotAllowedError())
     }
 
-    const courseClasses: Class[] = []
-
-    completeCourse.modules.forEach(moduleToExtract => {
-      courseClasses.push(...moduleToExtract.classes)
-    })
+    const courseClasses: Class[] = await this.modulesRepository.findManyClassesByCourseId(completeCourse.course.id.toString())
 
     const classesInThisModule = courseClasses.filter(classToCompare => classToCompare.moduleId.toString() === moduleId)
     const classWithSameNameInSameModule = classesInThisModule.find(classToCompare => classToCompare.name === name)

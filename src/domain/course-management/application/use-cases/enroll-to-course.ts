@@ -3,7 +3,7 @@ import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-e
 import { type UseCase } from '@/core/use-cases/use-case'
 import { Enrollment } from '../../enterprise/entities/enrollment'
 import { type CoursesRepository } from '../repositories/courses-repository'
-import { type EnrollmentsRepository } from '../repositories/enrollments'
+import { type EnrollmentsRepository } from '../repositories/enrollments-repository'
 import { type StudentsRepository } from '../repositories/students-repository'
 import { AlreadyEnrolledInThisCourse } from './errors/already-enrolled-in-this-course'
 

@@ -1,8 +1,15 @@
-import { type EnrollmentsRepository } from '@/domain/course-management/application/repositories/enrollments'
+import { type EnrollmentsRepository } from '@/domain/course-management/application/repositories/enrollments-repository'
 import { type Enrollment } from '@/domain/course-management/enterprise/entities/enrollment'
+import { type InMemoryClassesRepository } from './in-memory-classes-repository'
+import { type InMemoryModulesRepository } from './in-memory-modules-repository'
 
 export class InMemoryEnrollmentsRepository implements EnrollmentsRepository {
   public items: Enrollment[] = []
+
+  constructor(
+    private readonly inMemoryClassesRepository: InMemoryClassesRepository,
+    private readonly inMemoryModulesRepository: InMemoryModulesRepository
+  ) {}
 
   async findById(id: string): Promise<Enrollment | null> {
     const enrollment = this.items.find(enrollmentToCompare => enrollmentToCompare.id.toString() === id)
@@ -34,8 +41,39 @@ export class InMemoryEnrollmentsRepository implements EnrollmentsRepository {
     return this.items.filter(enrollmentToFilter => enrollmentToFilter.courseId.toString() === courseId)
   }
 
+  async markClassAsCompleted(classId: string, enrollment: Enrollment): Promise<Enrollment | null> {
+    const classToFind = await this.inMemoryClassesRepository.findById(classId)
+
+    if (!classToFind) {
+      return null
+    }
+
+    enrollment.completedClasses.push(classToFind.id)
+    await this.save(enrollment)
+
+    return enrollment
+  }
+
+  async markModuleAsCompleted(moduleId: string, enrollment: Enrollment): Promise<Enrollment | null> {
+    const module = await this.inMemoryModulesRepository.findById(moduleId)
+
+    if (!module) {
+      return null
+    }
+
+    enrollment.completedClasses.push(module.id)
+    await this.save(enrollment)
+
+    return enrollment
+  }
+
   async create(enrollment: Enrollment): Promise<Enrollment> {
     this.items.push(enrollment)
     return enrollment
+  }
+
+  async save(enrollment: Enrollment): Promise<void> {
+    const enrollmentIndex = this.items.indexOf(enrollment)
+    this.items[enrollmentIndex] = enrollment
   }
 }
