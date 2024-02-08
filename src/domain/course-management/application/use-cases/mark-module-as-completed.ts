@@ -70,8 +70,7 @@ export class MarkModuleAsCompletedUseCase implements UseCase<MarkModuleAsComplet
       return left(new AllClassesInTheModuleMustBeMarkedAsCompleted(module.name))
     }
 
-    enrollment.completedModules.push(module.id)
-    await this.enrollmentsRepository.save(enrollment)
+    await this.enrollmentsRepository.markModuleAsCompleted(moduleId, enrollment)
 
     return right({
       module

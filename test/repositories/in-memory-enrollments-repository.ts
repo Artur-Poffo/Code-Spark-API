@@ -61,7 +61,14 @@ export class InMemoryEnrollmentsRepository implements EnrollmentsRepository {
       return null
     }
 
-    enrollment.completedClasses.push(module.id)
+    enrollment.completedModules.push(module.id)
+    await this.save(enrollment)
+
+    return enrollment
+  }
+
+  async markAsCompleted(enrollment: Enrollment): Promise<Enrollment> {
+    enrollment.completedAt = new Date()
     await this.save(enrollment)
 
     return enrollment
