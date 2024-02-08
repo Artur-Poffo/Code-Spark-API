@@ -24,10 +24,13 @@ describe('Register module to a course use case', () => {
   beforeEach(() => {
     inMemoryClassesRepository = new InMemoryClassesRepository()
     inMemoryInstructorRepository = new InMemoryInstructorRepository()
-    inMemoryEnrollmentsRepository = new InMemoryEnrollmentsRepository()
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
 
     inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
+
+    inMemoryEnrollmentsRepository = new InMemoryEnrollmentsRepository(
+      inMemoryClassesRepository, inMemoryModulesRepository
+    )
     inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository)
 
     sut = new RegisterModuleToCourseUseCase(inMemoryCoursesRepository, inMemoryModulesRepository)

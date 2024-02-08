@@ -183,5 +183,3 @@
 - [x] Review use cases and check improvements.
 - [x] Review entities created with IDs, ensuring the usage of `new UniqueEntityId()` only where needed and correct any discrepancies.
 - [x] Evaluate the Enrollment entity and determine if updates are necessary for simpler management of modules and classes.
-
-criar método separado no repo de cursos pra pegar ele completo com o progresso do estudante

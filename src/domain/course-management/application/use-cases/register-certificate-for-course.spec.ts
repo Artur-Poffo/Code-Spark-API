@@ -29,10 +29,13 @@ describe('Register certificate for a course use case', () => {
     inMemoryCertificatesRepository = new InMemoryCertificatesRepository()
     inMemoryClassesRepository = new InMemoryClassesRepository()
     inMemoryInstructorsRepository = new InMemoryInstructorRepository()
-    inMemoryEnrollmentsRepository = new InMemoryEnrollmentsRepository()
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
 
     inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
+
+    inMemoryEnrollmentsRepository = new InMemoryEnrollmentsRepository(
+      inMemoryClassesRepository, inMemoryModulesRepository
+    )
     inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository)
 
     sut = new RegisterCertificateForCourseUseCase(inMemoryCertificatesRepository, inMemoryImagesRepository, inMemoryCoursesRepository)

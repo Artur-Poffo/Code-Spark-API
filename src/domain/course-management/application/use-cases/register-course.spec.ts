@@ -23,9 +23,12 @@ describe('Register course use case', () => {
     inMemoryClassesRepository = new InMemoryClassesRepository()
     inMemoryInstructorRepository = new InMemoryInstructorRepository()
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
-    inMemoryEnrollmentsRepository = new InMemoryEnrollmentsRepository()
 
     inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
+
+    inMemoryEnrollmentsRepository = new InMemoryEnrollmentsRepository(
+      inMemoryClassesRepository, inMemoryModulesRepository
+    )
     inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository)
 
     sut = new RegisterCourseUseCase(inMemoryCoursesRepository)
