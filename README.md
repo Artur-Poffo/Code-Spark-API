@@ -23,9 +23,9 @@
 - [x] Return information about a course with its students.
 - [ ] Return information about a course with student progress in your modules and classes.
 - [x] Students can mark classes as completed.
-- [ ] Mark modules as completed after the student views all its classes.
-- [ ] Return information about a student with the courses they are enrolled in.
+- [x] Mark modules as completed after the student views all its classes.
 - [ ] After completing all modules of a course, that course for a student should be marked as completed.
+- [ ] Return information about a student with the courses they are enrolled in.
 - [ ] After completing a course, the student can issue a certificate.
 
 - [ ] It should be possible to filter courses by name or "tags."
