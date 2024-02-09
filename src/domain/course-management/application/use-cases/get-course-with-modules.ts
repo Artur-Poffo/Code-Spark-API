@@ -29,7 +29,7 @@ export class GetCourseWithModulesUseCase implements UseCase<GetCourseWithModules
       return left(new ResourceNotFoundError())
     }
 
-    const courseWithTheirModules = await this.coursesRepository.findCourseWithSModulesById(course.id.toString())
+    const courseWithTheirModules = await this.coursesRepository.findCourseWithModulesById(course.id.toString())
 
     if (!courseWithTheirModules) {
       return left(new ResourceNotFoundError())

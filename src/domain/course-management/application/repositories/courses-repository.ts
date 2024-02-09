@@ -8,8 +8,9 @@ import { type StudentWithCoursesDTO } from './../../enterprise/entities/dtos/stu
 export interface CoursesRepository {
   findById: (id: string) => Promise<Course | null>
   findManyByInstructorId: (instructorId: string) => Promise<Course[]>
+  queryByName: (name: string) => Promise<Course[]>
   findCourseWithStudentsById: (id: string) => Promise<CourseWithStudentsDTO | null>
-  findCourseWithSModulesById: (id: string) => Promise<CourseWithModulesDTO | null>
+  findCourseWithModulesById: (id: string) => Promise<CourseWithModulesDTO | null>
   findCompleteCourseEntityById: (id: string) => Promise<CompleteCourseDTO | null>
   findInstructorWithCoursesByInstructorId: (instructorId: string) => Promise<InstructorWithCoursesDTO | null>
   findStudentWithCoursesByStudentId: (studentId: string) => Promise<StudentWithCoursesDTO | null>

@@ -37,6 +37,10 @@ export class InMemoryCoursesRepository implements CoursesRepository {
     return this.items.filter(courseToCompare => courseToCompare.instructorId.toString() === instructorId)
   }
 
+  async queryByName(name: string): Promise<Course[]> {
+    return this.items.filter(courseToCompare => courseToCompare.name.toUpperCase().includes(name.toUpperCase()))
+  }
+
   async findCourseWithStudentsById(id: string): Promise<CourseWithStudentsDTO | null> {
     const course = this.items.find(courseToCompare => courseToCompare.id.toString() === id)
 
@@ -64,7 +68,7 @@ export class InMemoryCoursesRepository implements CoursesRepository {
     return courseWithStudents
   }
 
-  async findCourseWithSModulesById(id: string): Promise<CourseWithModulesDTO | null> {
+  async findCourseWithModulesById(id: string): Promise<CourseWithModulesDTO | null> {
     const course = this.items.find(courseToCompare => courseToCompare.id.toString() === id)
 
     if (!course) {
