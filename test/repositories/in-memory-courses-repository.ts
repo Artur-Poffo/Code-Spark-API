@@ -6,12 +6,15 @@ import { type InstructorWithCoursesDTO } from '@/domain/course-management/enterp
 import { type StudentWithCoursesDTO } from '@/domain/course-management/enterprise/entities/dtos/student-with-courses'
 import { type Enrollment } from '@/domain/course-management/enterprise/entities/enrollment'
 import { type Student } from '@/domain/course-management/enterprise/entities/student'
+import { type Tag } from '@/domain/course-management/enterprise/entities/tag'
 import { type Course } from './../../src/domain/course-management/enterprise/entities/course'
 import { type ModuleWithClassesDTO } from './../../src/domain/course-management/enterprise/entities/dtos/module-with-classes'
+import { type InMemoryCourseTagsRepository } from './in-memory-course-tags-repository'
 import { type InMemoryEnrollmentsRepository } from './in-memory-enrollments-repository'
 import { type InMemoryInstructorRepository } from './in-memory-instructors-repository'
 import { type InMemoryModulesRepository } from './in-memory-modules-repository'
 import { type InMemoryStudentsRepository } from './in-memory-students-repository'
+import { type InMemoryTagsRepository } from './in-memory-tags-repository'
 
 export class InMemoryCoursesRepository implements CoursesRepository {
   public items: Course[] = []
@@ -20,7 +23,9 @@ export class InMemoryCoursesRepository implements CoursesRepository {
     private readonly inMemoryModulesRepository: InMemoryModulesRepository,
     private readonly inMemoryInstructorRepository: InMemoryInstructorRepository,
     private readonly inMemoryEnrollmentsRepository: InMemoryEnrollmentsRepository,
-    private readonly inMemoryStudentsRepository: InMemoryStudentsRepository
+    private readonly inMemoryStudentsRepository: InMemoryStudentsRepository,
+    private readonly inMemoryTagsRepository: InMemoryTagsRepository,
+    private readonly inMemoryCourseTagsRepository: InMemoryCourseTagsRepository
   ) {}
 
   async findById(id: string): Promise<Course | null> {
@@ -39,6 +44,17 @@ export class InMemoryCoursesRepository implements CoursesRepository {
 
   async queryByName(name: string): Promise<Course[]> {
     return this.items.filter(courseToCompare => courseToCompare.name.toUpperCase().includes(name.toUpperCase()))
+  }
+
+  async queryByTags(tags: Tag[]): Promise<Course[]> {
+    const tagIds = tags.map(tagToMap => tagToMap.id)
+
+    const courseTags = await this.inMemoryCourseTagsRepository.findAll()
+    const courseTagsContainingTagsToQuery = courseTags.map(courseTagToMap => tagIds.includes(courseTagToMap.id))
+
+    // TODO: Continue at home ;)
+
+    return []
   }
 
   async findCourseWithStudentsById(id: string): Promise<CourseWithStudentsDTO | null> {
