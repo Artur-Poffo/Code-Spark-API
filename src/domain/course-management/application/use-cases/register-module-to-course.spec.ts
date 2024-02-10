@@ -3,6 +3,7 @@ import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-e
 import { makeCourse } from '../../../../../test/factories/make-course'
 import { makeInstructor } from '../../../../../test/factories/make-instructor'
 import { InMemoryClassesRepository } from '../../../../../test/repositories/in-memory-classes-repository'
+import { InMemoryCourseTagsRepository } from '../../../../../test/repositories/in-memory-course-tags-repository'
 import { InMemoryEnrollmentsRepository } from '../../../../../test/repositories/in-memory-enrollments-repository'
 import { InMemoryStudentsRepository } from '../../../../../test/repositories/in-memory-students-repository'
 import { InMemoryCoursesRepository } from './../../../../../test/repositories/in-memory-courses-repository'
@@ -13,6 +14,7 @@ import { ModuleNumberIsAlreadyInUseError } from './errors/module-number-already-
 import { RegisterModuleToCourseUseCase } from './register-module-to-course'
 
 let inMemoryEnrollmentsRepository: InMemoryEnrollmentsRepository
+let inMemoryCourseTagsRepository: InMemoryCourseTagsRepository
 let inMemoryStudentsRepository: InMemoryStudentsRepository
 let inMemoryClassesRepository: InMemoryClassesRepository
 let inMemoryInstructorRepository: InMemoryInstructorRepository
@@ -23,6 +25,7 @@ let sut: RegisterModuleToCourseUseCase
 describe('Register module to a course use case', () => {
   beforeEach(() => {
     inMemoryClassesRepository = new InMemoryClassesRepository()
+    inMemoryCourseTagsRepository = new InMemoryCourseTagsRepository()
     inMemoryInstructorRepository = new InMemoryInstructorRepository()
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
 
@@ -31,7 +34,7 @@ describe('Register module to a course use case', () => {
     inMemoryEnrollmentsRepository = new InMemoryEnrollmentsRepository(
       inMemoryClassesRepository, inMemoryModulesRepository
     )
-    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository)
+    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository, inMemoryCourseTagsRepository)
 
     sut = new RegisterModuleToCourseUseCase(inMemoryCoursesRepository, inMemoryModulesRepository)
   })

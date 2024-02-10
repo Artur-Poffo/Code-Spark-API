@@ -1,4 +1,5 @@
 import { type CoursesRepository } from '@/domain/course-management/application/repositories/courses-repository'
+import { type CourseTag } from '@/domain/course-management/enterprise/entities/course-tag'
 import { type CompleteCourseDTO } from '@/domain/course-management/enterprise/entities/dtos/complete-course'
 import { type CourseWithModulesDTO } from '@/domain/course-management/enterprise/entities/dtos/course-with-modules'
 import { type CourseWithStudentsDTO } from '@/domain/course-management/enterprise/entities/dtos/course-with-students'
@@ -14,7 +15,6 @@ import { type InMemoryEnrollmentsRepository } from './in-memory-enrollments-repo
 import { type InMemoryInstructorRepository } from './in-memory-instructors-repository'
 import { type InMemoryModulesRepository } from './in-memory-modules-repository'
 import { type InMemoryStudentsRepository } from './in-memory-students-repository'
-import { type InMemoryTagsRepository } from './in-memory-tags-repository'
 
 export class InMemoryCoursesRepository implements CoursesRepository {
   public items: Course[] = []
@@ -24,7 +24,6 @@ export class InMemoryCoursesRepository implements CoursesRepository {
     private readonly inMemoryInstructorRepository: InMemoryInstructorRepository,
     private readonly inMemoryEnrollmentsRepository: InMemoryEnrollmentsRepository,
     private readonly inMemoryStudentsRepository: InMemoryStudentsRepository,
-    private readonly inMemoryTagsRepository: InMemoryTagsRepository,
     private readonly inMemoryCourseTagsRepository: InMemoryCourseTagsRepository
   ) {}
 
@@ -49,12 +48,28 @@ export class InMemoryCoursesRepository implements CoursesRepository {
   async queryByTags(tags: Tag[]): Promise<Course[]> {
     const tagIds = tags.map(tagToMap => tagToMap.id)
 
-    const courseTags = await this.inMemoryCourseTagsRepository.findAll()
-    const courseTagsContainingTagsToQuery = courseTags.map(courseTagToMap => tagIds.includes(courseTagToMap.id))
+    const courseTags: CourseTag[] = []
 
-    // TODO: Continue at home ;)
+    await Promise.all(
+      tagIds.map(async tagId => {
+        const tagsForCurrentId = await this.inMemoryCourseTagsRepository.findManyByTagId(tagId.toString())
+        courseTags.push(...tagsForCurrentId)
+      })
+    )
 
-    return []
+    const coursesSet = new Set<Course>()
+
+    courseTags.forEach(courseTag => {
+      const course = this.items.find(courseToFind => courseToFind.id.equals(courseTag.courseId))
+
+      if (course) {
+        coursesSet.add(course)
+      }
+    })
+
+    const courses: Course[] = Array.from(coursesSet)
+
+    return courses
   }
 
   async findCourseWithStudentsById(id: string): Promise<CourseWithStudentsDTO | null> {

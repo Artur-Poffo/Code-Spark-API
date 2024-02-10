@@ -4,6 +4,7 @@ import { makeEnrollment } from '../../../../../test/factories/make-enrollment'
 import { makeInstructor } from '../../../../../test/factories/make-instructor'
 import { makeStudent } from '../../../../../test/factories/make-student'
 import { InMemoryClassesRepository } from '../../../../../test/repositories/in-memory-classes-repository'
+import { InMemoryCourseTagsRepository } from '../../../../../test/repositories/in-memory-course-tags-repository'
 import { InMemoryCoursesRepository } from '../../../../../test/repositories/in-memory-courses-repository'
 import { InMemoryEnrollmentsRepository } from '../../../../../test/repositories/in-memory-enrollments-repository'
 import { InMemoryInstructorRepository } from '../../../../../test/repositories/in-memory-instructors-repository'
@@ -12,6 +13,7 @@ import { InMemoryStudentsRepository } from '../../../../../test/repositories/in-
 import { GetStudentWithCoursesUseCase } from './get-student-with-courses'
 
 let inMemoryEnrollmentsRepository: InMemoryEnrollmentsRepository
+let inMemoryCourseTagsRepository: InMemoryCourseTagsRepository
 let inMemoryStudentsRepository: InMemoryStudentsRepository
 let inMemoryClassesRepository: InMemoryClassesRepository
 let inMemoryInstructorsRepository: InMemoryInstructorRepository
@@ -22,6 +24,7 @@ let sut: GetStudentWithCoursesUseCase
 describe('Get student with their courses', () => {
   beforeEach(() => {
     inMemoryClassesRepository = new InMemoryClassesRepository()
+    inMemoryCourseTagsRepository = new InMemoryCourseTagsRepository()
     inMemoryInstructorsRepository = new InMemoryInstructorRepository()
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
 
@@ -30,7 +33,7 @@ describe('Get student with their courses', () => {
     inMemoryEnrollmentsRepository = new InMemoryEnrollmentsRepository(
       inMemoryClassesRepository, inMemoryModulesRepository
     )
-    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository)
+    inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository, inMemoryCourseTagsRepository)
 
     sut = new GetStudentWithCoursesUseCase(inMemoryCoursesRepository)
   })

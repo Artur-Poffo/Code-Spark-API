@@ -27,12 +27,11 @@ export class QueryCoursesByTagsUseCase implements UseCase<QueryCoursesByTagsUseC
     query
   }: QueryCoursesByTagsUseCaseRequest): Promise<QueryCoursesByTagsUseCaseResponse> {
     const tags = await this.tagsRepository.queryByValue(query)
-    const tagIds = tags.map(tagToMap => tagToMap.id.toString())
 
-    const courseWithThisTags = await this.coursesRepository.queryByTags(tagIds)
+    const coursesWithThisTags = await this.coursesRepository.queryByTags(tags)
 
     return right({
-      courses: courseWithThisTags
+      courses: coursesWithThisTags
     })
   }
 }
