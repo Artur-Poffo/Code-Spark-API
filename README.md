@@ -27,7 +27,7 @@
 - [x] Return information about a student with the courses they are enrolled in.
 - [x] After completing a course, the student can issue a certificate.
 
-- [ ] It should be possible to filter courses by name or "tags."
+- [x] It should be possible to filter courses by name or "tags."
 - [ ] Students can evaluate a particular course they are taking with a rating from 1 to 5 to later have an average rating for each course.
 
 - [ ] An instructor should be able to retrieve traffic data for one of their courses.
