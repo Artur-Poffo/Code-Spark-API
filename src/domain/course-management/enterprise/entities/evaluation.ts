@@ -2,25 +2,20 @@ import { Entity } from '@/core/entities/entity'
 import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { type Optional } from '@/core/types/optional'
 
-export interface RateProps {
+export interface EvaluationProps {
   value: number
-  userId: UniqueEntityID
-  courseId?: UniqueEntityID
-  classId?: UniqueEntityID
+  studentId: UniqueEntityID
+  classId: UniqueEntityID
   createdAt: Date
 }
 
-export class Rate extends Entity<RateProps> {
+export class Evaluation extends Entity<EvaluationProps> {
   get value() {
     return this.props.value
   }
 
-  get userId() {
-    return this.props.userId
-  }
-
-  get courseId() {
-    return this.props.courseId
+  get studentId() {
+    return this.props.studentId
   }
 
   get classId() {
@@ -32,10 +27,10 @@ export class Rate extends Entity<RateProps> {
   }
 
   static create(
-    props: Optional<RateProps, 'createdAt'>,
+    props: Optional<EvaluationProps, 'createdAt'>,
     id?: UniqueEntityID
   ) {
-    const rate = new Rate(
+    const evaluation = new Evaluation(
       {
         ...props,
         createdAt: props.createdAt ?? new Date()
@@ -43,6 +38,6 @@ export class Rate extends Entity<RateProps> {
       id
     )
 
-    return rate
+    return evaluation
   }
 }
