@@ -19,24 +19,24 @@ import { StudentMustBeRegisteredToEvaluateError } from './errors/student-must-be
 import { EvaluateClassUseCase } from './evaluate-class'
 
 let inMemoryEnrollmentsRepository: InMemoryEnrollmentsRepository
-let inMemoryEvaluationsRepository: InMemoryEvaluationsRepository
 let inMemoryCourseTagsRepository: InMemoryCourseTagsRepository
 let inMemoryClassesRepository: InMemoryClassesRepository
 let inMemoryInstructorsRepository: InMemoryInstructorRepository
 let inMemoryStudentsRepository: InMemoryStudentsRepository
 let inMemoryModulesRepository: InMemoryModulesRepository
+let inMemoryEvaluationsRepository: InMemoryEvaluationsRepository
 let inMemoryCoursesRepository: InMemoryCoursesRepository
 let sut: EvaluateClassUseCase
 
 describe('Evaluate class use case', () => {
   beforeEach(() => {
     inMemoryClassesRepository = new InMemoryClassesRepository()
-    inMemoryEvaluationsRepository = new InMemoryEvaluationsRepository()
     inMemoryInstructorsRepository = new InMemoryInstructorRepository()
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
 
     inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
 
+    inMemoryEvaluationsRepository = new InMemoryEvaluationsRepository(inMemoryModulesRepository)
     inMemoryEnrollmentsRepository = new InMemoryEnrollmentsRepository(
       inMemoryClassesRepository, inMemoryModulesRepository
     )

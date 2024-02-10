@@ -29,7 +29,7 @@
 
 - [x] It should be possible to filter courses by name or "tags."
 - [x] Students can evaluate a particular class they are taking with a rating from 1 to 5 to later have an average rating for the course.
-- [ ] get average of course evaluations
+- [x] Get course evaluations average
 
 - [ ] An instructor should be able to retrieve traffic data for one of their courses.
 
