@@ -14,8 +14,16 @@ export class InMemoryCourseTagsRepository implements CourseTagsRepository {
     return courseTag
   }
 
+  async findManyByTagId(tagId: string): Promise<CourseTag[]> {
+    return this.items.filter(courseTagToCompare => courseTagToCompare.tagId.toString() === tagId)
+  }
+
   async findManyByCourseId(courseId: string): Promise<CourseTag[]> {
     return this.items.filter(courseTagToCompare => courseTagToCompare.courseId.toString() === courseId)
+  }
+
+  async findAll(): Promise<CourseTag[]> {
+    return this.items
   }
 
   async create(courseTag: CourseTag): Promise<CourseTag> {

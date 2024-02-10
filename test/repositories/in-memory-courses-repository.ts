@@ -1,4 +1,5 @@
 import { type CoursesRepository } from '@/domain/course-management/application/repositories/courses-repository'
+import { type CourseTag } from '@/domain/course-management/enterprise/entities/course-tag'
 import { type CompleteCourseDTO } from '@/domain/course-management/enterprise/entities/dtos/complete-course'
 import { type CourseWithModulesDTO } from '@/domain/course-management/enterprise/entities/dtos/course-with-modules'
 import { type CourseWithStudentsDTO } from '@/domain/course-management/enterprise/entities/dtos/course-with-students'
@@ -6,8 +7,10 @@ import { type InstructorWithCoursesDTO } from '@/domain/course-management/enterp
 import { type StudentWithCoursesDTO } from '@/domain/course-management/enterprise/entities/dtos/student-with-courses'
 import { type Enrollment } from '@/domain/course-management/enterprise/entities/enrollment'
 import { type Student } from '@/domain/course-management/enterprise/entities/student'
+import { type Tag } from '@/domain/course-management/enterprise/entities/tag'
 import { type Course } from './../../src/domain/course-management/enterprise/entities/course'
 import { type ModuleWithClassesDTO } from './../../src/domain/course-management/enterprise/entities/dtos/module-with-classes'
+import { type InMemoryCourseTagsRepository } from './in-memory-course-tags-repository'
 import { type InMemoryEnrollmentsRepository } from './in-memory-enrollments-repository'
 import { type InMemoryInstructorRepository } from './in-memory-instructors-repository'
 import { type InMemoryModulesRepository } from './in-memory-modules-repository'
@@ -20,7 +23,8 @@ export class InMemoryCoursesRepository implements CoursesRepository {
     private readonly inMemoryModulesRepository: InMemoryModulesRepository,
     private readonly inMemoryInstructorRepository: InMemoryInstructorRepository,
     private readonly inMemoryEnrollmentsRepository: InMemoryEnrollmentsRepository,
-    private readonly inMemoryStudentsRepository: InMemoryStudentsRepository
+    private readonly inMemoryStudentsRepository: InMemoryStudentsRepository,
+    private readonly inMemoryCourseTagsRepository: InMemoryCourseTagsRepository
   ) {}
 
   async findById(id: string): Promise<Course | null> {
@@ -39,6 +43,33 @@ export class InMemoryCoursesRepository implements CoursesRepository {
 
   async queryByName(name: string): Promise<Course[]> {
     return this.items.filter(courseToCompare => courseToCompare.name.toUpperCase().includes(name.toUpperCase()))
+  }
+
+  async queryByTags(tags: Tag[]): Promise<Course[]> {
+    const tagIds = tags.map(tagToMap => tagToMap.id)
+
+    const courseTags: CourseTag[] = []
+
+    await Promise.all(
+      tagIds.map(async tagId => {
+        const tagsForCurrentId = await this.inMemoryCourseTagsRepository.findManyByTagId(tagId.toString())
+        courseTags.push(...tagsForCurrentId)
+      })
+    )
+
+    const coursesSet = new Set<Course>()
+
+    courseTags.forEach(courseTag => {
+      const course = this.items.find(courseToFind => courseToFind.id.equals(courseTag.courseId))
+
+      if (course) {
+        coursesSet.add(course)
+      }
+    })
+
+    const courses: Course[] = Array.from(coursesSet)
+
+    return courses
   }
 
   async findCourseWithStudentsById(id: string): Promise<CourseWithStudentsDTO | null> {

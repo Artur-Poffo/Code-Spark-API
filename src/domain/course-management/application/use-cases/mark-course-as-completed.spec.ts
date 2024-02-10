@@ -7,6 +7,7 @@ import { makeInstructor } from '../../../../../test/factories/make-instructor'
 import { makeModule } from '../../../../../test/factories/make-module'
 import { makeStudent } from '../../../../../test/factories/make-student'
 import { InMemoryClassesRepository } from '../../../../../test/repositories/in-memory-classes-repository'
+import { InMemoryCourseTagsRepository } from '../../../../../test/repositories/in-memory-course-tags-repository'
 import { InMemoryCoursesRepository } from '../../../../../test/repositories/in-memory-courses-repository'
 import { InMemoryEnrollmentsRepository } from '../../../../../test/repositories/in-memory-enrollments-repository'
 import { InMemoryStudentsRepository } from '../../../../../test/repositories/in-memory-students-repository'
@@ -16,6 +17,7 @@ import { AllModulesInTheCourseMustBeMarkedAsCompleted } from './errors/all-modul
 import { MarkCourseAsCompletedUseCase } from './mark-course-as-completed'
 
 let inMemoryEnrollmentsRepository: InMemoryEnrollmentsRepository
+let inMemoryCourseTagsRepository: InMemoryCourseTagsRepository
 let inMemoryStudentsRepository: InMemoryStudentsRepository
 let inMemoryClassesRepository: InMemoryClassesRepository
 let inMemoryInstructorsRepository: InMemoryInstructorRepository
@@ -26,6 +28,7 @@ let sut: MarkCourseAsCompletedUseCase
 describe('Mark course as completed use case', () => {
   beforeEach(() => {
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
+    inMemoryCourseTagsRepository = new InMemoryCourseTagsRepository()
     inMemoryClassesRepository = new InMemoryClassesRepository()
     inMemoryInstructorsRepository = new InMemoryInstructorRepository()
 
@@ -35,7 +38,7 @@ describe('Mark course as completed use case', () => {
       inMemoryClassesRepository, inMemoryModulesRepository
     )
     inMemoryCoursesRepository = new InMemoryCoursesRepository(
-      inMemoryModulesRepository, inMemoryInstructorsRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository
+      inMemoryModulesRepository, inMemoryInstructorsRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository, inMemoryCourseTagsRepository
     )
 
     sut = new MarkCourseAsCompletedUseCase(
