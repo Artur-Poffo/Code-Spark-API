@@ -18,4 +18,5 @@ export interface CoursesRepository {
   findInstructorWithCoursesByInstructorId: (instructorId: string) => Promise<InstructorWithCoursesDTO | null>
   findStudentWithCoursesByStudentId: (studentId: string) => Promise<StudentWithCoursesDTO | null>
   create: (course: Course) => Promise<Course>
+  save: (course: Course) => Promise<void>
 }

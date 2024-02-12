@@ -204,7 +204,7 @@
 - [ ] GET /courses/:courseId/students - Get students enrolled in this course
 - [ ] GET /courses/:courseId/modules - Get course modules
 - [ ] POST /courses - Register course
-- [ ] PUT /courses/:courseId - Update course details - make use case
+- [ ] PUT /courses/:courseId - Update course details
 - [ ] DELETE /courses/:courseId - Delete course - make use case
 
 ### Modules

@@ -234,4 +234,9 @@ export class InMemoryCoursesRepository implements CoursesRepository {
     this.items.push(course)
     return course
   }
+
+  async save(course: Course): Promise<void> {
+    const courseIndex = this.items.indexOf(course)
+    this.items[courseIndex] = course
+  }
 }

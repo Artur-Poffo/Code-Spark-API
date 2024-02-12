@@ -16,8 +16,16 @@ export class Course extends Entity<CourseProps> {
     return this.props.name
   }
 
+  set name(name: string) {
+    this.props.name = name
+  }
+
   get description() {
     return this.props.description
+  }
+
+  set description(description: string) {
+    this.props.description = description
   }
 
   get instructorId() {
@@ -28,8 +36,16 @@ export class Course extends Entity<CourseProps> {
     return this.props.coverImageKey
   }
 
+  set coverImageKey(coverImageKey: string | undefined | null) {
+    this.props.coverImageKey = coverImageKey
+  }
+
   get bannerImageKey() {
     return this.props.bannerImageKey
+  }
+
+  set bannerImageKey(bannerImageKey: string | undefined | null) {
+    this.props.bannerImageKey = bannerImageKey
   }
 
   get createdAt() {
