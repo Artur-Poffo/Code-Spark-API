@@ -14,16 +14,32 @@ export class Class extends Entity<ClassProps> {
     return this.props.name
   }
 
+  set name(name: string) {
+    this.props.name = name
+  }
+
   get description() {
     return this.props.description
+  }
+
+  set description(description: string) {
+    this.props.description = description
   }
 
   get videoId() {
     return this.props.videoId
   }
 
+  set videoId(videoId: UniqueEntityID) {
+    this.props.videoId = videoId
+  }
+
   get classNumber() {
     return this.props.classNumber
+  }
+
+  set classNumber(classNumber: number) {
+    this.props.classNumber = classNumber
   }
 
   get moduleId() {

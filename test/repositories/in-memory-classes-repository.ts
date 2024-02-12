@@ -24,4 +24,9 @@ export class InMemoryClassesRepository implements ClassesRepository {
     this.items.push(classToAdd)
     return classToAdd
   }
+
+  async save(classToEdit: Class): Promise<void> {
+    const classIndex = this.items.indexOf(classToEdit)
+    this.items[classIndex] = classToEdit
+  }
 }
