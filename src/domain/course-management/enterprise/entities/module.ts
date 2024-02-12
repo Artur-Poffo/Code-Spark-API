@@ -13,12 +13,24 @@ export class Module extends Entity<ModuleProps> {
     return this.props.name
   }
 
+  set name(name: string) {
+    this.props.name = name
+  }
+
   get description() {
     return this.props.description
   }
 
+  set description(description: string) {
+    this.props.description = description
+  }
+
   get moduleNumber() {
     return this.props.moduleNumber
+  }
+
+  set moduleNumber(moduleNumber: number) {
+    this.props.moduleNumber = moduleNumber
   }
 
   get courseId() {

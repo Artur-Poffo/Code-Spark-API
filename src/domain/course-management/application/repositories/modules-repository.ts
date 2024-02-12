@@ -8,4 +8,5 @@ export interface ModulesRepository {
   findManyClassesByCourseId: (courseId: string) => Promise<Class[]>
   findModuleWithClassesById: (id: string) => Promise<ModuleWithClassesDTO | null>
   create: (module: Module) => Promise<Module>
+  save: (module: Module) => Promise<void>
 }

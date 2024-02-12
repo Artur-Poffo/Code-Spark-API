@@ -69,4 +69,9 @@ export class InMemoryModulesRepository implements ModulesRepository {
     this.items.push(module)
     return module
   }
+
+  async save(module: Module): Promise<void> {
+    const moduleIndex = this.items.indexOf(module)
+    this.items[moduleIndex] = module
+  }
 }
