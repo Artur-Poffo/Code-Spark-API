@@ -6,4 +6,5 @@ export interface UsersRepository {
   findById: (id: string) => Promise<User<StudentProps | InstructorProps> | null>
   findByEmail: (email: string) => Promise<User<StudentProps | InstructorProps> | null>
   create: (user: User<StudentProps | InstructorProps>) => Promise<User<StudentProps | InstructorProps>>
+  delete: (user: User<StudentProps | InstructorProps>) => Promise<void>
 }

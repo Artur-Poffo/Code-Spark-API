@@ -182,7 +182,7 @@
 - [ ] GET /users/:userId - Get user details
 - [ ] POST /users - Register user
 - [ ] PUT /users/:userId - Update user
-- [ ] DELETE /users/:userId - Delete user - make use case
+- [ ] DELETE /users/:userId - Delete user
 
 ### Sessions
 - [ ] POST /sessions - User authentication

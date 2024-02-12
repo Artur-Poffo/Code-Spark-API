@@ -44,4 +44,9 @@ export class InMemoryUsersRepository implements UsersRepository {
     this.inMemoryInstructorsRepository.items.push(user)
     return user
   }
+
+  async delete(user: User<StudentProps | InstructorProps>): Promise<void> {
+    const userIndex = this.items.indexOf(user)
+    this.items.splice(userIndex, 1)
+  }
 }
