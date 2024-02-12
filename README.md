@@ -176,6 +176,61 @@
     - size: number
     - storedAt: Date
 
+## Initial Routes (must have changes)
+
+### Users
+- [ ] GET /users/:userId - Get user details
+- [ ] POST /users - Register user
+- [ ] PUT /users/:userId - Update user - make use case
+- [ ] DELETE /users/:userId - Delete user
+
+### Sessions
+- [ ] POST /sessions - User authentication
+
+### Students
+- [ ] GET /students/:studentId/courses - Get student courses with instructor and evaluations
+
+### Instructors
+- [ ] GET /instructors/:instructorId/courses - Get instructor courses with instructor and evaluations
+
+### Courses
+- [ ] GET /courses/:courseId - Get course details
+- [ ] GET /courses/:courseId/instructor - Get course instructor details
+- [ ] GET /courses/:courseId/evaluations - Get course evaluations - make use case
+- [ ] GET /courses/:courseId/stats - Get course statistics, like duration and number of classes - make use case
+- [ ] GET /courses/:courseId/metrics - Get course metrics for a dashboard
+- [ ] GET /courses - Get recent courses with instructor and evaluations - make use case
+- [ ] GET /courses/filter - Filter courses by name or tags
+- [ ] GET /courses/:courseId/students - Get students enrolled in this course
+- [ ] GET /courses/:courseId/modules - Get course modules
+- [ ] POST /courses - Register course
+- [ ] PUT /courses/:courseId - Update course details - make use case
+- [ ] DELETE /courses/:courseId - Delete course - make use case
+
+### Modules
+- [ ] POST /modules - Register module
+- [ ] GET /modules/:moduleId/classes - Get classes from a module - make use case
+- [ ] PUT /modules/:moduleId - Update module details - make use case
+- [ ] DELETE /modules/:moduleId - Delete module - make use case
+
+### Classes
+- [ ] POST /classes - Register class
+- [ ] PUT /classes/:classId - Update class details - make use case
+- [ ] DELETE /classes/:classId - Delete class - make use case
+
+### Tags
+- [ ] GET /tags - Get recent tags - make use case
+- [ ] POST /tags - Register tag
+
+### Evaluations
+- [ ] POST /evaluations - Register evaluation
+- [ ] PUT /evaluations/:evaluationId - Update evaluation - make use case
+
+### Enrollments
+- [ ] POST /enrollments - Register enrollment
+- [ ] GET /enrollments/students/:studentId/courses/:courseId - Get enrollment of a student on a course - make use case
+- [ ] DELETE /enrollments/students/:studentId/courses/:courseId - Cancel enrollment - make use case
+
 ## Potential Refactoring or Updates:
 
 - [x] Implement course repository method.
