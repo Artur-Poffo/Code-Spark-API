@@ -205,7 +205,7 @@
 - [ ] GET /courses/:courseId/modules - Get course modules
 - [ ] POST /courses - Register course
 - [ ] PUT /courses/:courseId - Update course details
-- [ ] DELETE /courses/:courseId - Delete course - make use case
+- [ ] DELETE /courses/:courseId - Delete course
 
 ### Modules
 - [ ] POST /modules - Register module

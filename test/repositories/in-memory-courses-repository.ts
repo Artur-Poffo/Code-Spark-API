@@ -239,4 +239,9 @@ export class InMemoryCoursesRepository implements CoursesRepository {
     const courseIndex = this.items.indexOf(course)
     this.items[courseIndex] = course
   }
+
+  async delete(course: Course): Promise<void> {
+    const courseIndex = this.items.indexOf(course)
+    this.items.splice(courseIndex, 1)
+  }
 }
