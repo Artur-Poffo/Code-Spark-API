@@ -1,5 +1,7 @@
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
+import { makeClass } from '../../../../../test/factories/make-class'
 import { makeCourse } from '../../../../../test/factories/make-course'
+import { makeModule } from '../../../../../test/factories/make-module'
 import { InMemoryClassesRepository } from '../../../../../test/repositories/in-memory-classes-repository'
 import { InMemoryCourseTagsRepository } from '../../../../../test/repositories/in-memory-course-tags-repository'
 import { InMemoryCoursesRepository } from '../../../../../test/repositories/in-memory-courses-repository'
@@ -7,7 +9,7 @@ import { InMemoryEnrollmentsRepository } from '../../../../../test/repositories/
 import { InMemoryInstructorRepository } from '../../../../../test/repositories/in-memory-instructors-repository'
 import { InMemoryModulesRepository } from '../../../../../test/repositories/in-memory-modules-repository'
 import { InMemoryStudentsRepository } from '../../../../../test/repositories/in-memory-students-repository'
-import { DeleteCourseUseCase } from './delete-course'
+import { DeleteClassUseCase } from './delete-class'
 
 let inMemoryClassesRepository: InMemoryClassesRepository
 let inMemoryCourseTagsRepository: InMemoryCourseTagsRepository
@@ -16,9 +18,9 @@ let inMemoryStudentsRepository: InMemoryStudentsRepository
 let inMemoryInstructorsRepository: InMemoryInstructorRepository
 let inMemoryModulesRepository: InMemoryModulesRepository
 let inMemoryCoursesRepository: InMemoryCoursesRepository
-let sut: DeleteCourseUseCase
+let sut: DeleteClassUseCase
 
-describe('Delete course use case', () => {
+describe('Delete class use case', () => {
   beforeEach(() => {
     inMemoryClassesRepository = new InMemoryClassesRepository()
     inMemoryCourseTagsRepository = new InMemoryCourseTagsRepository()
@@ -32,29 +34,42 @@ describe('Delete course use case', () => {
     )
     inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository, inMemoryCourseTagsRepository)
 
-    sut = new DeleteCourseUseCase(inMemoryCoursesRepository)
+    sut = new DeleteClassUseCase(inMemoryClassesRepository)
   })
 
-  it('should be able to delete a course', async () => {
+  it('should be able to delete a class', async () => {
     const course = makeCourse({ name: 'John Doe Course' })
     await inMemoryCoursesRepository.create(course)
 
+    const module = makeModule({
+      courseId: course.id,
+      moduleNumber: 1
+    })
+    await inMemoryModulesRepository.create(module)
+
+    const classToDelete = makeClass({
+      moduleId: module.id,
+      classNumber: 1,
+      name: 'Class to delete'
+    })
+    await inMemoryClassesRepository.create(classToDelete)
+
     const result = await sut.exec({
-      courseId: course.id.toString()
+      classId: classToDelete.id.toString()
     })
 
     expect(result.isRight()).toBe(true)
     expect(result.value).toMatchObject({
-      course: expect.objectContaining({
-        name: 'John Doe Course'
+      class: expect.objectContaining({
+        name: 'Class to delete'
       })
     })
-    expect(inMemoryCoursesRepository.items).toHaveLength(0)
+    expect(inMemoryClassesRepository.items).toHaveLength(0)
   })
 
-  it('should not be able to delete a inexistent course', async () => {
+  it('should not be able to delete a inexistent class', async () => {
     const result = await sut.exec({
-      courseId: 'inexistentCourseId'
+      classId: 'inexistentClassId'
     })
 
     expect(result.isLeft()).toBe(true)

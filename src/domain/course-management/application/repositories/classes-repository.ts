@@ -5,4 +5,5 @@ export interface ClassesRepository {
   findManyByModuleId: (moduleId: string) => Promise<Class[]>
   create: (classToAdd: Class) => Promise<Class>
   save: (classToSave: Class) => Promise<void>
+  delete: (classToDelete: Class) => Promise<void>
 }

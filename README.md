@@ -215,8 +215,8 @@
 
 ### Classes
 - [ ] POST /classes - Register class
-- [ ] PUT /classes/:classId - Update class details - make use case
-- [ ] DELETE /classes/:classId - Delete class - make use case
+- [ ] PUT /classes/:classId - Update class details
+- [ ] DELETE /classes/:classId - Delete class
 
 ### Tags
 - [ ] GET /tags - Get recent tags - make use case

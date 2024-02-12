@@ -29,4 +29,9 @@ export class InMemoryClassesRepository implements ClassesRepository {
     const classIndex = this.items.indexOf(classToEdit)
     this.items[classIndex] = classToEdit
   }
+
+  async delete(classToDelete: Class): Promise<void> {
+    const classIndex = this.items.indexOf(classToDelete)
+    this.items.splice(classIndex, 1)
+  }
 }
