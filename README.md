@@ -209,7 +209,7 @@
 
 ### Modules
 - [ ] POST /modules - Register module
-- [ ] GET /modules/:moduleId/classes - Get classes from a module - make use case
+- [ ] GET /modules/:moduleId/classes - Get classes from a module
 - [ ] PUT /modules/:moduleId - Update module details - make use case
 - [ ] DELETE /modules/:moduleId - Delete module - make use case
 

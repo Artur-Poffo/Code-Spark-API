@@ -45,8 +45,6 @@ describe('Fetch recent courses use case', () => {
 
     const result = await sut.exec()
 
-    console.log(result.value)
-
     expect(result.isRight()).toBe(true)
     expect(result.value).toMatchObject({
       courses: [

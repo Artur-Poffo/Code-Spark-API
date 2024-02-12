@@ -15,7 +15,9 @@ export class InMemoryClassesRepository implements ClassesRepository {
   }
 
   async findManyByModuleId(moduleId: string): Promise<Class[]> {
-    return this.items.filter(classToCompare => classToCompare.moduleId.toString() === moduleId)
+    return this.items
+      .filter(classToCompare => classToCompare.moduleId.toString() === moduleId)
+      .sort((a, b) => a.classNumber - b.classNumber)
   }
 
   async create(classToAdd: Class): Promise<Class> {
