@@ -1,6 +1,4 @@
 import { right, type Either } from '@/core/either'
-import { type NotAllowedError } from '@/core/errors/errors/not-allowed-error'
-import { type ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { type UseCase } from '@/core/use-cases/use-case'
 import { type EvaluationsRepository } from '../repositories/evaluations-repository'
 
@@ -9,7 +7,7 @@ interface GetCourseEvaluationsAverageUseCaseRequest {
 }
 
 type GetCourseEvaluationsAverageUseCaseResponse = Either<
-ResourceNotFoundError | NotAllowedError,
+null,
 {
   evaluationsAverage: number
 }

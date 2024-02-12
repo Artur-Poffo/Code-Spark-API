@@ -21,7 +21,7 @@ interface AddClassToModuleUseCaseRequest {
 }
 
 type AddClassToModuleUseCaseResponse = Either<
-ResourceNotFoundError | NotAllowedError | ClassAlreadyExistsInThisModuleError | ClassNumberIsAlreadyInUseError,
+ResourceNotFoundError | NotAllowedError | ClassAlreadyExistsInThisModuleError | ClassNumberIsAlreadyInUseError | ClassVideoRequiredError,
 {
   class: Class
 }

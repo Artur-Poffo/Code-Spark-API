@@ -9,7 +9,6 @@ import { type CoursesRepository } from '../repositories/courses-repository'
 import { type TagsRepository } from '../repositories/tags-repository'
 import { RepeatedTagError } from './errors/repeated-tag-error'
 import { TagAlreadyAttachedError } from './errors/tag-already-attached-error'
-import { type TagAlreadyExistsError } from './errors/tag-already-exists-error'
 
 interface AttachTagToCourseUseCaseRequest {
   tagIds: string[]
@@ -18,7 +17,7 @@ interface AttachTagToCourseUseCaseRequest {
 }
 
 type AttachTagToCourseUseCaseResponse = Either<
-TagAlreadyExistsError,
+RepeatedTagError | ResourceNotFoundError | NotAllowedError | TagAlreadyAttachedError,
 {
   attachedTags: CourseTag[]
 }

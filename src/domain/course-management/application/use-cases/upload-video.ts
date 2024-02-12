@@ -1,5 +1,4 @@
 import { right, type Either } from '@/core/either'
-import { type ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { type UseCase } from '@/core/use-cases/use-case'
 import { Video } from '../../enterprise/entities/video'
 import { type VideosRepository } from './../repositories/videos-repository'
@@ -13,7 +12,7 @@ interface UploadVideoUseCaseRequest {
 }
 
 type UploadVideoUseCaseResponse = Either<
-ResourceNotFoundError,
+null,
 {
   video: Video
 }

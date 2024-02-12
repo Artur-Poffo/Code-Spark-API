@@ -8,18 +8,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
+          cache: 'yarn'
 
       - name: Install dependencies
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: install # will run `yarn install` command
+        run: yarn install
 
       - name: Test the API
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: test:unit # test command
+        run: yarn test:unit

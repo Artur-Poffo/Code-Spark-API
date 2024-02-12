@@ -29,7 +29,7 @@ describe('Get instructors with their courses', () => {
     inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
 
     inMemoryEnrollmentsRepository = new InMemoryEnrollmentsRepository(
-      inMemoryClassesRepository, inMemoryModulesRepository
+      inMemoryClassesRepository, inMemoryModulesRepository, inMemoryStudentsRepository
     )
     inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository, inMemoryCourseTagsRepository)
 

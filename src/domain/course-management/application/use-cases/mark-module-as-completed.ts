@@ -16,7 +16,7 @@ interface MarkModuleAsCompletedUseCaseRequest {
 }
 
 type MarkModuleAsCompletedUseCaseResponse = Either<
-ResourceNotFoundError | NotAllowedError,
+ResourceNotFoundError | NotAllowedError | AllClassesInTheModuleMustBeMarkedAsCompleted,
 {
   module: Module
 }

@@ -31,7 +31,7 @@
 - [x] Students can evaluate a particular class they are taking with a rating from 1 to 5 to later have an average rating for the course.
 - [x] Get course evaluations average
 
-- [ ] An instructor should be able to retrieve traffic data for one of their courses.
+- [x] An instructor should be able to retrieve traffic data for one of their courses.
 
 - [ ] CRUDs for all main entities: course, module, class, user, etc.
 
@@ -184,3 +184,5 @@
 - [x] Review use cases and check improvements.
 - [x] Review entities created with IDs, ensuring the usage of `new UniqueEntityId()` only where needed and correct any discrepancies.
 - [x] Evaluate the Enrollment entity and determine if updates are necessary for simpler management of modules and classes.
+- [x] Replace all asynchronous forEach for Promise.all() with asynchronous map
+- [x] Update use cases Either errors

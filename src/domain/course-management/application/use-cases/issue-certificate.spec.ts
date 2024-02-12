@@ -39,7 +39,7 @@ describe('Issue certificate use case', () => {
     inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
 
     inMemoryEnrollmentsRepository = new InMemoryEnrollmentsRepository(
-      inMemoryClassesRepository, inMemoryModulesRepository
+      inMemoryClassesRepository, inMemoryModulesRepository, inMemoryStudentsRepository
     )
     inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository, inMemoryCourseTagsRepository)
 

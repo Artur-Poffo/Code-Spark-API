@@ -38,7 +38,7 @@ describe('Evaluate class use case', () => {
 
     inMemoryEvaluationsRepository = new InMemoryEvaluationsRepository(inMemoryModulesRepository)
     inMemoryEnrollmentsRepository = new InMemoryEnrollmentsRepository(
-      inMemoryClassesRepository, inMemoryModulesRepository
+      inMemoryClassesRepository, inMemoryModulesRepository, inMemoryStudentsRepository
     )
     inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository, inMemoryCourseTagsRepository)
 

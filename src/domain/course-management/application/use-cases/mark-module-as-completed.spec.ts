@@ -35,7 +35,7 @@ describe('Mark module as completed use case', () => {
     inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
 
     inMemoryEnrollmentsRepository = new InMemoryEnrollmentsRepository(
-      inMemoryClassesRepository, inMemoryModulesRepository
+      inMemoryClassesRepository, inMemoryModulesRepository, inMemoryStudentsRepository
     )
     inMemoryCoursesRepository = new InMemoryCoursesRepository(
       inMemoryModulesRepository, inMemoryInstructorsRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository, inMemoryCourseTagsRepository

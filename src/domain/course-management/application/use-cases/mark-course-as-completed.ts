@@ -15,7 +15,7 @@ interface MarkCourseAsCompletedUseCaseRequest {
 }
 
 type MarkCourseAsCompletedUseCaseResponse = Either<
-ResourceNotFoundError | NotAllowedError,
+ResourceNotFoundError | NotAllowedError | AllModulesInTheCourseMustBeMarkedAsCompleted,
 {
   course: CompleteCourseDTO
 }
