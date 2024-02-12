@@ -181,10 +181,11 @@ describe('Get course metrics use case', () => {
   })
 
   it('should calculate course growth percentage correctly', async ({ expect }) => {
-    const instructor = makeInstructor({ registeredAt: new Date('2020-01-01') })
+    const createdAt = new Date('2007-03-27')
+
+    const instructor = makeInstructor({ registeredAt: createdAt })
     await inMemoryInstructorsRepository.create(instructor)
 
-    const createdAt = new Date('2023-01-01')
     const course = makeCourse({ createdAt, instructorId: instructor.id })
     await inMemoryCoursesRepository.create(course)
 
