@@ -12,14 +12,11 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 20
+          cache: 'yarn'
 
       - name: Install dependencies
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: install # will run `yarn install` command
+        run: yarn install
 
       - name: Test the API
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: test:unit # test command
+        run: yarn test:unit
