@@ -219,7 +219,7 @@
 - [ ] DELETE /classes/:classId - Delete class
 
 ### Tags
-- [ ] GET /tags - Get recent tags - make use case
+- [ ] GET /tags - Get recent tags
 - [ ] POST /tags - Register tag
 
 ### Evaluations

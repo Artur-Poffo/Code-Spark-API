@@ -14,6 +14,12 @@ export class InMemoryTagsRepository implements TagsRepository {
     return tag
   }
 
+  async findAll(): Promise<Tag[]> {
+    const tags = [...this.items]
+
+    return tags.sort((a, b) => b.addedAt.getTime() - a.addedAt.getTime())
+  }
+
   async queryByValue(value: string): Promise<Tag[]> {
     return this.items.filter(tagToCompare => tagToCompare.value.toUpperCase().includes(value.toUpperCase()))
   }

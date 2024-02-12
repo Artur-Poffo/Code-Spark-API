@@ -9,6 +9,7 @@ export function makeTag(
   const tag = Tag.create(
     {
       value: faker.lorem.word(),
+      addedAt: override.addedAt ?? new Date(),
       ...override
     },
     id
