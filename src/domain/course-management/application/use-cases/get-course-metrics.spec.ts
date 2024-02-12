@@ -195,8 +195,6 @@ describe('Get course metrics use case', () => {
     const enrollmentsOnLastYear = 80
 
     const countEnrollmentsByYear = async (year: number): Promise<number> => {
-      console.log(`called with year: ${year}`)
-
       if (year === currentYear) {
         return 120
       } else if (year === createdAt.getFullYear()) {
@@ -212,15 +210,10 @@ describe('Get course metrics use case', () => {
     const originalMethod = inMemoryEnrollmentsRepository.countEnrollmentsByYear
     inMemoryEnrollmentsRepository.countEnrollmentsByYear = countEnrollmentsByYear
 
-    // eslint-disable-next-line @typescript-eslint/unbound-method
-    console.log(inMemoryEnrollmentsRepository.countEnrollmentsByYear)
-
     const result = await sut.exec({
       courseId: course.id.toString(),
       instructorId: course.instructorId.toString()
     })
-
-    console.log(result)
 
     inMemoryEnrollmentsRepository.countEnrollmentsByYear = originalMethod
 
@@ -228,10 +221,6 @@ describe('Get course metrics use case', () => {
 
     const expectedGrowthPercentage = ((120 - enrollmentsOnReferenceYear) / enrollmentsOnReferenceYear) * 100
     const expectedGrowthPercentageFromLastYear = ((120 - enrollmentsOnLastYear) / enrollmentsOnLastYear) * 100
-
-    console.log(enrollmentsOnReferenceYear)
-    console.log(enrollmentsOnLastYear)
-    console.log(currentYear)
 
     expect(result.value).toMatchObject({
       growthPercentage: expectedGrowthPercentage,
