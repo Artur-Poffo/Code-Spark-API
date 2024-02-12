@@ -211,7 +211,7 @@
 - [ ] POST /modules - Register module
 - [ ] GET /modules/:moduleId/classes - Get classes from a module
 - [ ] PUT /modules/:moduleId - Update module details
-- [ ] DELETE /modules/:moduleId - Delete module - make use case
+- [ ] DELETE /modules/:moduleId - Delete module
 
 ### Classes
 - [ ] POST /classes - Register class

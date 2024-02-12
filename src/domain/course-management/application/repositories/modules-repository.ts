@@ -9,4 +9,5 @@ export interface ModulesRepository {
   findModuleWithClassesById: (id: string) => Promise<ModuleWithClassesDTO | null>
   create: (module: Module) => Promise<Module>
   save: (module: Module) => Promise<void>
+  delete: (module: Module) => Promise<void>
 }

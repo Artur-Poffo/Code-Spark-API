@@ -74,4 +74,9 @@ export class InMemoryModulesRepository implements ModulesRepository {
     const moduleIndex = this.items.indexOf(module)
     this.items[moduleIndex] = module
   }
+
+  async delete(module: Module): Promise<void> {
+    const moduleIndex = this.items.indexOf(module)
+    this.items.splice(moduleIndex, 1)
+  }
 }
