@@ -5,4 +5,5 @@ export interface EvaluationsRepository {
   findByStudentIdAndClassId: (studentId: string, classId: string) => Promise<Evaluation | null>
   findManyByCourseId: (courseId: string) => Promise<Evaluation[]>
   create: (evaluation: Evaluation) => Promise<Evaluation>
+  save: (evaluation: Evaluation) => Promise<void>
 }

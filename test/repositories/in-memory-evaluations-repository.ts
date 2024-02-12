@@ -56,4 +56,9 @@ export class InMemoryEvaluationsRepository implements EvaluationsRepository {
     this.items.push(evaluation)
     return evaluation
   }
+
+  async save(evaluation: Evaluation): Promise<void> {
+    const evaluationIndex = this.items.indexOf(evaluation)
+    this.items[evaluationIndex] = evaluation
+  }
 }

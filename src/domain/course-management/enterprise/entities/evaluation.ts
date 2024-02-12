@@ -14,6 +14,10 @@ export class Evaluation extends Entity<EvaluationProps> {
     return this.props.value
   }
 
+  set value(value: number) {
+    this.props.value = value
+  }
+
   get studentId() {
     return this.props.studentId
   }

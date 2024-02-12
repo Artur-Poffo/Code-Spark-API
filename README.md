@@ -224,7 +224,7 @@
 
 ### Evaluations
 - [ ] POST /evaluations - Register evaluation
-- [ ] PUT /evaluations/:evaluationId - Update evaluation - make use case
+- [ ] PUT /evaluations/:evaluationId - Update evaluation
 
 ### Enrollments
 - [ ] POST /enrollments - Register enrollment
