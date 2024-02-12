@@ -8,6 +8,7 @@ import { type StudentWithCoursesDTO } from './../../enterprise/entities/dtos/stu
 
 export interface CoursesRepository {
   findById: (id: string) => Promise<Course | null>
+  findAll: () => Promise<Course[]>
   findManyByInstructorId: (instructorId: string) => Promise<Course[]>
   queryByName: (name: string) => Promise<Course[]>
   queryByTags: (tags: Tag[]) => Promise<Course[]>

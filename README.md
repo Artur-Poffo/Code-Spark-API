@@ -196,10 +196,10 @@
 ### Courses
 - [ ] GET /courses/:courseId - Get course details
 - [ ] GET /courses/:courseId/instructor - Get course instructor details
-- [ ] GET /courses/:courseId/evaluations - Get course evaluations - make use case
+- [ ] GET /courses/:courseId/evaluation - Get course evaluation average
 - [ ] GET /courses/:courseId/stats - Get course statistics, like duration and number of classes
 - [ ] GET /courses/:courseId/metrics - Get course metrics for a dashboard
-- [ ] GET /courses - Get recent courses with instructor and evaluations - make use case
+- [ ] GET /courses - Get recent courses with instructor and evaluation average
 - [ ] GET /courses/filter - Filter courses by name or tags
 - [ ] GET /courses/:courseId/students - Get students enrolled in this course
 - [ ] GET /courses/:courseId/modules - Get course modules

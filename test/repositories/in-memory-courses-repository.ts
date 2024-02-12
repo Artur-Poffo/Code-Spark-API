@@ -37,6 +37,12 @@ export class InMemoryCoursesRepository implements CoursesRepository {
     return course
   }
 
+  async findAll(): Promise<Course[]> {
+    const courses = [...this.items]
+
+    return courses.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+  }
+
   async findManyByInstructorId(instructorId: string): Promise<Course[]> {
     return this.items.filter(courseToCompare => courseToCompare.instructorId.toString() === instructorId)
   }
