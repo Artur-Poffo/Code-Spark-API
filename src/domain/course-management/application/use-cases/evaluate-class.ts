@@ -1,5 +1,4 @@
 import { left, right, type Either } from '@/core/either'
-import { type NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { type UseCase } from '@/core/use-cases/use-case'
 import { Evaluation } from '../../enterprise/entities/evaluation'
@@ -20,7 +19,7 @@ interface EvaluateClassUseCaseRequest {
 }
 
 type EvaluateClassUseCaseResponse = Either<
-ResourceNotFoundError | NotAllowedError,
+InvalidEvaluationValueError | ResourceNotFoundError | StudentAlreadyEvaluateThisClassError | StudentMustBeRegisteredToEvaluateError,
 {
   evaluation: Evaluation
 }

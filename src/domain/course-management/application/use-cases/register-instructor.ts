@@ -5,7 +5,6 @@ import { Student } from '../../enterprise/entities/student'
 import { type HashGenerator } from '../cryptography/hash-generator'
 import { type InstructorsRepository } from '../repositories/instructors-repository'
 import { InstructorAlreadyExistsError } from './errors/instructor-already-exists-error'
-import { type StudentAlreadyExistsError } from './errors/student-already-exists-error'
 
 interface RegisterInstructorUseCaseRequest {
   name: string
@@ -17,7 +16,7 @@ interface RegisterInstructorUseCaseRequest {
 }
 
 type RegisterInstructorUseCaseResponse = Either<
-StudentAlreadyExistsError,
+InstructorAlreadyExistsError,
 {
   instructor: Instructor
 }

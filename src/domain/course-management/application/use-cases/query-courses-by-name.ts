@@ -1,6 +1,4 @@
 import { right, type Either } from '@/core/either'
-import { type NotAllowedError } from '@/core/errors/errors/not-allowed-error'
-import { type ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { type UseCase } from '@/core/use-cases/use-case'
 import { type Course } from '../../enterprise/entities/course'
 import { type CoursesRepository } from '../repositories/courses-repository'
@@ -10,7 +8,7 @@ interface QueryCoursesByNameUseCaseRequest {
 }
 
 type QueryCoursesByNameUseCaseResponse = Either<
-ResourceNotFoundError | NotAllowedError,
+null,
 {
   courses: Course[]
 }

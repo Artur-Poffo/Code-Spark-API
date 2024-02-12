@@ -15,7 +15,6 @@ describe('Upload image use case', () => {
       imageName: 'imageName',
       imageType: 'image/jpeg',
       body: Buffer.from('imageBody'),
-      duration: 60 * 10, // Ten minutes,
       size: 1024 * 1024 // 1MB
     })
 

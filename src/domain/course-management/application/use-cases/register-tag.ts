@@ -10,7 +10,7 @@ interface RegisterTagUseCaseRequest {
 }
 
 type RegisterTagUseCaseResponse = Either<
-TagAlreadyExistsError,
+RepeatedTagError | TagAlreadyExistsError,
 {
   tags: Tag[]
 }

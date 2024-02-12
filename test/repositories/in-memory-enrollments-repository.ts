@@ -1,14 +1,17 @@
 import { type EnrollmentsRepository } from '@/domain/course-management/application/repositories/enrollments-repository'
 import { type Enrollment } from '@/domain/course-management/enterprise/entities/enrollment'
+import { type Student } from '@/domain/course-management/enterprise/entities/student'
 import { type InMemoryClassesRepository } from './in-memory-classes-repository'
 import { type InMemoryModulesRepository } from './in-memory-modules-repository'
+import { type InMemoryStudentsRepository } from './in-memory-students-repository'
 
 export class InMemoryEnrollmentsRepository implements EnrollmentsRepository {
   public items: Enrollment[] = []
 
   constructor(
     private readonly inMemoryClassesRepository: InMemoryClassesRepository,
-    private readonly inMemoryModulesRepository: InMemoryModulesRepository
+    private readonly inMemoryModulesRepository: InMemoryModulesRepository,
+    private readonly inMemoryStudentsRepository: InMemoryStudentsRepository
   ) {}
 
   async findById(id: string): Promise<Enrollment | null> {
@@ -45,6 +48,20 @@ export class InMemoryEnrollmentsRepository implements EnrollmentsRepository {
     return this.items.filter(enrollmentToFilter => enrollmentToFilter.studentId.toString() === studentId)
   }
 
+  async findManyStudentsByCourseId(courseId: string): Promise<Student[]> {
+    const courseEnrollments = await this.findManyByCourseId(courseId)
+
+    const uniqueStudentIds = Array.from(new Set(courseEnrollments.map(enrollment => enrollment.studentId.toString())))
+
+    const students = await Promise.all(
+      uniqueStudentIds.map(async studentId => await this.inMemoryStudentsRepository.findById(studentId))
+    )
+
+    const courseStudents = students.filter(student => student !== null) as Student[]
+
+    return courseStudents
+  }
+
   async markClassAsCompleted(classId: string, enrollment: Enrollment): Promise<Enrollment | null> {
     const classToFind = await this.inMemoryClassesRepository.findById(classId)
 
@@ -76,6 +93,10 @@ export class InMemoryEnrollmentsRepository implements EnrollmentsRepository {
     await this.save(enrollment)
 
     return enrollment
+  }
+
+  async countEnrollmentsByYear(year: number): Promise<number> {
+    return this.items.filter(enrollmentToFilter => enrollmentToFilter.ocurredAt.getFullYear() === year).length
   }
 
   async create(enrollment: Enrollment): Promise<Enrollment> {

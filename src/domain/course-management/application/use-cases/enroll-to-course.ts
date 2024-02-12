@@ -13,7 +13,7 @@ interface EnrollToCourseUseCaseRequest {
 }
 
 type EnrollToCourseUseCaseResponse = Either<
-ResourceNotFoundError,
+ResourceNotFoundError | AlreadyEnrolledInThisCourse,
 {
   enrollment: Enrollment
 }

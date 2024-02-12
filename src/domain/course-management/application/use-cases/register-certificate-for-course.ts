@@ -15,7 +15,7 @@ interface RegisterCertificateForCourseUseCaseRequest {
 }
 
 type RegisterCertificateForCourseUseCaseResponse = Either<
-ResourceNotFoundError | NotAllowedError,
+ResourceNotFoundError | NotAllowedError | CourseAlreadyHasACertificateError,
 {
   certificate: Certificate
 }
