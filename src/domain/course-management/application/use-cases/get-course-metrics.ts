@@ -19,6 +19,7 @@ ResourceNotFoundError | NotAllowedError,
   ageAverage: number
   growthPercentage: number
   growthPercentageFromLastYear: number
+  completionNumber: number
   completionPercentage: number
 }
 >
@@ -109,6 +110,7 @@ export class GetCourseMetricsUseCase implements UseCase< GetCourseMetricsUseCase
       ageAverage: studentsAgeAverage,
       growthPercentage,
       growthPercentageFromLastYear,
+      completionNumber: sumOfCompletedEnrollments,
       completionPercentage: studentsCompletionPercentage
     })
   }

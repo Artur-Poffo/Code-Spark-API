@@ -79,6 +79,7 @@ describe('Get course metrics use case', () => {
       ageAverage: 20,
       growthPercentage: 0,
       growthPercentageFromLastYear: 0,
+      completionNumber: 1,
       completionPercentage: 100
     })
   })
@@ -176,6 +177,7 @@ describe('Get course metrics use case', () => {
       ageAverage: 40,
       growthPercentage: 0,
       growthPercentageFromLastYear: 0,
+      completionNumber: 1,
       completionPercentage: 50
     })
   })
