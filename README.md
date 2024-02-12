@@ -197,7 +197,7 @@
 - [ ] GET /courses/:courseId - Get course details
 - [ ] GET /courses/:courseId/instructor - Get course instructor details
 - [ ] GET /courses/:courseId/evaluations - Get course evaluations - make use case
-- [ ] GET /courses/:courseId/stats - Get course statistics, like duration and number of classes - make use case
+- [ ] GET /courses/:courseId/stats - Get course statistics, like duration and number of classes
 - [ ] GET /courses/:courseId/metrics - Get course metrics for a dashboard
 - [ ] GET /courses - Get recent courses with instructor and evaluations - make use case
 - [ ] GET /courses/filter - Filter courses by name or tags
