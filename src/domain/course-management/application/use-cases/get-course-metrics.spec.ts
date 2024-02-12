@@ -181,7 +181,7 @@ describe('Get course metrics use case', () => {
   })
 
   it('should calculate course growth percentage correctly', async ({ expect }) => {
-    const instructor = makeInstructor()
+    const instructor = makeInstructor({ registeredAt: new Date('2020-01-01') })
     await inMemoryInstructorsRepository.create(instructor)
 
     const createdAt = new Date('2023-01-01')
@@ -209,10 +209,15 @@ describe('Get course metrics use case', () => {
     const originalMethod = inMemoryEnrollmentsRepository.countEnrollmentsByYear
     inMemoryEnrollmentsRepository.countEnrollmentsByYear = countEnrollmentsByYear
 
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    console.log(inMemoryEnrollmentsRepository.countEnrollmentsByYear)
+
     const result = await sut.exec({
       courseId: course.id.toString(),
       instructorId: course.instructorId.toString()
     })
+
+    console.log(result)
 
     inMemoryEnrollmentsRepository.countEnrollmentsByYear = originalMethod
 
@@ -220,6 +225,10 @@ describe('Get course metrics use case', () => {
 
     const expectedGrowthPercentage = ((120 - enrollmentsOnReferenceYear) / enrollmentsOnReferenceYear) * 100
     const expectedGrowthPercentageFromLastYear = ((120 - enrollmentsOnLastYear) / enrollmentsOnLastYear) * 100
+
+    console.log(enrollmentsOnReferenceYear)
+    console.log(enrollmentsOnLastYear)
+    console.log(currentYear)
 
     expect(result.value).toMatchObject({
       growthPercentage: expectedGrowthPercentage,
