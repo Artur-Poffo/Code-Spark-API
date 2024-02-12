@@ -38,4 +38,9 @@ export class InMemoryStudentsRepository implements StudentsRepository {
     this.items.push(student)
     return student
   }
+
+  async save(student: Student): Promise<void> {
+    const studentIndex = this.items.indexOf(student)
+    this.items[studentIndex] = student
+  }
 }

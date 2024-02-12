@@ -5,4 +5,5 @@ export interface StudentsRepository {
   findByEmail: (email: string) => Promise<Student | null>
   findByCpf: (cpf: string) => Promise<Student | null>
   create: (student: Student) => Promise<Student>
+  save: (student: Student) => Promise<void>
 }

@@ -17,8 +17,16 @@ export abstract class User<Props extends UserProps> extends Entity<Props> {
     return this.props.name
   }
 
+  set name(name: string) {
+    this.props.name = name
+  }
+
   get email() {
     return this.props.email
+  }
+
+  set email(email: string) {
+    this.props.email = email
   }
 
   get passwordHash() {
@@ -29,6 +37,10 @@ export abstract class User<Props extends UserProps> extends Entity<Props> {
     return this.props.age
   }
 
+  set age(age: number) {
+    this.props.age = age
+  }
+
   get cpf() {
     return this.props.cpf
   }
@@ -37,12 +49,24 @@ export abstract class User<Props extends UserProps> extends Entity<Props> {
     return this.props.summary
   }
 
+  set summary(summary: string) {
+    this.props.summary = summary
+  }
+
   get profileImageKey() {
     return this.props.profileImageKey
   }
 
+  set profileImageKey(profileImageKey: string | undefined | null) {
+    this.props.profileImageKey = profileImageKey
+  }
+
   get bannerImageKey() {
     return this.props.bannerImageKey
+  }
+
+  set bannerImageKey(bannerImageKey: string | undefined | null) {
+    this.props.bannerImageKey = bannerImageKey
   }
 
   get registeredAt() {
