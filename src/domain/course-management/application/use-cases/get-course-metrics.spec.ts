@@ -194,6 +194,8 @@ describe('Get course metrics use case', () => {
     const enrollmentsOnLastYear = 80
 
     const countEnrollmentsByYear = async (year: number): Promise<number> => {
+      console.log(`called with year: ${year}`)
+
       if (year === currentYear) {
         return 120
       } else if (year === createdAt.getFullYear()) {
