@@ -78,7 +78,7 @@ describe('Register module to a course use case', () => {
     expect(result.value).toBeInstanceOf(ResourceNotFoundError)
   })
 
-  it('should not be able to register a module for a course if the instructor not is the sponsor', async () => {
+  it('should not be able to register a module for a course if the instructor not is the owner', async () => {
     const correctInstructor = makeInstructor()
     await inMemoryInstructorRepository.create(correctInstructor)
 

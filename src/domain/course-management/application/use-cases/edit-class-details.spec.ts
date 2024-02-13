@@ -1,6 +1,8 @@
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { makeClass } from '../../../../../test/factories/make-class'
 import { makeCourse } from '../../../../../test/factories/make-course'
+import { makeInstructor } from '../../../../../test/factories/make-instructor'
 import { makeModule } from '../../../../../test/factories/make-module'
 import { makeVideo } from '../../../../../test/factories/make-video'
 import { InMemoryClassesRepository } from '../../../../../test/repositories/in-memory-classes-repository'
@@ -41,12 +43,17 @@ describe('Edit class details use case', () => {
 
     sut = new EditClassDetailsUseCase(
       inMemoryClassesRepository,
-      inMemoryVideosRepository
+      inMemoryVideosRepository,
+      inMemoryModulesRepository,
+      inMemoryCoursesRepository
     )
   })
 
   it('should be able to edit class details with video', async () => {
-    const course = makeCourse({ name: 'John Doe Course' })
+    const instructor = makeInstructor()
+    await inMemoryInstructorsRepository.create(instructor)
+
+    const course = makeCourse({ name: 'John Doe Course', instructorId: instructor.id })
     await inMemoryCoursesRepository.create(course)
 
     const module = makeModule({
@@ -67,7 +74,8 @@ describe('Edit class details use case', () => {
     const result = await sut.exec({
       name: 'New Class Name',
       videoId: newVideo.id.toString(),
-      classId: classToEdit.id.toString()
+      classId: classToEdit.id.toString(),
+      instructorId: instructor.id.toString()
     })
 
     expect(result.isRight()).toBe(true)
@@ -79,9 +87,48 @@ describe('Edit class details use case', () => {
     })
   })
 
+  it('should not be able to edit class details if the instructor not is the owner', async () => {
+    const owner = makeInstructor()
+    const wrongInstructor = makeInstructor()
+
+    await Promise.all([
+      inMemoryInstructorsRepository.create(owner),
+      inMemoryInstructorsRepository.create(wrongInstructor)
+    ])
+
+    const course = makeCourse({ name: 'John Doe Course', instructorId: owner.id })
+    await inMemoryCoursesRepository.create(course)
+
+    const module = makeModule({
+      courseId: course.id,
+      moduleNumber: 1
+    })
+    await inMemoryModulesRepository.create(module)
+
+    const newVideo = makeVideo()
+    await inMemoryVideosRepository.create(newVideo)
+
+    const classToEdit = makeClass({
+      name: 'John Doe Class',
+      moduleId: module.id
+    })
+    await inMemoryClassesRepository.create(classToEdit)
+
+    const result = await sut.exec({
+      name: 'New Class Name',
+      videoId: newVideo.id.toString(),
+      classId: classToEdit.id.toString(),
+      instructorId: wrongInstructor.id.toString()
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(NotAllowedError)
+  })
+
   it('should not be able to edit class details of a inexistent class', async () => {
     const result = await sut.exec({
-      classId: 'inexistentClassId'
+      classId: 'inexistentClassId',
+      instructorId: 'inexistentInstructorId'
     })
 
     expect(result.isLeft()).toBe(true)
@@ -89,7 +136,10 @@ describe('Edit class details use case', () => {
   })
 
   it('should not be able to update video class if the new video not exists', async () => {
-    const course = makeCourse({ name: 'John Doe Course' })
+    const instructor = makeInstructor()
+    await inMemoryInstructorsRepository.create(instructor)
+
+    const course = makeCourse({ name: 'John Doe Course', instructorId: instructor.id })
     await inMemoryCoursesRepository.create(course)
 
     const module = makeModule({
@@ -107,7 +157,8 @@ describe('Edit class details use case', () => {
     const result = await sut.exec({
       name: 'New Class Name',
       videoId: 'inexistentVideoId',
-      classId: classToEdit.id.toString()
+      classId: classToEdit.id.toString(),
+      instructorId: instructor.id.toString()
     })
 
     expect(result.isLeft()).toBe(true)
@@ -115,7 +166,10 @@ describe('Edit class details use case', () => {
   })
 
   it('should not be able to update class number if the class number is already in use', async () => {
-    const course = makeCourse({ name: 'John Doe Course' })
+    const instructor = makeInstructor()
+    await inMemoryInstructorsRepository.create(instructor)
+
+    const course = makeCourse({ name: 'John Doe Course', instructorId: instructor.id })
     await inMemoryCoursesRepository.create(course)
 
     const module = makeModule({
@@ -143,7 +197,8 @@ describe('Edit class details use case', () => {
     const result = await sut.exec({
       name: 'New Class Name',
       classNumber: 1,
-      classId: classToEdit.id.toString()
+      classId: classToEdit.id.toString(),
+      instructorId: instructor.id.toString()
     })
 
     expect(result.isLeft()).toBe(true)

@@ -131,15 +131,16 @@ describe('Add class to a module use case', () => {
     expect(result.value).toBeInstanceOf(ResourceNotFoundError)
   })
 
-  it('should not be possible to add a class to a module if the instructor is not the sponsor', async () => {
-    const sponsor = makeInstructor()
+  it('should not be possible to add a class to a module if the instructor is not the owner', async () => {
+    const owner = makeInstructor()
     const wrongInstructor = makeInstructor()
+
     await Promise.all([
-      inMemoryInstructorsRepository.create(sponsor),
+      inMemoryInstructorsRepository.create(owner),
       inMemoryInstructorsRepository.create(wrongInstructor)
     ])
 
-    const course = makeCourse({ instructorId: sponsor.id })
+    const course = makeCourse({ instructorId: owner.id })
     await inMemoryCoursesRepository.create(course)
 
     const video = makeVideo()

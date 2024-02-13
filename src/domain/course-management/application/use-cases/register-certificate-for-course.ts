@@ -42,9 +42,9 @@ export class RegisterCertificateForCourseUseCase implements UseCase<RegisterCert
       return left(new ResourceNotFoundError())
     }
 
-    const instructorIsTheSponsor = course.instructorId.toString() === instructorId
+    const instructorIsTheOwner = course.instructorId.toString() === instructorId
 
-    if (!instructorIsTheSponsor) {
+    if (!instructorIsTheOwner) {
       return left(new NotAllowedError())
     }
 

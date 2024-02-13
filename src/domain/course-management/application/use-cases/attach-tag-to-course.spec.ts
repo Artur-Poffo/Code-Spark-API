@@ -139,16 +139,16 @@ describe('Attach tag to course use case', () => {
     expect(result.value).toBeInstanceOf(ResourceNotFoundError)
   })
 
-  it('should not be able to attach a tag for a course if the instructor not is the sponsor', async () => {
-    const sponsor = makeInstructor()
+  it('should not be able to attach a tag for a course if the instructor not is the owner', async () => {
+    const owner = makeInstructor()
     const wrongInstructor = makeInstructor()
 
     await Promise.all([
-      inMemoryInstructorsRepository.create(sponsor),
+      inMemoryInstructorsRepository.create(owner),
       inMemoryInstructorsRepository.create(wrongInstructor)
     ])
 
-    const course = makeCourse({ instructorId: sponsor.id })
+    const course = makeCourse({ instructorId: owner.id })
     await inMemoryCoursesRepository.create(course)
 
     const tag = makeTag({ value: 'TYPESCRIPT' })

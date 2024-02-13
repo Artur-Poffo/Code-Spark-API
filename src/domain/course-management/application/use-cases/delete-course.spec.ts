@@ -1,5 +1,7 @@
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { makeCourse } from '../../../../../test/factories/make-course'
+import { makeInstructor } from '../../../../../test/factories/make-instructor'
 import { InMemoryClassesRepository } from '../../../../../test/repositories/in-memory-classes-repository'
 import { InMemoryCourseTagsRepository } from '../../../../../test/repositories/in-memory-course-tags-repository'
 import { InMemoryCoursesRepository } from '../../../../../test/repositories/in-memory-courses-repository'
@@ -36,11 +38,15 @@ describe('Delete course use case', () => {
   })
 
   it('should be able to delete a course', async () => {
-    const course = makeCourse({ name: 'John Doe Course' })
+    const instructor = makeInstructor()
+    await inMemoryInstructorsRepository.create(instructor)
+
+    const course = makeCourse({ name: 'John Doe Course', instructorId: instructor.id })
     await inMemoryCoursesRepository.create(course)
 
     const result = await sut.exec({
-      courseId: course.id.toString()
+      courseId: course.id.toString(),
+      instructorId: instructor.id.toString()
     })
 
     expect(result.isRight()).toBe(true)
@@ -54,10 +60,32 @@ describe('Delete course use case', () => {
 
   it('should not be able to delete a inexistent course', async () => {
     const result = await sut.exec({
-      courseId: 'inexistentCourseId'
+      courseId: 'inexistentCourseId',
+      instructorId: 'inexistentInstructorId'
     })
 
     expect(result.isLeft()).toBe(true)
     expect(result.value).toBeInstanceOf(ResourceNotFoundError)
+  })
+
+  it('should not be able to delete a course if the instructor not is the owner', async () => {
+    const owner = makeInstructor()
+    const wrongInstructor = makeInstructor()
+
+    await Promise.all([
+      inMemoryInstructorsRepository.create(owner),
+      inMemoryInstructorsRepository.create(wrongInstructor)
+    ])
+
+    const course = makeCourse({ name: 'John Doe Course', instructorId: owner.id })
+    await inMemoryCoursesRepository.create(course)
+
+    const result = await sut.exec({
+      courseId: course.id.toString(),
+      instructorId: wrongInstructor.id.toString()
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(NotAllowedError)
   })
 })

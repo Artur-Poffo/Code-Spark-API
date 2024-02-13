@@ -55,9 +55,9 @@ export class AddClassToModuleUseCase implements UseCase<AddClassToModuleUseCaseR
       return left(new ResourceNotFoundError())
     }
 
-    const instructorIsTheSponsor = completeCourse.instructor.id.toString() === instructorId
+    const instructorIsTheOwner = completeCourse.instructor.id.toString() === instructorId
 
-    if (!instructorIsTheSponsor) {
+    if (!instructorIsTheOwner) {
       return left(new NotAllowedError())
     }
 
