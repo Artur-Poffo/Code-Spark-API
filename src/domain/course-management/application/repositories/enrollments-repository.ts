@@ -12,5 +12,6 @@ export interface EnrollmentsRepository {
   markAsCompleted: (enrollment: Enrollment) => Promise<Enrollment>
   countEnrollmentsByYear: (year: number) => Promise<number>
   create: (enrollment: Enrollment) => Promise<Enrollment>
-  save: (classToSave: Enrollment) => Promise<void>
+  save: (enrollment: Enrollment) => Promise<void>
+  delete: (enrollment: Enrollment) => Promise<void>
 }

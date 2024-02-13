@@ -229,7 +229,7 @@
 ### Enrollments
 - [ ] POST /enrollments - Register enrollment
 - [ ] GET /enrollments/students/:studentId/courses/:courseId - Get enrollment of a student on a course
-- [ ] DELETE /enrollments/students/:studentId/courses/:courseId - Cancel enrollment - make use case
+- [ ] DELETE /enrollments/students/:studentId/courses/:courseId - Cancel enrollment
 
 ## Potential Refactoring or Updates:
 

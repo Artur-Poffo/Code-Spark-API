@@ -66,7 +66,7 @@ describe('Delete module use case', () => {
         name: 'John Doe Module'
       })
     })
-    expect(inMemoryClassesRepository.items).toHaveLength(0)
+    expect(inMemoryModulesRepository.items).toHaveLength(0)
   })
 
   it('should not be able to delete a inexistent module', async () => {
