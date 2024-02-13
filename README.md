@@ -33,7 +33,7 @@
 
 - [x] An instructor should be able to retrieve traffic data for one of their courses.
 
-- [ ] CRUDs for all main entities: course, module, class, user, etc.
+- [x] CRUDs for all main entities: course, module, class, user, etc.
 
 - [ ] Return information about a course with student progress in your modules and classes.
 - [ ] Video streaming to watch the classes.
