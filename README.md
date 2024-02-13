@@ -204,6 +204,8 @@
 - [ ] GET /courses/:courseId/students - Get students enrolled in this course
 - [ ] GET /courses/:courseId/modules - Get course modules
 - [ ] POST /courses - Register course
+- [ ] GET /courses/:courseId/tags - Get course tags
+- [ ] POST /courses/:courseId/tags - Attach tag to course
 - [ ] PUT /courses/:courseId - Update course details
 - [ ] DELETE /courses/:courseId - Delete course
 
