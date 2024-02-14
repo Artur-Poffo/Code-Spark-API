@@ -6,3 +6,159 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum Role {
+  STUDENT
+  INSTRUCTOR
+}
+
+model User {
+  id              String   @id @default(uuid())
+  name            String
+  email           String   @unique()
+  passwordHash    String   @map("password_hash")
+  summary         String
+  age             Int
+  role            Role
+  cpf             String   @unique
+  profileImageKey String?  @map("profile_image_key")
+  bannerImageKey  String?  @map("banner_image_key")
+  registeredAt    DateTime @default(now()) @map("registered_at")
+
+  Enrollment         Enrollment[]
+  StudentCertificate StudentCertificate[]
+  Evaluation         Evaluation[]
+
+  @@map("users")
+}
+
+model Course {
+  id             String   @id @default(uuid())
+  name           String
+  description    String
+  coverImageKey  String?  @map("cover_image_key")
+  bannerImageKey String?  @map("banner_image_key")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  CourseTag   CourseTag[]
+  Enrollment  Enrollment[]
+  Module      Module[]
+  Certificate Certificate?
+
+  @@map("courses")
+}
+
+model Tag {
+  id      String   @id @default(uuid())
+  value   String   @unique()
+  addedAt DateTime @default(now()) @map("added_at")
+
+  CourseTag CourseTag[]
+
+  @@map("tags")
+}
+
+model CourseTag {
+  id     String @id @default(uuid())
+  course Course @relation(fields: [courseId], references: [id])
+  tag    Tag    @relation(fields: [tagId], references: [id])
+
+  courseId String @map("course_id")
+  tagId    String @map("tag_id")
+
+  @@map("course_tags")
+}
+
+model Enrollment {
+  id          String    @id @default(uuid())
+  ocurredAt   DateTime  @default(now()) @map("ocurred_at")
+  completedAt DateTime? @map("completed_at")
+  user        User      @relation(fields: [userId], references: [id])
+  course      Course    @relation(fields: [courseId], references: [id])
+
+  enrollmentCompletedItems EnrollmentCompletedItem[]
+
+  userId   String @map("user_id")
+  courseId String @map("course_id")
+
+  @@map("enrollments")
+}
+
+enum EnrollmentCompletedItemType {
+  CLASS
+  MODULE
+}
+
+model EnrollmentCompletedItem {
+  id         Int                         @id @default(autoincrement())
+  enrollment Enrollment                  @relation(fields: [enrollmentId], references: [id])
+  itemType   EnrollmentCompletedItemType @map("item_type")
+  itemId     String                      @map("item_id")
+
+  enrollmentId String @map("enrollment_id")
+}
+
+model Evaluation {
+  id        String   @id @default(uuid())
+  value     Int
+  createdAt DateTime @default(now()) @map("created_at")
+  user      User     @relation(fields: [userId], references: [id])
+  class     Class    @relation(fields: [classId], references: [id])
+
+  userId  String @map("user_id")
+  classId String @map("class_id")
+
+  @@map("evaluations")
+}
+
+model Module {
+  id           String @id @default(uuid())
+  name         String
+  description  String
+  moduleNumber Int    @map("module_number")
+  course       Course @relation(fields: [courseId], references: [id])
+
+  Class Class[]
+
+  courseId String @map("course_id")
+
+  @@map("modules")
+}
+
+model Certificate {
+  id       String @id @default(uuid())
+  imageKey String @unique() @map("image_key")
+  course   Course @relation(fields: [courseId], references: [id])
+
+  studentCertificate StudentCertificate[]
+
+  courseId String @unique @map("course_id")
+
+  @@map("certificates")
+}
+
+model StudentCertificate {
+  id          String      @id @default(uuid())
+  issuedAt    DateTime    @default(now()) @map("issued_at")
+  certificate Certificate @relation(fields: [certificateId], references: [id])
+  user        User        @relation(fields: [userId], references: [id])
+
+  certificateId String @map("certificate_id")
+  userId        String @map("user_id")
+
+  @@map("students_certificates")
+}
+
+model Class {
+  id          String @id @default(uuid())
+  name        String
+  description String
+  videoKey    String @map("video_key")
+  classNumber Int    @map("class_number")
+  module      Module @relation(fields: [moduleId], references: [id])
+
+  moduleId   String       @map("module_id")
+  Evaluation Evaluation[]
+
+  @@map("classes")
+}

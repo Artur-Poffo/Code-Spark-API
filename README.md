@@ -101,6 +101,7 @@
 - [x] Tag
 - - id: string
   - value: string
+  - addedAt: Date
 
 - [x] CourseTag
 - - id: string
@@ -120,7 +121,7 @@
 - - id: string
   - value: number (1 - 5)
   - userId: string
-  - classId: string | null
+  - classId: string
   - createdAt: date
 
 - [x] Module
