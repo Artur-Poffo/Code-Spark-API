@@ -10,7 +10,8 @@ export class CourseMapper {
         description: raw.description,
         instructorId: new UniqueEntityID(raw.instructorId),
         bannerImageKey: raw.bannerImageKey,
-        coverImageKey: raw.coverImageKey
+        coverImageKey: raw.coverImageKey,
+        createdAt: raw.createdAt
       },
       new UniqueEntityID(raw.id)
     )

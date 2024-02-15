@@ -7,7 +7,9 @@ export class EnrollmentMapper {
     return Enrollment.create(
       {
         courseId: new UniqueEntityID(raw.courseId),
-        studentId: new UniqueEntityID(raw.userId)
+        studentId: new UniqueEntityID(raw.userId),
+        completedAt: raw.completedAt,
+        ocurredAt: raw.ocurredAt
       },
       new UniqueEntityID(raw.id)
     )
