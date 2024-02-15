@@ -17,6 +17,10 @@ export class CourseTag extends Entity<CourseTagProps> {
     return this.props.tagId
   }
 
+  get attachedAt() {
+    return this.props.attachedAt
+  }
+
   static create(
     props: Optional<CourseTagProps, 'attachedAt'>,
     id?: UniqueEntityID

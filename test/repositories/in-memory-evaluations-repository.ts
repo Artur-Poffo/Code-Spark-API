@@ -52,6 +52,10 @@ export class InMemoryEvaluationsRepository implements EvaluationsRepository {
     return courseEvaluations
   }
 
+  async findManyByClassId(classId: string): Promise<Evaluation[]> {
+    return this.items.filter(evaluationToCompare => evaluationToCompare.classId.toString() === classId)
+  }
+
   async create(evaluation: Evaluation): Promise<Evaluation> {
     this.items.push(evaluation)
     return evaluation

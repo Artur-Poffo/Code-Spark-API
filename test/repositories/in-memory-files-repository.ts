@@ -14,6 +14,16 @@ export class InMemoryFilesRepository implements FilesRepository {
     return file
   }
 
+  async findByKey(key: string): Promise<File | null> {
+    const file = this.items.find(fileToCompare => fileToCompare.fileKey === key)
+
+    if (!file) {
+      return null
+    }
+
+    return file
+  }
+
   async create(file: File): Promise<File> {
     this.items.push(file)
     return file
