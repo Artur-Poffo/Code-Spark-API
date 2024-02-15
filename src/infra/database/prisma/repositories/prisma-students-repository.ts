@@ -66,10 +66,10 @@ export class PrismaStudentsRepository implements StudentsRepository {
     const user = StudentMapper.toPrisma(student)
 
     await prisma.user.update({
-      data: user,
       where: {
         id: user.id
-      }
+      },
+      data: user
     })
   }
 }

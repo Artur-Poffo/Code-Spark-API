@@ -63,9 +63,10 @@ model Tag {
 }
 
 model CourseTag {
-  id     String @id @default(uuid())
-  course Course @relation(fields: [courseId], references: [id])
-  tag    Tag    @relation(fields: [tagId], references: [id])
+  id         String   @id @default(uuid())
+  attachedAt DateTime @default(now())
+  course     Course   @relation(fields: [courseId], references: [id])
+  tag        Tag      @relation(fields: [tagId], references: [id])
 
   courseId String @map("course_id")
   tagId    String @map("tag_id")

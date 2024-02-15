@@ -66,10 +66,10 @@ export class PrismaInstructorsRepository implements InstructorsRepository {
     const user = InstructorMapper.toPrisma(instructor)
 
     await prisma.user.update({
-      data: user,
       where: {
         id: user.id
-      }
+      },
+      data: user
     })
   }
 }
