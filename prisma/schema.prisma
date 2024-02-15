@@ -25,9 +25,10 @@ model User {
   bannerImageKey  String?  @map("banner_image_key")
   registeredAt    DateTime @default(now()) @map("registered_at")
 
-  Enrollment         Enrollment[]
-  StudentCertificate StudentCertificate[]
-  Evaluation         Evaluation[]
+  enrollments         Enrollment[]
+  studentCertificates StudentCertificate[]
+  evaluations         Evaluation[]
+  courses             Course[]
 
   @@map("users")
 }
@@ -39,11 +40,14 @@ model Course {
   coverImageKey  String?  @map("cover_image_key")
   bannerImageKey String?  @map("banner_image_key")
   createdAt      DateTime @default(now()) @map("created_at")
+  instructor     User     @relation(fields: [instructorId], references: [id])
 
-  CourseTag   CourseTag[]
-  Enrollment  Enrollment[]
-  Module      Module[]
-  Certificate Certificate?
+  courseTags  CourseTag[]
+  enrollments Enrollment[]
+  modules     Module[]
+
+  certificate  Certificate?
+  instructorId String       @map("instructor_id")
 
   @@map("courses")
 }
@@ -53,7 +57,7 @@ model Tag {
   value   String   @unique()
   addedAt DateTime @default(now()) @map("added_at")
 
-  CourseTag CourseTag[]
+  courseTags CourseTag[]
 
   @@map("tags")
 }
@@ -84,16 +88,16 @@ model Enrollment {
   @@map("enrollments")
 }
 
-enum EnrollmentCompletedItemType {
+enum EnrollmentCompletedItemTypes {
   CLASS
   MODULE
 }
 
 model EnrollmentCompletedItem {
-  id         Int                         @id @default(autoincrement())
-  enrollment Enrollment                  @relation(fields: [enrollmentId], references: [id])
-  itemType   EnrollmentCompletedItemType @map("item_type")
-  itemId     String                      @map("item_id")
+  id         Int                          @id @default(autoincrement())
+  enrollment Enrollment                   @relation(fields: [enrollmentId], references: [id])
+  itemType   EnrollmentCompletedItemTypes @map("item_type")
+  itemId     String                       @map("item_id")
 
   enrollmentId String @map("enrollment_id")
 }
@@ -118,7 +122,7 @@ model Module {
   moduleNumber Int    @map("module_number")
   course       Course @relation(fields: [courseId], references: [id])
 
-  Class Class[]
+  classes Class[]
 
   courseId String @map("course_id")
 
@@ -130,7 +134,7 @@ model Certificate {
   imageKey String @unique() @map("image_key")
   course   Course @relation(fields: [courseId], references: [id])
 
-  studentCertificate StudentCertificate[]
+  studentCertificates StudentCertificate[]
 
   courseId String @unique @map("course_id")
 
@@ -153,12 +157,38 @@ model Class {
   id          String @id @default(uuid())
   name        String
   description String
-  videoKey    String @map("video_key")
   classNumber Int    @map("class_number")
+  video       Video  @relation(fields: [videoId], references: [id])
   module      Module @relation(fields: [moduleId], references: [id])
 
-  moduleId   String       @map("module_id")
-  Evaluation Evaluation[]
+  evaluations Evaluation[]
+
+  moduleId String @map("module_id")
+  videoId  String @map("video_id")
 
   @@map("classes")
+}
+
+model File {
+  id       String   @id @default(uuid())
+  name     String
+  type     String
+  key      String   @unique()
+  size     Decimal
+  storedAt DateTime @default(now()) @map("stored_at")
+  video    Video?
+
+  @@map("files")
+}
+
+model Video {
+  id       String  @id @default(uuid())
+  duration Decimal
+  file     File?   @relation(fields: [fileId], references: [id])
+
+  classes Class[]
+
+  fileId String @unique() @map("file_id")
+
+  @@map("videos")
 }
