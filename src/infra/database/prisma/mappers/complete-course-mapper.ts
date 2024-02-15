@@ -2,6 +2,7 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { type CompleteCourseDTO } from '@/domain/course-management/enterprise/entities/dtos/complete-course'
 import { type Class, type Course, type Module, type User } from '@prisma/client'
 import { InstructorMapper } from './instructor-mapper'
+import { ModuleWithClassesMapper } from './module-with-classes-mapper'
 
 type PrismaCompleteCourse = Course & {
   instructor: User
@@ -15,7 +16,7 @@ export class CompleteCourseMapper {
   static toDomain(raw: PrismaCompleteCourse): CompleteCourseDTO {
     const domainInstructor = InstructorMapper.toDomain(raw.instructor)
 
-    // TODO: Make it works after make module with classes mapper
+    const domainModulesWithClasses = raw.modules.map(module => ModuleWithClassesMapper.toDomain(module))
 
     const completeCourse: CompleteCourseDTO = {
       course: {
@@ -27,7 +28,7 @@ export class CompleteCourseMapper {
         createdAt: raw.createdAt
       },
       instructor: domainInstructor,
-      modules: []
+      modules: domainModulesWithClasses
     }
 
     return completeCourse

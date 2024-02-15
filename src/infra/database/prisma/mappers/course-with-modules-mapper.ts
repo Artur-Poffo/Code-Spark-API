@@ -1,6 +1,7 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { type CourseWithModulesDTO } from '@/domain/course-management/enterprise/entities/dtos/course-with-modules'
 import { type Course, type Module } from '@prisma/client'
+import { ModuleMapper } from './module-mapper'
 
 type PrismaCourseWithModules = Course & {
   modules: Module[]
@@ -8,7 +9,7 @@ type PrismaCourseWithModules = Course & {
 
 export class CourseWithModulesMapper {
   static toDomain(raw: PrismaCourseWithModules): CourseWithModulesDTO {
-    // TODO: Make it works after make module mapper
+    const domainModules = raw.modules.map(module => ModuleMapper.toDomain(module))
 
     const courseWithModules: CourseWithModulesDTO = {
       course: {
@@ -19,7 +20,7 @@ export class CourseWithModulesMapper {
         coverImageKey: raw.coverImageKey,
         createdAt: raw.createdAt
       },
-      modules: []
+      modules: domainModules
     }
 
     return courseWithModules

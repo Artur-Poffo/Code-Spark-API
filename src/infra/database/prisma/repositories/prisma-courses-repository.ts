@@ -10,14 +10,11 @@ import { CompleteCourseMapper } from '../mappers/complete-course-mapper'
 import { CourseMapper } from '../mappers/course-mapper'
 import { CourseWithModulesMapper } from '../mappers/course-with-modules-mapper'
 import { courseWithStudentsMapper } from '../mappers/course-with-students-mapper'
-import { type CourseTagsRepository } from './../../../../domain/course-management/application/repositories/course-tags-repository'
+import { instructorWithCoursesMapper } from '../mappers/instructor-with-courses'
+import { studentWithCoursesMapper } from '../mappers/student-with-courses'
 import { type CourseWithStudentsDTO } from './../../../../domain/course-management/enterprise/entities/dtos/course-with-students'
 
 export class PrismaCoursesRepository implements CoursesRepository {
-  constructor(
-    private readonly courseTagsRepository: CourseTagsRepository
-  ) {}
-
   async findById(id: string): Promise<Course | null> {
     const course = await prisma.course.findUnique({
       where: {
@@ -145,25 +142,74 @@ export class PrismaCoursesRepository implements CoursesRepository {
     return domainCompleteCourse
   }
 
-  // TODO: Continue ;)
-
   async findInstructorWithCoursesByInstructorId(instructorId: string): Promise<InstructorWithCoursesDTO | null> {
+    const instructorWithCourses = await prisma.user.findUnique({
+      where: {
+        id: instructorId
+      },
+      include: {
+        courses: true
+      }
+    })
 
+    if (!instructorWithCourses) {
+      return null
+    }
+
+    const domainInstructorWithCourses = instructorWithCoursesMapper.toDomain(instructorWithCourses)
+
+    return domainInstructorWithCourses
   }
 
   async findStudentWithCoursesByStudentId(studentId: string): Promise<StudentWithCoursesDTO | null> {
+    const studentWithCourses = await prisma.user.findUnique({
+      where: {
+        id: studentId
+      },
+      include: {
+        enrollments: {
+          include: {
+            course: true
+          }
+        }
+      }
+    })
 
+    if (!studentWithCourses) {
+      return null
+    }
+
+    const domainStudentWithCourses = studentWithCoursesMapper.toDomain(studentWithCourses)
+
+    return domainStudentWithCourses
   }
 
   async create(course: Course): Promise<Course> {
+    const infraCourse = CourseMapper.toPrisma(course)
 
+    await prisma.course.create({
+      data: infraCourse
+    })
+
+    return course
   }
 
   async save(course: Course): Promise<void> {
+    const infraCourse = CourseMapper.toPrisma(course)
 
+    await prisma.course.update({
+      data: infraCourse,
+      where: {
+        id: infraCourse.id
+      }
+    })
   }
 
   async delete(course: Course): Promise<void> {
-
+    await prisma.course.delete({
+      where: {
+        id: course.id.toString()
+      }
+    })
   }
 }
