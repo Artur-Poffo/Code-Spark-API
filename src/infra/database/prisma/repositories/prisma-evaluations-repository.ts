@@ -51,6 +51,16 @@ export class PrismaEvaluationsRepository implements EvaluationsRepository {
     return evaluations.map(evaluation => EvaluationMapper.toDomain(evaluation))
   }
 
+  async findManyByClassId(classId: string): Promise<Evaluation[]> {
+    const evaluations = await prisma.evaluation.findMany({
+      where: {
+        classId
+      }
+    })
+
+    return evaluations.map(evaluation => EvaluationMapper.toDomain(evaluation))
+  }
+
   async create(evaluation: Evaluation): Promise<Evaluation> {
     const infraEvaluation = EvaluationMapper.toPrisma(evaluation)
 
