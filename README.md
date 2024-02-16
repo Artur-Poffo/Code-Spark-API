@@ -244,3 +244,4 @@
 - [x] Evaluate the Enrollment entity and determine if updates are necessary for simpler management of modules and classes.
 - [x] Replace all asynchronous forEach for Promise.all() with asynchronous map
 - [x] Update use cases Either errors
+- [ ] Implement mappers for domain entities -> DTO

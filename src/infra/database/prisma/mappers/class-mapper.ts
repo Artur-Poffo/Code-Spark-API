@@ -17,6 +17,9 @@ export class ClassMapper {
   }
 
   static toPrisma(classToPrisma: Class): Prisma.ClassUncheckedCreateInput {
+    // const evaluations = await this.evaluationsRepository.findManyByClassId(classToPrisma.id.toString())
+    // const infraEvaluations = evaluations.map(evaluation => EvaluationMapper.toPrisma(evaluation))
+
     return {
       id: classToPrisma.id.toString(),
       name: classToPrisma.name,
@@ -24,6 +27,7 @@ export class ClassMapper {
       classNumber: classToPrisma.classNumber,
       moduleId: classToPrisma.moduleId.toString(),
       videoId: classToPrisma.videoId.toString()
+      // evaluations: infraEvaluations -> type conflict
     }
   }
 }
