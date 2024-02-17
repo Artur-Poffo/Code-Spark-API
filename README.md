@@ -204,6 +204,7 @@
 - [ ] GET /courses/filter - Filter courses by name or tags
 - [ ] GET /courses/:courseId/students - Get students enrolled in this course
 - [ ] GET /courses/:courseId/modules - Get course modules
+- [ ] GET /courses/:courseId/classes - Get course classes - make use case
 - [ ] POST /courses - Register course
 - [ ] GET /courses/:courseId/tags - Get course tags
 - [ ] POST /courses/:courseId/tags - Attach tag to course
@@ -244,4 +245,9 @@
 - [x] Evaluate the Enrollment entity and determine if updates are necessary for simpler management of modules and classes.
 - [x] Replace all asynchronous forEach for Promise.all() with asynchronous map
 - [x] Update use cases Either errors
-- [ ] Implement mappers for domain entities -> DTO
+- [x] Order by on find many methods of prisma repositories
+- [ ] Refactor relations database names
+- [ ] Refactor complete classes and modules system
+- [ ] Fix infinite calls of prisma repositories in some uses of mappers
+- [ ] Events on prisma repositories
+- [ ] Implement mappers for domain entities for DTOs

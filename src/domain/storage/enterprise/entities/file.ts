@@ -4,6 +4,7 @@ import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
 export interface FileProps {
   fileName: string
   fileType: string
+  body: Buffer
   fileKey: string
   size: number
   storedAt: Date
@@ -16,6 +17,10 @@ export class File extends AggregateRoot<FileProps> {
 
   get fileType() {
     return this.props.fileType
+  }
+
+  get body() {
+    return this.props.body
   }
 
   get fileKey() {

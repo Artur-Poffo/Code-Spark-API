@@ -1,8 +1,13 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Class } from '@/domain/course-management/enterprise/entities/class'
 import { type Prisma, type Class as PrismaClass } from '@prisma/client'
+import { type EvaluationsRepository } from './../../../../domain/course-management/application/repositories/evaluations-repository'
 
 export class ClassMapper {
+  constructor(
+    private readonly evaluationsRepository: EvaluationsRepository
+  ) {}
+
   static toDomain(raw: PrismaClass): Class {
     return Class.create(
       {
@@ -16,9 +21,8 @@ export class ClassMapper {
     )
   }
 
-  static toPrisma(classToPrisma: Class): Prisma.ClassUncheckedCreateInput {
-    // const evaluations = await this.evaluationsRepository.findManyByClassId(classToPrisma.id.toString())
-    // const infraEvaluations = evaluations.map(evaluation => EvaluationMapper.toPrisma(evaluation))
+  async toPrisma(classToPrisma: Class): Promise<Prisma.ClassUncheckedCreateInput> {
+    const evaluations = await this.evaluationsRepository.findManyByClassId(classToPrisma.id.toString())
 
     return {
       id: classToPrisma.id.toString(),
@@ -26,8 +30,10 @@ export class ClassMapper {
       description: classToPrisma.description,
       classNumber: classToPrisma.classNumber,
       moduleId: classToPrisma.moduleId.toString(),
-      videoId: classToPrisma.videoId.toString()
-      // evaluations: infraEvaluations -> type conflict
+      videoId: classToPrisma.videoId.toString(),
+      evaluations: {
+        connect: evaluations.map(evaluation => ({ id: evaluation.id.toString() }))
+      }
     }
   }
 }

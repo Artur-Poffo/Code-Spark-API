@@ -24,6 +24,22 @@ export class PrismaVideosRepository implements VideosRepository {
     return domainVideo
   }
 
+  async findByVideoKey(key: string): Promise<Video | null> {
+    const video = await prisma.video.findUnique({
+      where: {
+        fileKey: key
+      }
+    })
+
+    if (!video) {
+      return null
+    }
+
+    const domainVideo = await this.videoMapper.toDomain(video)
+
+    return domainVideo
+  }
+
   async appendVideoKey(videoKey: string, videoId: string): Promise<Video | null> {
     const video = await prisma.video.findUnique({
       where: {

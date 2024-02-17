@@ -78,13 +78,13 @@ model Enrollment {
   id          String    @id @default(uuid())
   ocurredAt   DateTime  @default(now()) @map("ocurred_at")
   completedAt DateTime? @map("completed_at")
-  user        User      @relation(fields: [userId], references: [id])
+  student     User      @relation(fields: [studentId], references: [id])
   course      Course    @relation(fields: [courseId], references: [id])
 
   enrollmentCompletedItems EnrollmentCompletedItem[]
 
-  userId   String @map("user_id")
-  courseId String @map("course_id")
+  studentId String @map("student_id")
+  courseId  String @map("course_id")
 
   @@map("enrollments")
 }
@@ -107,11 +107,11 @@ model Evaluation {
   id        String   @id @default(uuid())
   value     Int
   createdAt DateTime @default(now()) @map("created_at")
-  user      User     @relation(fields: [userId], references: [id])
+  student   User     @relation(fields: [studentId], references: [id])
   class     Class    @relation(fields: [classId], references: [id])
 
-  userId  String @map("user_id")
-  classId String @map("class_id")
+  studentId String @map("student_id")
+  classId   String @map("class_id")
 
   @@map("evaluations")
 }
@@ -146,10 +146,10 @@ model StudentCertificate {
   id          String      @id @default(uuid())
   issuedAt    DateTime    @default(now()) @map("issued_at")
   certificate Certificate @relation(fields: [certificateId], references: [id])
-  user        User        @relation(fields: [userId], references: [id])
+  student     User        @relation(fields: [studentId], references: [id])
 
   certificateId String @map("certificate_id")
-  userId        String @map("user_id")
+  studentId     String @map("student_id")
 
   @@map("students_certificates")
 }
@@ -185,11 +185,11 @@ model File {
 model Video {
   id       String  @id @default(uuid())
   duration Decimal
-  file     File?   @relation(fields: [fileId], references: [id])
+  file     File?   @relation(fields: [fileKey], references: [key])
 
   classes Class[]
 
-  fileId String @unique() @map("file_id")
+  fileKey String @unique() @map("file_key")
 
   @@map("videos")
 }

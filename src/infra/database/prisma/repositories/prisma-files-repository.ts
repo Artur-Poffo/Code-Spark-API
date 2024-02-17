@@ -1,9 +1,13 @@
 import { type FilesRepository } from '@/domain/storage/application/repositories/files-repository'
 import { type File } from '@/domain/storage/enterprise/entities/file'
 import { prisma } from '..'
-import { FileMapper } from '../mappers/file-mapper'
+import { type FileMapper } from './../mappers/file-mapper'
 
 export class PrismaFilesRepository implements FilesRepository {
+  constructor(
+    private readonly fileMapper: FileMapper
+  ) {}
+
   async findById(id: string): Promise<File | null> {
     const file = await prisma.file.findUnique({
       where: {
@@ -15,7 +19,7 @@ export class PrismaFilesRepository implements FilesRepository {
       return null
     }
 
-    const domainFile = FileMapper.toDomain(file)
+    const domainFile = await this.fileMapper.toDomain(file)
 
     return domainFile
   }
@@ -31,13 +35,13 @@ export class PrismaFilesRepository implements FilesRepository {
       return null
     }
 
-    const domainFile = FileMapper.toDomain(file)
+    const domainFile = await this.fileMapper.toDomain(file)
 
     return domainFile
   }
 
   async create(file: File): Promise<File> {
-    const infraFile = FileMapper.toPrisma(file)
+    const infraFile = await this.fileMapper.toPrisma(file)
 
     await prisma.file.create({
       data: infraFile

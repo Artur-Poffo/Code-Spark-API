@@ -4,6 +4,10 @@ import { prisma } from '..'
 import { ClassMapper } from '../mappers/class-mapper'
 
 export class PrismaClassesRepository implements ClassesRepository {
+  constructor(
+    private readonly classMapper: ClassMapper
+  ) {}
+
   async findById(id: string): Promise<Class | null> {
     const classToFind = await prisma.class.findUnique({
       where: {
@@ -24,6 +28,9 @@ export class PrismaClassesRepository implements ClassesRepository {
     const classesToFind = await prisma.class.findMany({
       where: {
         moduleId
+      },
+      orderBy: {
+        classNumber: 'asc'
       }
     })
 
@@ -33,7 +40,7 @@ export class PrismaClassesRepository implements ClassesRepository {
   }
 
   async create(classToAdd: Class): Promise<Class> {
-    const infraClass = ClassMapper.toPrisma(classToAdd)
+    const infraClass = await this.classMapper.toPrisma(classToAdd)
 
     await prisma.class.create({
       data: infraClass
@@ -43,7 +50,7 @@ export class PrismaClassesRepository implements ClassesRepository {
   }
 
   async save(classToSave: Class): Promise<void> {
-    const infraClass = ClassMapper.toPrisma(classToSave)
+    const infraClass = await this.classMapper.toPrisma(classToSave)
 
     await prisma.class.update({
       where: {

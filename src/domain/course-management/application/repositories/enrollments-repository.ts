@@ -9,9 +9,9 @@ export interface EnrollmentsRepository {
   findManyStudentsByCourseId: (courseId: string) => Promise<Student[]>
   markClassAsCompleted: (classId: string, enrollment: Enrollment) => Promise<Enrollment | null>
   markModuleAsCompleted: (moduleId: string, enrollment: Enrollment) => Promise<Enrollment | null>
-  markAsCompleted: (enrollment: Enrollment) => Promise<Enrollment>
+  markAsCompleted: (enrollment: Enrollment) => Promise<Enrollment | null>
   countEnrollmentsByYear: (year: number) => Promise<number>
-  create: (enrollment: Enrollment) => Promise<Enrollment>
+  create: (enrollment: Enrollment) => Promise<Enrollment | null>
   save: (enrollment: Enrollment) => Promise<void>
   delete: (enrollment: Enrollment) => Promise<void>
 }

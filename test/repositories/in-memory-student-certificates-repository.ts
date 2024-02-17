@@ -30,6 +30,14 @@ export class InMemoryStudentCertificatesRepository implements StudentCertificate
     return studentCertificate
   }
 
+  async findManyByStudentId(studentId: string): Promise<StudentCertificate[]> {
+    return this.items.filter(studentCertificateToFilter => studentCertificateToFilter.studentId.toString() === studentId)
+  }
+
+  async findManyByCertificateId(certificateId: string): Promise<StudentCertificate[]> {
+    return this.items.filter(studentCertificateToFilter => studentCertificateToFilter.certificateId.toString() === certificateId)
+  }
+
   async create(studentCertificate: StudentCertificate): Promise<StudentCertificate> {
     this.items.push(studentCertificate)
     return studentCertificate

@@ -1,4 +1,3 @@
-import { type CoursesRepository } from '@/domain/course-management/application/repositories/courses-repository'
 import { type Course } from '@/domain/course-management/enterprise/entities/course'
 import { type CompleteCourseDTO } from '@/domain/course-management/enterprise/entities/dtos/complete-course'
 import { type CourseWithModulesDTO } from '@/domain/course-management/enterprise/entities/dtos/course-with-modules'
@@ -7,14 +6,19 @@ import { type StudentWithCoursesDTO } from '@/domain/course-management/enterpris
 import { type Tag } from '@/domain/course-management/enterprise/entities/tag'
 import { prisma } from '..'
 import { CompleteCourseMapper } from '../mappers/complete-course-mapper'
-import { CourseMapper } from '../mappers/course-mapper'
 import { CourseWithModulesMapper } from '../mappers/course-with-modules-mapper'
 import { courseWithStudentsMapper } from '../mappers/course-with-students-mapper'
 import { instructorWithCoursesMapper } from '../mappers/instructor-with-courses'
 import { studentWithCoursesMapper } from '../mappers/student-with-courses'
+import { type CoursesRepository } from './../../../../domain/course-management/application/repositories/courses-repository'
 import { type CourseWithStudentsDTO } from './../../../../domain/course-management/enterprise/entities/dtos/course-with-students'
+import { CourseMapper } from './../mappers/course-mapper'
 
 export class PrismaCoursesRepository implements CoursesRepository {
+  constructor(
+    private readonly courseMapper: CourseMapper
+  ) {}
+
   async findById(id: string): Promise<Course | null> {
     const course = await prisma.course.findUnique({
       where: {
@@ -32,7 +36,12 @@ export class PrismaCoursesRepository implements CoursesRepository {
   }
 
   async findAll(): Promise<Course[]> {
-    const courses = await prisma.course.findMany()
+    const courses = await prisma.course.findMany({
+      orderBy: {
+        createdAt: 'desc'
+      }
+    })
+
     return courses.map(course => CourseMapper.toDomain(course))
   }
 
@@ -40,6 +49,9 @@ export class PrismaCoursesRepository implements CoursesRepository {
     const courses = await prisma.course.findMany({
       where: {
         instructorId
+      },
+      orderBy: {
+        createdAt: 'desc'
       }
     })
 
@@ -185,7 +197,7 @@ export class PrismaCoursesRepository implements CoursesRepository {
   }
 
   async create(course: Course): Promise<Course> {
-    const infraCourse = CourseMapper.toPrisma(course)
+    const infraCourse = await this.courseMapper.toPrisma(course)
 
     await prisma.course.create({
       data: infraCourse
@@ -195,7 +207,7 @@ export class PrismaCoursesRepository implements CoursesRepository {
   }
 
   async save(course: Course): Promise<void> {
-    const infraCourse = CourseMapper.toPrisma(course)
+    const infraCourse = await this.courseMapper.toPrisma(course)
 
     await prisma.course.update({
       data: infraCourse,

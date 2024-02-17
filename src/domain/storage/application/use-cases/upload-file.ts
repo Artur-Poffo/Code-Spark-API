@@ -42,6 +42,7 @@ export class UploadFileUseCase implements UseCase<UploadFileUseCaseRequest, Uplo
     const file = File.create({
       fileName,
       fileType,
+      body,
       fileKey: key,
       size,
       storedAt

@@ -1,25 +1,15 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { type VideosRepository } from '@/domain/course-management/application/repositories/videos-repository'
 import { Video } from '@/domain/course-management/enterprise/entities/video'
+import { type FilesRepository } from '@/domain/storage/application/repositories/files-repository'
 import { type Prisma, type Video as PrismaVideo } from '@prisma/client'
-import { type FilesRepository } from './../../../../domain/storage/application/repositories/files-repository'
 
 export class VideoMapper {
   constructor(
-    private readonly videosRepository: VideosRepository,
     private readonly filesRepository: FilesRepository
   ) {}
 
-  private async getDomainVideo(videoId: string) {
-    return await this.videosRepository.findById(videoId)
-  }
-
-  private async getRespectiveFile(videoKey: string) {
-    return await this.filesRepository.findByKey(videoKey)
-  }
-
   async toDomain(raw: PrismaVideo): Promise<Video | null> {
-    const video = await this.getDomainVideo(raw.id)
+    const video = await this.filesRepository.findByKey(raw.fileKey)
 
     if (!video) {
       return null
@@ -27,11 +17,11 @@ export class VideoMapper {
 
     return Video.create(
       {
-        videoName: video.videoName,
+        videoName: video.fileName,
         size: video.size,
         body: video.body,
-        videoKey: video.videoKey,
-        videoType: video.videoType,
+        videoKey: video.fileKey,
+        videoType: video.fileType as 'video/mp4' | 'video/avi',
         duration: Number(raw.duration),
         storedAt: video.storedAt
       },
@@ -44,16 +34,10 @@ export class VideoMapper {
       return null
     }
 
-    const file = await this.getRespectiveFile(video.videoKey)
-
-    if (!file) {
-      return null
-    }
-
     return {
       id: video.id.toString(),
       duration: video.duration,
-      fileId: file.id.toString()
+      fileKey: video.videoKey
     }
   }
 }

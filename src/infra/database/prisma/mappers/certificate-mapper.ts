@@ -1,11 +1,13 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { type ImagesRepository } from '@/domain/course-management/application/repositories/images-repository'
+import { type StudentCertificatesRepository } from '@/domain/course-management/application/repositories/student-certificates-repository'
 import { Certificate } from '@/domain/course-management/enterprise/entities/certificate'
 import { type Prisma, type Certificate as PrismaCertificate } from '@prisma/client'
 
 export class CertificateMapper {
   constructor(
-    private readonly imagesRepository: ImagesRepository
+    private readonly imagesRepository: ImagesRepository,
+    private readonly studentCertificatesRepository: StudentCertificatesRepository
   ) {}
 
   async toDomain(raw: PrismaCertificate): Promise<Certificate | null> {
@@ -26,6 +28,7 @@ export class CertificateMapper {
 
   async toPrisma(certificate: Certificate): Promise<Prisma.CertificateUncheckedCreateInput | null> {
     const image = await this.imagesRepository.findById(certificate.imageId.toString())
+    const studentCertificates = await this.studentCertificatesRepository.findManyByCertificateId(certificate.id.toString())
 
     if (!image) {
       return null
@@ -38,7 +41,10 @@ export class CertificateMapper {
     return {
       id: certificate.id.toString(),
       courseId: certificate.courseId.toString(),
-      imageKey: image.imageKey
+      imageKey: image.imageKey,
+      studentCertificates: {
+        connect: studentCertificates.map(studentCertificate => ({ id: studentCertificate.id.toString() }))
+      }
     }
   }
 }

@@ -37,6 +37,32 @@ export class PrismaStudentCertificatesRepository implements StudentCertificatesR
     return domainStudentCertificate
   }
 
+  async findManyByStudentId(studentId: string): Promise<StudentCertificate[]> {
+    const studentCertificates = await prisma.studentCertificate.findMany({
+      where: {
+        userId: studentId
+      },
+      orderBy: {
+        issuedAt: 'desc'
+      }
+    })
+
+    return studentCertificates.map(studentCertificate => StudentCertificateMapper.toDomain(studentCertificate))
+  }
+
+  async findManyByCertificateId(certificateId: string): Promise<StudentCertificate[]> {
+    const studentCertificates = await prisma.studentCertificate.findMany({
+      where: {
+        certificateId
+      },
+      orderBy: {
+        issuedAt: 'desc'
+      }
+    })
+
+    return studentCertificates.map(studentCertificate => StudentCertificateMapper.toDomain(studentCertificate))
+  }
+
   async create(studentCertificate: StudentCertificate): Promise<StudentCertificate> {
     const infraStudentCertificate = StudentCertificateMapper.toPrisma(studentCertificate)
 
