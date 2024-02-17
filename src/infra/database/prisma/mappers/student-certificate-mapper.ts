@@ -7,7 +7,7 @@ export class StudentCertificateMapper {
     return StudentCertificate.create(
       {
         certificateId: new UniqueEntityID(raw.certificateId),
-        studentId: new UniqueEntityID(raw.userId),
+        studentId: new UniqueEntityID(raw.studentId),
         issuedAt: raw.issuedAt
       },
       new UniqueEntityID(raw.id)
@@ -18,7 +18,7 @@ export class StudentCertificateMapper {
     return {
       id: studentCertificate.id.toString(),
       certificateId: studentCertificate.certificateId.toString(),
-      userId: studentCertificate.studentId.toString(),
+      studentId: studentCertificate.studentId.toString(),
       issuedAt: studentCertificate.issuedAt
     }
   }

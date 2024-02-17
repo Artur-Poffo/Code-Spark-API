@@ -3,9 +3,13 @@ import { type InstructorProps } from '@/domain/course-management/enterprise/enti
 import { type StudentProps } from '@/domain/course-management/enterprise/entities/student'
 import { type User } from '@/domain/course-management/enterprise/entities/user'
 import { prisma } from '..'
-import { UserMapper } from '../mappers/user-mapper'
+import { UserMapper } from './../mappers/user-mapper'
 
 export class PrismaUsersRepository implements UsersRepository {
+  constructor(
+    private readonly userMapper: UserMapper
+  ) {}
+
   async findById(id: string): Promise<User<StudentProps | InstructorProps> | null> {
     const user = await prisma.user.findUnique({
       where: {
@@ -39,7 +43,7 @@ export class PrismaUsersRepository implements UsersRepository {
   }
 
   async create(user: User<StudentProps | InstructorProps>): Promise<User<StudentProps | InstructorProps>> {
-    const prismaUser = UserMapper.toPrisma(user)
+    const prismaUser = await this.userMapper.toPrisma(user)
 
     await prisma.user.create({
       data: prismaUser

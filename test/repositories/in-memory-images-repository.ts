@@ -15,6 +15,16 @@ export class InMemoryImagesRepository implements ImagesRepository {
     return image
   }
 
+  async findByImageKey(key: string): Promise<Image | null> {
+    const image = this.items.find(imageToCompare => imageToCompare.imageKey?.toString() === key)
+
+    if (!image) {
+      return null
+    }
+
+    return image
+  }
+
   async appendImageKey(imageKey: string, id: string): Promise<Image | null> {
     const imageToAppendKey = this.items.find(imageToCompare => imageToCompare.id.toString() === id)
 

@@ -23,7 +23,7 @@ export class PrismaStudentCertificatesRepository implements StudentCertificatesR
   async findByStudentIdAndCertificateId(studentId: string, certificateId: string): Promise<StudentCertificate | null> {
     const studentCertificate = await prisma.studentCertificate.findFirst({
       where: {
-        userId: studentId,
+        studentId,
         certificateId
       }
     })
@@ -35,6 +35,32 @@ export class PrismaStudentCertificatesRepository implements StudentCertificatesR
     const domainStudentCertificate = StudentCertificateMapper.toDomain(studentCertificate)
 
     return domainStudentCertificate
+  }
+
+  async findManyByStudentId(studentId: string): Promise<StudentCertificate[]> {
+    const studentCertificates = await prisma.studentCertificate.findMany({
+      where: {
+        studentId
+      },
+      orderBy: {
+        issuedAt: 'desc'
+      }
+    })
+
+    return studentCertificates.map(studentCertificate => StudentCertificateMapper.toDomain(studentCertificate))
+  }
+
+  async findManyByCertificateId(certificateId: string): Promise<StudentCertificate[]> {
+    const studentCertificates = await prisma.studentCertificate.findMany({
+      where: {
+        certificateId
+      },
+      orderBy: {
+        issuedAt: 'desc'
+      }
+    })
+
+    return studentCertificates.map(studentCertificate => StudentCertificateMapper.toDomain(studentCertificate))
   }
 
   async create(studentCertificate: StudentCertificate): Promise<StudentCertificate> {

@@ -3,12 +3,14 @@ import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-e
 import { makeClass } from '../../../../../test/factories/make-class'
 import { makeCourse } from '../../../../../test/factories/make-course'
 import { makeEnrollment } from '../../../../../test/factories/make-enrollment'
+import { makeEnrollmentCompletedItem } from '../../../../../test/factories/make-enrollment-completed-item'
 import { makeInstructor } from '../../../../../test/factories/make-instructor'
 import { makeModule } from '../../../../../test/factories/make-module'
 import { makeStudent } from '../../../../../test/factories/make-student'
 import { InMemoryClassesRepository } from '../../../../../test/repositories/in-memory-classes-repository'
 import { InMemoryCourseTagsRepository } from '../../../../../test/repositories/in-memory-course-tags-repository'
 import { InMemoryCoursesRepository } from '../../../../../test/repositories/in-memory-courses-repository'
+import { InMemoryEnrollmentCompletedItemsRepository } from '../../../../../test/repositories/in-memory-enrollment-completed-items-repository'
 import { InMemoryEnrollmentsRepository } from '../../../../../test/repositories/in-memory-enrollments-repository'
 import { InMemoryStudentsRepository } from '../../../../../test/repositories/in-memory-students-repository'
 import { InMemoryInstructorRepository } from './../../../../../test/repositories/in-memory-instructors-repository'
@@ -16,6 +18,7 @@ import { InMemoryModulesRepository } from './../../../../../test/repositories/in
 import { AllClassesInTheModuleMustBeMarkedAsCompleted } from './errors/all-classes-in-the-module-must-be-marked-as-completed'
 import { MarkModuleAsCompletedUseCase } from './mark-module-as-completed'
 
+let inMemoryEnrollmentCompletedItemsRepository: InMemoryEnrollmentCompletedItemsRepository
 let inMemoryEnrollmentsRepository: InMemoryEnrollmentsRepository
 let inMemoryCourseTagsRepository: InMemoryCourseTagsRepository
 let inMemoryStudentsRepository: InMemoryStudentsRepository
@@ -28,6 +31,7 @@ let sut: MarkModuleAsCompletedUseCase
 describe('Mark module as completed use case', () => {
   beforeEach(() => {
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
+    inMemoryEnrollmentCompletedItemsRepository = new InMemoryEnrollmentCompletedItemsRepository()
     inMemoryCourseTagsRepository = new InMemoryCourseTagsRepository()
     inMemoryClassesRepository = new InMemoryClassesRepository()
     inMemoryInstructorsRepository = new InMemoryInstructorRepository()
@@ -35,14 +39,14 @@ describe('Mark module as completed use case', () => {
     inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
 
     inMemoryEnrollmentsRepository = new InMemoryEnrollmentsRepository(
-      inMemoryClassesRepository, inMemoryModulesRepository, inMemoryStudentsRepository
+      inMemoryStudentsRepository, inMemoryEnrollmentCompletedItemsRepository
     )
     inMemoryCoursesRepository = new InMemoryCoursesRepository(
       inMemoryModulesRepository, inMemoryInstructorsRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository, inMemoryCourseTagsRepository
     )
 
     sut = new MarkModuleAsCompletedUseCase(
-      inMemoryEnrollmentsRepository, inMemoryModulesRepository, inMemoryClassesRepository, inMemoryStudentsRepository
+      inMemoryEnrollmentsRepository, inMemoryModulesRepository, inMemoryClassesRepository, inMemoryStudentsRepository, inMemoryEnrollmentCompletedItemsRepository
     )
   })
 
@@ -69,7 +73,10 @@ describe('Mark module as completed use case', () => {
     const enrollment = makeEnrollment({ studentId: student.id, courseId: course.id })
     await inMemoryEnrollmentsRepository.create(enrollment)
 
-    await inMemoryEnrollmentsRepository.markClassAsCompleted(classToAdd.id.toString(), enrollment)
+    const completedItem = makeEnrollmentCompletedItem({ enrollmentId: enrollment.id, itemId: classToAdd.id, type: 'CLASS' })
+    await inMemoryEnrollmentCompletedItemsRepository.create(completedItem)
+
+    await inMemoryEnrollmentsRepository.markItemAsCompleted(completedItem.id.toString(), enrollment)
 
     const result = await sut.exec({
       enrollmentId: enrollment.id.toString(),
@@ -83,9 +90,10 @@ describe('Mark module as completed use case', () => {
         name: 'John Doe Module'
       })
     })
+    expect(inMemoryEnrollmentCompletedItemsRepository.items).toHaveLength(2)
   })
 
-  it('should be able to mark a inexistent module of a enrollment as completed', async () => {
+  it('should not be able to mark a inexistent module of a enrollment as completed', async () => {
     const instructor = makeInstructor()
     await inMemoryInstructorsRepository.create(instructor)
 
@@ -136,7 +144,10 @@ describe('Mark module as completed use case', () => {
     const enrollment = makeEnrollment({ studentId: correctStudent.id, courseId: course.id })
     await inMemoryEnrollmentsRepository.create(enrollment)
 
-    await inMemoryEnrollmentsRepository.markClassAsCompleted(classToAdd.id.toString(), enrollment)
+    const completedItem = makeEnrollmentCompletedItem({ enrollmentId: enrollment.id, itemId: classToAdd.id, type: 'CLASS' })
+    await inMemoryEnrollmentCompletedItemsRepository.create(completedItem)
+
+    await inMemoryEnrollmentsRepository.markItemAsCompleted(completedItem.id.toString(), enrollment)
 
     const result = await sut.exec({
       enrollmentId: enrollment.id.toString(),

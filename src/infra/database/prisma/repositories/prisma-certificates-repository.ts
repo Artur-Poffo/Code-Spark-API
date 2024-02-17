@@ -1,9 +1,13 @@
 import { type CertificatesRepository } from '@/domain/course-management/application/repositories/certificates-repository'
 import { type Certificate } from '@/domain/course-management/enterprise/entities/certificate'
 import { prisma } from '..'
-import { CertificateMapper } from '../mappers/certificate-mapper'
+import { type CertificateMapper } from '../mappers/certificate-mapper'
 
 export class PrismaCertificatesRepository implements CertificatesRepository {
+  constructor(
+    private readonly certificateMapper: CertificateMapper
+  ) {}
+
   async findById(id: string): Promise<Certificate | null> {
     const certificate = await prisma.certificate.findUnique({
       where: {
@@ -15,7 +19,7 @@ export class PrismaCertificatesRepository implements CertificatesRepository {
       return null
     }
 
-    const domainCertificate = CertificateMapper.toDomain(certificate)
+    const domainCertificate = await this.certificateMapper.toDomain(certificate)
 
     return domainCertificate
   }
@@ -31,13 +35,17 @@ export class PrismaCertificatesRepository implements CertificatesRepository {
       return null
     }
 
-    const domainCertificate = CertificateMapper.toDomain(certificate)
+    const domainCertificate = await this.certificateMapper.toDomain(certificate)
 
     return domainCertificate
   }
 
-  async create(certificate: Certificate): Promise<Certificate> {
-    const infraCertificate = CertificateMapper.toPrisma(certificate)
+  async create(certificate: Certificate): Promise<Certificate | null> {
+    const infraCertificate = await this.certificateMapper.toPrisma(certificate)
+
+    if (!infraCertificate) {
+      return null
+    }
 
     await prisma.certificate.create({
       data: infraCertificate

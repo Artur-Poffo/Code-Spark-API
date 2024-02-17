@@ -6,6 +6,7 @@ import { InMemoryCertificatesRepository } from '../../../../../test/repositories
 import { InMemoryClassesRepository } from '../../../../../test/repositories/in-memory-classes-repository'
 import { InMemoryCourseTagsRepository } from '../../../../../test/repositories/in-memory-course-tags-repository'
 import { InMemoryCoursesRepository } from '../../../../../test/repositories/in-memory-courses-repository'
+import { InMemoryEnrollmentCompletedItemsRepository } from '../../../../../test/repositories/in-memory-enrollment-completed-items-repository'
 import { InMemoryEnrollmentsRepository } from '../../../../../test/repositories/in-memory-enrollments-repository'
 import { InMemoryInstructorRepository } from '../../../../../test/repositories/in-memory-instructors-repository'
 import { InMemoryModulesRepository } from '../../../../../test/repositories/in-memory-modules-repository'
@@ -14,6 +15,7 @@ import { InMemoryImagesRepository } from './../../../../../test/repositories/in-
 import { CourseAlreadyHasACertificateError } from './errors/course-already-has-a-certificate-error'
 import { RegisterCertificateForCourseUseCase } from './register-certificate-for-course'
 
+let inMemoryEnrollmentCompletedItemsRepository: InMemoryEnrollmentCompletedItemsRepository
 let inMemoryEnrollmentsRepository: InMemoryEnrollmentsRepository
 let inMemoryCourseTagsRepository: InMemoryCourseTagsRepository
 let inMemoryStudentsRepository: InMemoryStudentsRepository
@@ -27,6 +29,7 @@ let sut: RegisterCertificateForCourseUseCase
 
 describe('Register certificate for a course use case', () => {
   beforeEach(() => {
+    inMemoryEnrollmentCompletedItemsRepository = new InMemoryEnrollmentCompletedItemsRepository()
     inMemoryImagesRepository = new InMemoryImagesRepository()
     inMemoryCourseTagsRepository = new InMemoryCourseTagsRepository()
     inMemoryCertificatesRepository = new InMemoryCertificatesRepository()
@@ -37,7 +40,7 @@ describe('Register certificate for a course use case', () => {
     inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
 
     inMemoryEnrollmentsRepository = new InMemoryEnrollmentsRepository(
-      inMemoryClassesRepository, inMemoryModulesRepository, inMemoryStudentsRepository
+      inMemoryStudentsRepository, inMemoryEnrollmentCompletedItemsRepository
     )
     inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository, inMemoryCourseTagsRepository)
 

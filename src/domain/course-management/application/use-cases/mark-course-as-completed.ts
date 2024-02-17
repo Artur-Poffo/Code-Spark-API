@@ -3,7 +3,9 @@ import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { type UseCase } from '@/core/use-cases/use-case'
 import { type CompleteCourseDTO } from '../../enterprise/entities/dtos/complete-course'
+import { type Module } from '../../enterprise/entities/module'
 import { type CoursesRepository } from '../repositories/courses-repository'
+import { type EnrollmentCompletedItemsRepository } from '../repositories/enrollment-completed-items-repository'
 import { type EnrollmentsRepository } from '../repositories/enrollments-repository'
 import { type StudentsRepository } from '../repositories/students-repository'
 import { type ModulesRepository } from './../repositories/modules-repository'
@@ -26,7 +28,8 @@ export class MarkCourseAsCompletedUseCase implements UseCase<MarkCourseAsComplet
     private readonly enrollmentsRepository: EnrollmentsRepository,
     private readonly coursesRepository: CoursesRepository,
     private readonly modulesRepository: ModulesRepository,
-    private readonly studentsRepository: StudentsRepository
+    private readonly studentsRepository: StudentsRepository,
+    private readonly enrollmentCompletedItemsRepository: EnrollmentCompletedItemsRepository
   ) { }
 
   async exec({
@@ -55,9 +58,24 @@ export class MarkCourseAsCompletedUseCase implements UseCase<MarkCourseAsComplet
     }
 
     const courseModules = await this.modulesRepository.findManyByCourseId(completeCourse.course.id.toString())
+    const completedModulesItems = await this.enrollmentCompletedItemsRepository.findManyCompletedModulesByEnrollmentId(enrollmentId)
+
+    const completedModules: Module[] = []
+
+    await Promise.all(
+      completedModulesItems.map(async completedItem => {
+        if (completedItem.type === 'MODULE') {
+          const module = await this.modulesRepository.findById(completedItem.itemId.toString())
+
+          if (module) {
+            completedModules.push(module)
+          }
+        }
+      })
+    )
 
     const allModulesOfThisCourseIsCompleted = courseModules.every(moduleToCompare => {
-      return enrollment.completedModules.includes(moduleToCompare.id)
+      return completedModules.includes(moduleToCompare)
     })
 
     if (!allModulesOfThisCourseIsCompleted) {

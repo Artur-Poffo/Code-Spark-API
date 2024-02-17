@@ -1,9 +1,13 @@
 import { type InstructorsRepository } from '@/domain/course-management/application/repositories/instructors-repository'
 import { type Instructor } from '@/domain/course-management/enterprise/entities/instructor'
 import { prisma } from '..'
-import { InstructorMapper } from '../mappers/instructor-mapper'
+import { InstructorMapper } from './../mappers/instructor-mapper'
 
 export class PrismaInstructorsRepository implements InstructorsRepository {
+  constructor(
+    private readonly instructorMapper: InstructorMapper
+  ) {}
+
   async findById(id: string): Promise<Instructor | null> {
     const user = await prisma.user.findUnique({
       where: {
@@ -53,7 +57,7 @@ export class PrismaInstructorsRepository implements InstructorsRepository {
   }
 
   async create(instructor: Instructor): Promise<Instructor> {
-    const user = InstructorMapper.toPrisma(instructor)
+    const user = await this.instructorMapper.toPrisma(instructor)
 
     await prisma.user.create({
       data: user
@@ -63,7 +67,7 @@ export class PrismaInstructorsRepository implements InstructorsRepository {
   }
 
   async save(instructor: Instructor): Promise<void> {
-    const user = InstructorMapper.toPrisma(instructor)
+    const user = await this.instructorMapper.toPrisma(instructor)
 
     await prisma.user.update({
       where: {

@@ -2,8 +2,11 @@ import { left, right, type Either } from '@/core/either'
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { type UseCase } from '@/core/use-cases/use-case'
+import { type Class } from '../../enterprise/entities/class'
+import { EnrollmentCompletedItem } from '../../enterprise/entities/enrollment-completed-item'
 import { type Module } from '../../enterprise/entities/module'
 import { type ClassesRepository } from '../repositories/classes-repository'
+import { type EnrollmentCompletedItemsRepository } from '../repositories/enrollment-completed-items-repository'
 import { type EnrollmentsRepository } from '../repositories/enrollments-repository'
 import { type StudentsRepository } from '../repositories/students-repository'
 import { type ModulesRepository } from './../repositories/modules-repository'
@@ -27,7 +30,8 @@ export class MarkModuleAsCompletedUseCase implements UseCase<MarkModuleAsComplet
     private readonly enrollmentsRepository: EnrollmentsRepository,
     private readonly modulesRepository: ModulesRepository,
     private readonly classesRepository: ClassesRepository,
-    private readonly studentsRepository: StudentsRepository
+    private readonly studentsRepository: StudentsRepository,
+    private readonly enrollmentCompletedItemsRepository: EnrollmentCompletedItemsRepository
   ) { }
 
   async exec({
@@ -61,16 +65,38 @@ export class MarkModuleAsCompletedUseCase implements UseCase<MarkModuleAsComplet
     }
 
     const moduleClasses = await this.classesRepository.findManyByModuleId(moduleId)
+    const completedClassesItems = await this.enrollmentCompletedItemsRepository.findManyCompletedClassesByEnrollmentId(enrollmentId)
+
+    const completedClasses: Class[] = []
+
+    await Promise.all(
+      completedClassesItems.map(async completedItem => {
+        if (completedItem.type === 'CLASS') {
+          const classToAdd = await this.classesRepository.findById(completedItem.itemId.toString())
+
+          if (classToAdd) {
+            completedClasses.push(classToAdd)
+          }
+        }
+      })
+    )
 
     const allClassesOfThisModuleIsCompleted = moduleClasses.every(classToCompare => {
-      return enrollment.completedClasses.includes(classToCompare.id)
+      return completedClasses.includes(classToCompare)
     })
 
     if (!allClassesOfThisModuleIsCompleted) {
       return left(new AllClassesInTheModuleMustBeMarkedAsCompleted(module.name))
     }
 
-    await this.enrollmentsRepository.markModuleAsCompleted(moduleId, enrollment)
+    const completedItem = EnrollmentCompletedItem.create({
+      enrollmentId: enrollment.id,
+      itemId: module.id,
+      type: 'MODULE'
+    })
+    await this.enrollmentCompletedItemsRepository.create(completedItem)
+
+    await this.enrollmentsRepository.markItemAsCompleted(completedItem.id.toString(), enrollment)
 
     return right({
       module

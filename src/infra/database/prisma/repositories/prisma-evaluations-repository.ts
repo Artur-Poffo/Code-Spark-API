@@ -1,7 +1,7 @@
 import { type Evaluation } from '@/domain/course-management/enterprise/entities/evaluation'
 import { prisma } from '..'
-import { EvaluationMapper } from '../mappers/evaluation-mapper'
 import { type EvaluationsRepository } from './../../../../domain/course-management/application/repositories/evaluations-repository'
+import { EvaluationMapper } from './../mappers/evaluation-mapper'
 
 export class PrismaEvaluationsRepository implements EvaluationsRepository {
   async findById(id: string): Promise<Evaluation | null> {
@@ -23,7 +23,7 @@ export class PrismaEvaluationsRepository implements EvaluationsRepository {
   async findByStudentIdAndClassId(studentId: string, classId: string): Promise<Evaluation | null> {
     const evaluation = await prisma.evaluation.findFirst({
       where: {
-        userId: studentId,
+        studentId,
         classId
       }
     })
@@ -45,6 +45,22 @@ export class PrismaEvaluationsRepository implements EvaluationsRepository {
             courseId
           }
         }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    })
+
+    return evaluations.map(evaluation => EvaluationMapper.toDomain(evaluation))
+  }
+
+  async findManyByStudentId(studentId: string): Promise<Evaluation[]> {
+    const evaluations = await prisma.evaluation.findMany({
+      where: {
+        studentId
+      },
+      orderBy: {
+        createdAt: 'desc'
       }
     })
 
@@ -55,6 +71,9 @@ export class PrismaEvaluationsRepository implements EvaluationsRepository {
     const evaluations = await prisma.evaluation.findMany({
       where: {
         classId
+      },
+      orderBy: {
+        createdAt: 'desc'
       }
     })
 

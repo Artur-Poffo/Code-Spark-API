@@ -15,6 +15,16 @@ export class InMemoryVideosRepository implements VideosRepository {
     return video
   }
 
+  async findByVideoKey(key: string): Promise<Video | null> {
+    const video = this.items.find(videoToFind => videoToFind.videoKey === key)
+
+    if (!video) {
+      return null
+    }
+
+    return video
+  }
+
   async appendVideoKey(videoKey: string, id: string): Promise<Video | null> {
     const videoToAppendKey = this.items.find(videoToCompare => videoToCompare.id.toString() === id)
 

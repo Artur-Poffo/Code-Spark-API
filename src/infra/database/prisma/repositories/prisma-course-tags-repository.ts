@@ -24,6 +24,9 @@ export class PrismaCourseTagsRepository implements CourseTagsRepository {
     const courseTags = await prisma.courseTag.findMany({
       where: {
         courseId
+      },
+      orderBy: {
+        attachedAt: 'desc'
       }
     })
 
@@ -34,6 +37,9 @@ export class PrismaCourseTagsRepository implements CourseTagsRepository {
     const courseTags = await prisma.courseTag.findMany({
       where: {
         tagId
+      },
+      orderBy: {
+        attachedAt: 'desc'
       }
     })
 

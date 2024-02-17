@@ -7,11 +7,10 @@ export interface EnrollmentsRepository {
   findManyByCourseId: (courseId: string) => Promise<Enrollment[]>
   findManyByStudentId: (studentId: string) => Promise<Enrollment[]>
   findManyStudentsByCourseId: (courseId: string) => Promise<Student[]>
-  markClassAsCompleted: (classId: string, enrollment: Enrollment) => Promise<Enrollment | null>
-  markModuleAsCompleted: (moduleId: string, enrollment: Enrollment) => Promise<Enrollment | null>
-  markAsCompleted: (enrollment: Enrollment) => Promise<Enrollment>
+  markItemAsCompleted: (completedItemId: string, enrollment: Enrollment) => Promise<Enrollment | null>
+  markAsCompleted: (enrollment: Enrollment) => Promise<Enrollment | null>
   countEnrollmentsByYear: (year: number) => Promise<number>
-  create: (enrollment: Enrollment) => Promise<Enrollment>
+  create: (enrollment: Enrollment) => Promise<Enrollment | null>
   save: (enrollment: Enrollment) => Promise<void>
   delete: (enrollment: Enrollment) => Promise<void>
 }

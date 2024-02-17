@@ -7,7 +7,7 @@ export class EvaluationMapper {
     return Evaluation.create(
       {
         classId: new UniqueEntityID(raw.classId),
-        studentId: new UniqueEntityID(raw.userId),
+        studentId: new UniqueEntityID(raw.studentId),
         value: raw.value,
         createdAt: raw.createdAt
       },
@@ -19,7 +19,7 @@ export class EvaluationMapper {
     return {
       id: evaluation.id.toString(),
       classId: evaluation.classId.toString(),
-      userId: evaluation.studentId.toString(),
+      studentId: evaluation.studentId.toString(),
       value: evaluation.value,
       createdAt: evaluation.createdAt
     }

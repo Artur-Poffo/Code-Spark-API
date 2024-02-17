@@ -8,6 +8,10 @@ import { ModuleMapper } from '../mappers/module-mapper'
 import { ModuleWithClassesMapper } from '../mappers/module-with-classes-mapper'
 
 export class PrismaModulesRepository implements ModulesRepository {
+  constructor(
+    private readonly moduleMapper: ModuleMapper
+  ) {}
+
   async findById(id: string): Promise<Module | null> {
     const module = await prisma.module.findUnique({
       where: {
@@ -28,6 +32,9 @@ export class PrismaModulesRepository implements ModulesRepository {
     const modules = await prisma.module.findMany({
       where: {
         courseId: id
+      },
+      orderBy: {
+        moduleNumber: 'asc'
       }
     })
 
@@ -66,7 +73,7 @@ export class PrismaModulesRepository implements ModulesRepository {
   }
 
   async create(module: Module): Promise<Module> {
-    const infraModule = ModuleMapper.toPrisma(module)
+    const infraModule = await this.moduleMapper.toPrisma(module)
 
     await prisma.module.create({
       data: infraModule
@@ -76,7 +83,7 @@ export class PrismaModulesRepository implements ModulesRepository {
   }
 
   async save(module: Module): Promise<void> {
-    const infraModule = ModuleMapper.toPrisma(module)
+    const infraModule = await this.moduleMapper.toPrisma(module)
 
     await prisma.module.update({
       where: {

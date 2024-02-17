@@ -1,17 +1,15 @@
 import { type EnrollmentsRepository } from '@/domain/course-management/application/repositories/enrollments-repository'
 import { type Enrollment } from '@/domain/course-management/enterprise/entities/enrollment'
 import { type Student } from '@/domain/course-management/enterprise/entities/student'
-import { type InMemoryClassesRepository } from './in-memory-classes-repository'
-import { type InMemoryModulesRepository } from './in-memory-modules-repository'
+import { type InMemoryEnrollmentCompletedItemsRepository } from './in-memory-enrollment-completed-items-repository'
 import { type InMemoryStudentsRepository } from './in-memory-students-repository'
 
 export class InMemoryEnrollmentsRepository implements EnrollmentsRepository {
   public items: Enrollment[] = []
 
   constructor(
-    private readonly inMemoryClassesRepository: InMemoryClassesRepository,
-    private readonly inMemoryModulesRepository: InMemoryModulesRepository,
-    private readonly inMemoryStudentsRepository: InMemoryStudentsRepository
+    private readonly inMemoryStudentsRepository: InMemoryStudentsRepository,
+    private readonly inMemoryEnrollmentCompletedItemsRepository: InMemoryEnrollmentCompletedItemsRepository
   ) {}
 
   async findById(id: string): Promise<Enrollment | null> {
@@ -62,27 +60,14 @@ export class InMemoryEnrollmentsRepository implements EnrollmentsRepository {
     return courseStudents
   }
 
-  async markClassAsCompleted(classId: string, enrollment: Enrollment): Promise<Enrollment | null> {
-    const classToFind = await this.inMemoryClassesRepository.findById(classId)
+  async markItemAsCompleted(itemId: string, enrollment: Enrollment): Promise<Enrollment | null> {
+    const enrollmentCompletedItem = await this.inMemoryEnrollmentCompletedItemsRepository.findById(itemId)
 
-    if (!classToFind) {
+    if (!enrollmentCompletedItem) {
       return null
     }
 
-    enrollment.completedClasses.push(classToFind.id)
-    await this.save(enrollment)
-
-    return enrollment
-  }
-
-  async markModuleAsCompleted(moduleId: string, enrollment: Enrollment): Promise<Enrollment | null> {
-    const module = await this.inMemoryModulesRepository.findById(moduleId)
-
-    if (!module) {
-      return null
-    }
-
-    enrollment.completedModules.push(module.id)
+    enrollment.completedItems.push(enrollmentCompletedItem.id)
     await this.save(enrollment)
 
     return enrollment

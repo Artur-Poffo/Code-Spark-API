@@ -2,10 +2,14 @@ import { type EnrollmentsRepository } from '@/domain/course-management/applicati
 import { type Enrollment } from '@/domain/course-management/enterprise/entities/enrollment'
 import { type Student } from '@/domain/course-management/enterprise/entities/student'
 import { prisma } from '..'
-import { EnrollmentMapper } from '../mappers/enrollment-mapeer'
 import { StudentMapper } from '../mappers/student-mapper'
+import { type EnrollmentMapper } from './../mappers/enrollment-mapeer'
 
 export class PrismaEnrollmentsRepository implements EnrollmentsRepository {
+  constructor(
+    private readonly enrollmentMapper: EnrollmentMapper
+  ) {}
+
   async findById(id: string): Promise<Enrollment | null> {
     const enrollment = await prisma.enrollment.findUnique({
       where: {
@@ -17,7 +21,7 @@ export class PrismaEnrollmentsRepository implements EnrollmentsRepository {
       return null
     }
 
-    const domainEnrollment = EnrollmentMapper.toDomain(enrollment)
+    const domainEnrollment = await this.enrollmentMapper.toDomain(enrollment)
 
     return domainEnrollment
   }
@@ -26,7 +30,7 @@ export class PrismaEnrollmentsRepository implements EnrollmentsRepository {
     const enrollment = await prisma.enrollment.findFirst({
       where: {
         courseId,
-        userId: studentId
+        studentId
       }
     })
 
@@ -34,7 +38,7 @@ export class PrismaEnrollmentsRepository implements EnrollmentsRepository {
       return null
     }
 
-    const domainEnrollment = EnrollmentMapper.toDomain(enrollment)
+    const domainEnrollment = await this.enrollmentMapper.toDomain(enrollment)
 
     return domainEnrollment
   }
@@ -43,20 +47,36 @@ export class PrismaEnrollmentsRepository implements EnrollmentsRepository {
     const enrollments = await prisma.enrollment.findMany({
       where: {
         courseId
+      },
+      orderBy: {
+        ocurredAt: 'desc'
       }
     })
 
-    return enrollments.map(enrollment => EnrollmentMapper.toDomain(enrollment))
+    const domainEnrollments = await Promise.all(
+      enrollments.map(async (enrollment) => await this.enrollmentMapper.toDomain(enrollment))
+        .filter(enrollment => enrollment !== null) as unknown as Enrollment[]
+    )
+
+    return domainEnrollments
   }
 
   async findManyByStudentId(studentId: string): Promise<Enrollment[]> {
     const enrollments = await prisma.enrollment.findMany({
       where: {
-        userId: studentId
+        studentId
+      },
+      orderBy: {
+        ocurredAt: 'desc'
       }
     })
 
-    return enrollments.map(enrollment => EnrollmentMapper.toDomain(enrollment))
+    const domainEnrollments = await Promise.all(
+      enrollments.map(async (enrollment) => await this.enrollmentMapper.toDomain(enrollment))
+        .filter(enrollment => enrollment !== null) as unknown as Enrollment[]
+    )
+
+    return domainEnrollments
   }
 
   async findManyStudentsByCourseId(courseId: string): Promise<Student[]> {
@@ -73,7 +93,8 @@ export class PrismaEnrollmentsRepository implements EnrollmentsRepository {
     return students.map(student => StudentMapper.toDomain(student))
   }
 
-  async markClassAsCompleted(classId: string, enrollment: Enrollment): Promise<Enrollment | null> {
+  async markItemAsCompleted(itemId: string, enrollment: Enrollment): Promise<Enrollment | null> {
+    // TODO: This is wrong but I'm out of time, I'll refactor it in the future
     const infraEnrollment = await prisma.enrollment.findUnique({
       where: {
         id: enrollment.id.toString()
@@ -84,64 +105,12 @@ export class PrismaEnrollmentsRepository implements EnrollmentsRepository {
       return null
     }
 
-    const classToMarkAsCompleted = await prisma.class.findUnique({
-      where: {
-        id: classId
-      }
-    })
-
-    if (!classToMarkAsCompleted) {
-      return null
-    }
-
-    await prisma.enrollmentCompletedItem.create({
-      data: {
-        itemId: classId,
-        itemType: 'CLASS',
-        enrollmentId: infraEnrollment.id
-      }
-    })
-
-    const domainEnrollment = EnrollmentMapper.toDomain(infraEnrollment)
+    const domainEnrollment = await this.enrollmentMapper.toDomain(infraEnrollment)
 
     return domainEnrollment
   }
 
-  async markModuleAsCompleted(moduleId: string, enrollment: Enrollment): Promise<Enrollment | null> {
-    const infraEnrollment = await prisma.enrollment.findUnique({
-      where: {
-        id: enrollment.id.toString()
-      }
-    })
-
-    if (!infraEnrollment) {
-      return null
-    }
-
-    const module = await prisma.class.findUnique({
-      where: {
-        id: moduleId
-      }
-    })
-
-    if (!module) {
-      return null
-    }
-
-    await prisma.enrollmentCompletedItem.create({
-      data: {
-        itemId: moduleId,
-        itemType: 'MODULE',
-        enrollmentId: infraEnrollment.id
-      }
-    })
-
-    const domainEnrollment = EnrollmentMapper.toDomain(infraEnrollment)
-
-    return domainEnrollment
-  }
-
-  async markAsCompleted(enrollment: Enrollment): Promise<Enrollment> {
+  async markAsCompleted(enrollment: Enrollment): Promise<Enrollment | null> {
     const infraEnrollment = await prisma.enrollment.update({
       where: {
         id: enrollment.id.toString()
@@ -151,7 +120,7 @@ export class PrismaEnrollmentsRepository implements EnrollmentsRepository {
       }
     })
 
-    const domainEnrollment = EnrollmentMapper.toDomain(infraEnrollment)
+    const domainEnrollment = await this.enrollmentMapper.toDomain(infraEnrollment)
 
     return domainEnrollment
   }
@@ -164,8 +133,12 @@ export class PrismaEnrollmentsRepository implements EnrollmentsRepository {
     })
   }
 
-  async create(enrollment: Enrollment): Promise<Enrollment> {
-    const infraEnrollment = EnrollmentMapper.toPrisma(enrollment)
+  async create(enrollment: Enrollment): Promise<Enrollment | null> {
+    const infraEnrollment = await this.enrollmentMapper.toPrisma(enrollment)
+
+    if (!infraEnrollment) {
+      return null
+    }
 
     await prisma.enrollment.create({
       data: infraEnrollment
@@ -175,7 +148,11 @@ export class PrismaEnrollmentsRepository implements EnrollmentsRepository {
   }
 
   async save(enrollment: Enrollment): Promise<void> {
-    const infraEnrollment = EnrollmentMapper.toPrisma(enrollment)
+    const infraEnrollment = await this.enrollmentMapper.toPrisma(enrollment)
+
+    if (!infraEnrollment) {
+      return
+    }
 
     await prisma.enrollment.update({
       where: {

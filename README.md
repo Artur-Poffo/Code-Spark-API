@@ -173,6 +173,7 @@
   - - id: string
     - fileName: string
     - filType: string
+    - body: Buffer
     - fileKey: string
     - size: number
     - storedAt: Date
@@ -204,6 +205,7 @@
 - [ ] GET /courses/filter - Filter courses by name or tags
 - [ ] GET /courses/:courseId/students - Get students enrolled in this course
 - [ ] GET /courses/:courseId/modules - Get course modules
+- [ ] GET /courses/:courseId/classes - Get course classes - make use case
 - [ ] POST /courses - Register course
 - [ ] GET /courses/:courseId/tags - Get course tags
 - [ ] POST /courses/:courseId/tags - Attach tag to course
@@ -236,11 +238,17 @@
 
 ## Potential Refactoring or Updates:
 
-- [x] Implement course repository method.
+- [x] Implement method for course repository.
 - [x] Refactor dependencies in all unit tests.
 - [x] Verify the usage of `Promise.all()` and apply destructuring where applicable.
-- [x] Review use cases and check improvements.
-- [x] Review entities created with IDs, ensuring the usage of `new UniqueEntityId()` only where needed and correct any discrepancies.
-- [x] Evaluate the Enrollment entity and determine if updates are necessary for simpler management of modules and classes.
-- [x] Replace all asynchronous forEach for Promise.all() with asynchronous map
-- [x] Update use cases Either errors
+- [x] Review use cases and explore potential improvements.
+- [x] Ensure consistent usage of `new UniqueEntityId()` for entity IDs and rectify any inconsistencies.
+- [x] Evaluate the Enrollment entity for possible simplifications in managing modules and classes.
+- [x] Replace all asynchronous `forEach` loops with `Promise.all()` combined with asynchronous `map`.
+- [x] Update error handling in use cases.
+- [x] Implement sorting in `findMany` methods of Prisma repositories.
+- [x] Refactor database relation names.
+- [x] Revise mark as complete functionality for classes and modules system.
+- [x] Fix infinite calls to Prisma repositories in some mapper usage scenarios.
+- [x] Introduce domain events for Prisma repositories.
+- [ ] Implement mappers for mapping domain entities to DTOs.

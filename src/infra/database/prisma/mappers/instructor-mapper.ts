@@ -1,8 +1,13 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Instructor } from '@/domain/course-management/enterprise/entities/instructor'
 import { type Prisma, type User as PrismaUser } from '@prisma/client'
+import { type CoursesRepository } from './../../../../domain/course-management/application/repositories/courses-repository'
 
 export class InstructorMapper {
+  constructor(
+    private readonly coursesRepository: CoursesRepository
+  ) {}
+
   static toDomain(raw: PrismaUser): Instructor {
     return Instructor.create(
       {
@@ -20,7 +25,9 @@ export class InstructorMapper {
     )
   }
 
-  static toPrisma(instructor: Instructor): Prisma.UserUncheckedCreateInput {
+  async toPrisma(instructor: Instructor): Promise<Prisma.UserUncheckedCreateInput> {
+    const instructorCourses = await this.coursesRepository.findManyByInstructorId(instructor.id.toString())
+
     return {
       id: instructor.id.toString(),
       name: instructor.name,
@@ -32,7 +39,10 @@ export class InstructorMapper {
       summary: instructor.summary,
       bannerImageKey: instructor.bannerImageKey,
       profileImageKey: instructor.profileImageKey,
-      registeredAt: instructor.registeredAt
+      registeredAt: instructor.registeredAt,
+      courses: {
+        connect: instructorCourses.map(course => ({ id: course.id.toString() }))
+      }
     }
   }
 }

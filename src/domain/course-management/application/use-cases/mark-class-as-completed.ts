@@ -3,7 +3,9 @@ import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { type UseCase } from '@/core/use-cases/use-case'
 import { type Class } from '../../enterprise/entities/class'
+import { EnrollmentCompletedItem } from '../../enterprise/entities/enrollment-completed-item'
 import { type CoursesRepository } from '../repositories/courses-repository'
+import { type EnrollmentCompletedItemsRepository } from '../repositories/enrollment-completed-items-repository'
 import { type EnrollmentsRepository } from '../repositories/enrollments-repository'
 import { type StudentsRepository } from '../repositories/students-repository'
 import { type ClassesRepository } from './../repositories/classes-repository'
@@ -28,7 +30,8 @@ export class MarkClassAsCompletedUseCase implements UseCase<MarkClassAsCompleted
     private readonly coursesRepository: CoursesRepository,
     private readonly modulesRepository: ModulesRepository,
     private readonly classesRepository: ClassesRepository,
-    private readonly studentsRepository: StudentsRepository
+    private readonly studentsRepository: StudentsRepository,
+    private readonly enrollmentCompletedItemsRepository: EnrollmentCompletedItemsRepository
   ) { }
 
   async exec({
@@ -67,7 +70,14 @@ export class MarkClassAsCompletedUseCase implements UseCase<MarkClassAsCompleted
       return left(new ResourceNotFoundError())
     }
 
-    await this.enrollmentsRepository.markClassAsCompleted(classId, enrollment)
+    const completedItem = EnrollmentCompletedItem.create({
+      enrollmentId: enrollment.id,
+      itemId: classToMarkAsCompleted.id,
+      type: 'CLASS'
+    })
+    await this.enrollmentCompletedItemsRepository.create(completedItem)
+
+    await this.enrollmentsRepository.markItemAsCompleted(completedItem.id.toString(), enrollment)
 
     return right({
       class: classToMarkAsCompleted

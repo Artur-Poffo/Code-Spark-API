@@ -1,8 +1,17 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { type EnrollmentsRepository } from '@/domain/course-management/application/repositories/enrollments-repository'
+import { type EvaluationsRepository } from '@/domain/course-management/application/repositories/evaluations-repository'
+import { type StudentCertificatesRepository } from '@/domain/course-management/application/repositories/student-certificates-repository'
 import { Student } from '@/domain/course-management/enterprise/entities/student'
 import { type Prisma, type User as PrismaUser } from '@prisma/client'
 
 export class StudentMapper {
+  constructor(
+    private readonly enrollmentsRepository: EnrollmentsRepository,
+    private readonly evaluationsRepository: EvaluationsRepository,
+    private readonly studentCertificatesRepository: StudentCertificatesRepository
+  ) {}
+
   static toDomain(raw: PrismaUser): Student {
     return Student.create(
       {
@@ -20,7 +29,11 @@ export class StudentMapper {
     )
   }
 
-  static toPrisma(student: Student): Prisma.UserUncheckedCreateInput {
+  async toPrisma(student: Student): Promise<Prisma.UserUncheckedCreateInput> {
+    const studentEnrollments = await this.enrollmentsRepository.findManyByStudentId(student.id.toString())
+    const studentEvaluations = await this.evaluationsRepository.findManyByStudentId(student.id.toString())
+    const studentCertificates = await this.studentCertificatesRepository.findManyByStudentId(student.id.toString())
+
     return {
       id: student.id.toString(),
       name: student.name,
@@ -32,7 +45,16 @@ export class StudentMapper {
       summary: student.summary,
       bannerImageKey: student.bannerImageKey,
       profileImageKey: student.profileImageKey,
-      registeredAt: student.registeredAt
+      registeredAt: student.registeredAt,
+      enrollments: {
+        connect: studentEnrollments.map(enrollment => ({ id: enrollment.id.toString() }))
+      },
+      evaluations: {
+        connect: studentEvaluations.map(evaluation => ({ id: evaluation.id.toString() }))
+      },
+      studentCertificates: {
+        connect: studentCertificates.map(studentCertificate => ({ id: studentCertificate.id.toString() }))
+      }
     }
   }
 }
