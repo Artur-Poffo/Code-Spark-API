@@ -6,6 +6,7 @@ import { makeModule } from '../../../../../test/factories/make-module'
 import { makeVideo } from '../../../../../test/factories/make-video'
 import { InMemoryClassesRepository } from '../../../../../test/repositories/in-memory-classes-repository'
 import { InMemoryCoursesRepository } from '../../../../../test/repositories/in-memory-courses-repository'
+import { InMemoryEnrollmentCompletedItemsRepository } from '../../../../../test/repositories/in-memory-enrollment-completed-items-repository'
 import { InMemoryEnrollmentsRepository } from '../../../../../test/repositories/in-memory-enrollments-repository'
 import { InMemoryStudentsRepository } from '../../../../../test/repositories/in-memory-students-repository'
 import { InMemoryVideosRepository } from '../../../../../test/repositories/in-memory-videos-repository'
@@ -17,6 +18,7 @@ import { ClassAlreadyExistsInThisModuleError } from './errors/class-already-exis
 import { ClassNumberIsAlreadyInUseError } from './errors/class-number-is-already-in-use-error'
 import { ClassVideoRequiredError } from './errors/class-video-required-error'
 
+let inMemoryEnrollmentCompletedItemsRepository: InMemoryEnrollmentCompletedItemsRepository
 let inMemoryVideosRepository: InMemoryVideosRepository
 let inMemoryCourseTagsRepository: InMemoryCourseTagsRepository
 let inMemoryEnrollmentsRepository: InMemoryEnrollmentsRepository
@@ -29,6 +31,7 @@ let sut: AddClassToModuleUseCase
 
 describe('Add class to a module use case', () => {
   beforeEach(() => {
+    inMemoryEnrollmentCompletedItemsRepository = new InMemoryEnrollmentCompletedItemsRepository()
     inMemoryVideosRepository = new InMemoryVideosRepository()
     inMemoryCourseTagsRepository = new InMemoryCourseTagsRepository()
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
@@ -38,7 +41,7 @@ describe('Add class to a module use case', () => {
     inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
 
     inMemoryEnrollmentsRepository = new InMemoryEnrollmentsRepository(
-      inMemoryClassesRepository, inMemoryModulesRepository, inMemoryStudentsRepository
+      inMemoryStudentsRepository, inMemoryEnrollmentCompletedItemsRepository
     )
     inMemoryCoursesRepository = new InMemoryCoursesRepository(
       inMemoryModulesRepository, inMemoryInstructorsRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository, inMemoryCourseTagsRepository

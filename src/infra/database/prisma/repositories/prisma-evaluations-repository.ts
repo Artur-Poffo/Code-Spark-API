@@ -23,7 +23,7 @@ export class PrismaEvaluationsRepository implements EvaluationsRepository {
   async findByStudentIdAndClassId(studentId: string, classId: string): Promise<Evaluation | null> {
     const evaluation = await prisma.evaluation.findFirst({
       where: {
-        userId: studentId,
+        studentId,
         classId
       }
     })
@@ -57,7 +57,7 @@ export class PrismaEvaluationsRepository implements EvaluationsRepository {
   async findManyByStudentId(studentId: string): Promise<Evaluation[]> {
     const evaluations = await prisma.evaluation.findMany({
       where: {
-        userId: studentId
+        studentId
       },
       orderBy: {
         createdAt: 'desc'

@@ -173,6 +173,7 @@
   - - id: string
     - fileName: string
     - filType: string
+    - body: Buffer
     - fileKey: string
     - size: number
     - storedAt: Date
@@ -237,17 +238,17 @@
 
 ## Potential Refactoring or Updates:
 
-- [x] Implement course repository method.
+- [x] Implement method for course repository.
 - [x] Refactor dependencies in all unit tests.
 - [x] Verify the usage of `Promise.all()` and apply destructuring where applicable.
-- [x] Review use cases and check improvements.
-- [x] Review entities created with IDs, ensuring the usage of `new UniqueEntityId()` only where needed and correct any discrepancies.
-- [x] Evaluate the Enrollment entity and determine if updates are necessary for simpler management of modules and classes.
-- [x] Replace all asynchronous forEach for Promise.all() with asynchronous map
-- [x] Update use cases Either errors
-- [x] Order by on find many methods of prisma repositories
-- [ ] Refactor relations database names
-- [ ] Refactor complete classes and modules system
-- [ ] Fix infinite calls of prisma repositories in some uses of mappers
-- [ ] Events on prisma repositories
-- [ ] Implement mappers for domain entities for DTOs
+- [x] Review use cases and explore potential improvements.
+- [x] Ensure consistent usage of `new UniqueEntityId()` for entity IDs and rectify any inconsistencies.
+- [x] Evaluate the Enrollment entity for possible simplifications in managing modules and classes.
+- [x] Replace all asynchronous `forEach` loops with `Promise.all()` combined with asynchronous `map`.
+- [x] Update error handling in use cases.
+- [x] Implement sorting in `findMany` methods of Prisma repositories.
+- [x] Refactor database relation names.
+- [x] Revise mark as complete functionality for classes and modules system.
+- [x] Fix infinite calls to Prisma repositories in some mapper usage scenarios.
+- [x] Introduce domain events for Prisma repositories.
+- [ ] Implement mappers for mapping domain entities to DTOs.

@@ -95,7 +95,7 @@ enum EnrollmentCompletedItemTypes {
 }
 
 model EnrollmentCompletedItem {
-  id         Int                          @id @default(autoincrement())
+  id         String                       @id @default(uuid())
   enrollment Enrollment                   @relation(fields: [enrollmentId], references: [id])
   itemType   EnrollmentCompletedItemTypes @map("item_type")
   itemId     String                       @map("item_id")

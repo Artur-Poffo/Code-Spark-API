@@ -5,13 +5,13 @@ import { StudentMapper } from './student-mapper'
 
 type PrismaCourseWithStudents = Course & {
   enrollments: Array<Enrollment & {
-    user: User
+    student: User
   }>
 }
 
 export class courseWithStudentsMapper {
   static toDomain(raw: PrismaCourseWithStudents): CourseWithStudentsDTO {
-    const students = raw.enrollments.map(enrollment => enrollment.user)
+    const students = raw.enrollments.map(enrollment => enrollment.student)
 
     const domainStudents = students.map(student => StudentMapper.toDomain(student))
 

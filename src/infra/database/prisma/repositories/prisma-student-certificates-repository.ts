@@ -23,7 +23,7 @@ export class PrismaStudentCertificatesRepository implements StudentCertificatesR
   async findByStudentIdAndCertificateId(studentId: string, certificateId: string): Promise<StudentCertificate | null> {
     const studentCertificate = await prisma.studentCertificate.findFirst({
       where: {
-        userId: studentId,
+        studentId,
         certificateId
       }
     })
@@ -40,7 +40,7 @@ export class PrismaStudentCertificatesRepository implements StudentCertificatesR
   async findManyByStudentId(studentId: string): Promise<StudentCertificate[]> {
     const studentCertificates = await prisma.studentCertificate.findMany({
       where: {
-        userId: studentId
+        studentId
       },
       orderBy: {
         issuedAt: 'desc'

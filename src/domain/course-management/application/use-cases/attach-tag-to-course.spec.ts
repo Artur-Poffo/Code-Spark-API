@@ -6,6 +6,7 @@ import { makeTag } from '../../../../../test/factories/make-tag'
 import { InMemoryClassesRepository } from '../../../../../test/repositories/in-memory-classes-repository'
 import { InMemoryCourseTagsRepository } from '../../../../../test/repositories/in-memory-course-tags-repository'
 import { InMemoryCoursesRepository } from '../../../../../test/repositories/in-memory-courses-repository'
+import { InMemoryEnrollmentCompletedItemsRepository } from '../../../../../test/repositories/in-memory-enrollment-completed-items-repository'
 import { InMemoryEnrollmentsRepository } from '../../../../../test/repositories/in-memory-enrollments-repository'
 import { InMemoryInstructorRepository } from '../../../../../test/repositories/in-memory-instructors-repository'
 import { InMemoryModulesRepository } from '../../../../../test/repositories/in-memory-modules-repository'
@@ -15,6 +16,7 @@ import { AttachTagToCourseUseCase } from './attach-tag-to-course'
 import { RepeatedTagError } from './errors/repeated-tag-error'
 import { TagAlreadyAttachedError } from './errors/tag-already-attached-error'
 
+let inMemoryEnrollmentCompletedItemsRepository: InMemoryEnrollmentCompletedItemsRepository
 let inMemoryCourseTagsRepository: InMemoryCourseTagsRepository
 let inMemoryEnrollmentsRepository: InMemoryEnrollmentsRepository
 let inMemoryStudentsRepository: InMemoryStudentsRepository
@@ -27,6 +29,7 @@ let sut: AttachTagToCourseUseCase
 
 describe('Attach tag to course use case', () => {
   beforeEach(() => {
+    inMemoryEnrollmentCompletedItemsRepository = new InMemoryEnrollmentCompletedItemsRepository()
     inMemoryCourseTagsRepository = new InMemoryCourseTagsRepository()
     inMemoryTagsRepository = new InMemoryTagsRepository()
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
@@ -36,7 +39,7 @@ describe('Attach tag to course use case', () => {
     inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
 
     inMemoryEnrollmentsRepository = new InMemoryEnrollmentsRepository(
-      inMemoryClassesRepository, inMemoryModulesRepository, inMemoryStudentsRepository
+      inMemoryStudentsRepository, inMemoryEnrollmentCompletedItemsRepository
     )
     inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository, inMemoryCourseTagsRepository)
 

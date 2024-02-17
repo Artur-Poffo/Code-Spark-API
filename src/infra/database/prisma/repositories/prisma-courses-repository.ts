@@ -96,7 +96,7 @@ export class PrismaCoursesRepository implements CoursesRepository {
       include: {
         enrollments: {
           include: {
-            user: true
+            student: true
           }
         }
       }

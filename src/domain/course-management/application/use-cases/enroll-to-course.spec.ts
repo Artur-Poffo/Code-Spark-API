@@ -4,6 +4,7 @@ import { makeStudent } from '../../../../../test/factories/make-student'
 import { InMemoryClassesRepository } from '../../../../../test/repositories/in-memory-classes-repository'
 import { InMemoryCourseTagsRepository } from '../../../../../test/repositories/in-memory-course-tags-repository'
 import { InMemoryCoursesRepository } from '../../../../../test/repositories/in-memory-courses-repository'
+import { InMemoryEnrollmentCompletedItemsRepository } from '../../../../../test/repositories/in-memory-enrollment-completed-items-repository'
 import { InMemoryEnrollmentsRepository } from '../../../../../test/repositories/in-memory-enrollments-repository'
 import { InMemoryStudentsRepository } from '../../../../../test/repositories/in-memory-students-repository'
 import { InMemoryInstructorRepository } from './../../../../../test/repositories/in-memory-instructors-repository'
@@ -11,6 +12,7 @@ import { InMemoryModulesRepository } from './../../../../../test/repositories/in
 import { EnrollToCourseUseCase } from './enroll-to-course'
 import { AlreadyEnrolledInThisCourse } from './errors/already-enrolled-in-this-course'
 
+let inMemoryEnrollmentCompletedItemsRepository: InMemoryEnrollmentCompletedItemsRepository
 let inMemoryEnrollmentsRepository: InMemoryEnrollmentsRepository
 let inMemoryCourseTagsRepository: InMemoryCourseTagsRepository
 let inMemoryClassesRepository: InMemoryClassesRepository
@@ -22,6 +24,7 @@ let sut: EnrollToCourseUseCase
 
 describe('Enroll to course use case', () => {
   beforeEach(() => {
+    inMemoryEnrollmentCompletedItemsRepository = new InMemoryEnrollmentCompletedItemsRepository()
     inMemoryClassesRepository = new InMemoryClassesRepository()
     inMemoryCourseTagsRepository = new InMemoryCourseTagsRepository()
     inMemoryInstructorsRepository = new InMemoryInstructorRepository()
@@ -30,7 +33,7 @@ describe('Enroll to course use case', () => {
     inMemoryModulesRepository = new InMemoryModulesRepository(inMemoryClassesRepository)
 
     inMemoryEnrollmentsRepository = new InMemoryEnrollmentsRepository(
-      inMemoryClassesRepository, inMemoryModulesRepository, inMemoryStudentsRepository
+      inMemoryStudentsRepository, inMemoryEnrollmentCompletedItemsRepository
     )
     inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository, inMemoryCourseTagsRepository)
 
