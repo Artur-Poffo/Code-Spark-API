@@ -1,5 +1,7 @@
 # Entra21 TCC - CodeSpark API
 
+## ⚠️ Temporary README
+
 ## Functional Requirements
 
 - [x] User must be able to register in the system as "Student" or "Instructor."
@@ -59,8 +61,7 @@
 
 - [ ] File upload/storage on Cloudflare R2.
 - [x] User's password must be encrypted.
-- [ ] Application data must be persisted in a PostgreSQL database with Docker.
-- [ ] All data listings must be paginated with 20 items per page and have an attribute of total number of items.
+- [x] Application data must be persisted in a PostgreSQL database with Docker.
 - [ ] User must be identified by JWT.
 - [ ] JWT must use the RS256 algorithm.
 
@@ -190,35 +191,40 @@
 - [ ] POST /sessions - User authentication
 
 ### Students
-- [ ] GET /students/:studentId/courses - Get student courses with instructor and evaluations
+- [ ] GET /courses/:courseId/students - Get students enrolled in course
+- [ ] GET /students/:studentId/enrollments - Get student courses with instructor and evaluations
 
 ### Instructors
+- [ ] GET /courses/:courseId/instructor - Get course instructor details
 - [ ] GET /instructors/:instructorId/courses - Get instructor courses with instructor and evaluations
 
 ### Courses
 - [ ] GET /courses/:courseId - Get course details
-- [ ] GET /courses/:courseId/instructor - Get course instructor details
-- [ ] GET /courses/:courseId/evaluation - Get course evaluation average
+- [ ] GET /courses/:courseId/enrollments/:enrollmentId/progress - Get course details with student progress
 - [ ] GET /courses/:courseId/stats - Get course statistics, like duration and number of classes
 - [ ] GET /courses/:courseId/metrics - Get course metrics for a dashboard
 - [ ] GET /courses - Get recent courses with instructor and evaluation average
 - [ ] GET /courses/filter - Filter courses by name or tags
-- [ ] GET /courses/:courseId/students - Get students enrolled in this course
-- [ ] GET /courses/:courseId/modules - Get course modules
-- [ ] GET /courses/:courseId/classes - Get course classes - make use case
 - [ ] POST /courses - Register course
-- [ ] GET /courses/:courseId/tags - Get course tags
-- [ ] POST /courses/:courseId/tags - Attach tag to course
 - [ ] PUT /courses/:courseId - Update course details
 - [ ] DELETE /courses/:courseId - Delete course
 
+### Certificate
+- [ ] POST /courses/:courseId/certificates - Add certificate to course
+- [ ] DELETE /courses/:courseId/certificates - Remove certificate from course - make use case
+
+### StudentCertificate
+- [ ] GET /enrollments/:enrollmentId/certificate - Issue student certificate
+
 ### Modules
+- [ ] GET /courses/:courseId/modules - Get course modules
 - [ ] POST /modules - Register module
 - [ ] GET /modules/:moduleId/classes - Get classes from a module
 - [ ] PUT /modules/:moduleId - Update module details
 - [ ] DELETE /modules/:moduleId - Delete module
 
 ### Classes
+- [ ] GET /courses/:courseId/classes - Get course classes - make use case
 - [ ] POST /classes - Register class
 - [ ] PUT /classes/:classId - Update class details
 - [ ] DELETE /classes/:classId - Delete class
@@ -227,7 +233,13 @@
 - [ ] GET /tags - Get recent tags
 - [ ] POST /tags - Register tag
 
+### CourseTags
+- [ ] GET /courses/:courseId/tags - Get course tags
+- [ ] POST /courses/:courseId/tags/:tagId - Attach tag to course
+- [ ] POST /courses/:courseId/tags/tag:id - Remove tag to course - make use case
+
 ### Evaluations
+- [ ] GET /courses/:courseId/evaluation - Get course evaluation average
 - [ ] POST /evaluations - Register evaluation
 - [ ] PUT /evaluations/:evaluationId - Update evaluation
 
@@ -235,6 +247,13 @@
 - [ ] POST /enrollments - Register enrollment
 - [ ] GET /enrollments/students/:studentId/courses/:courseId - Get enrollment of a student on a course
 - [ ] DELETE /enrollments/students/:studentId/courses/:courseId - Cancel enrollment
+
+### Video
+- [ ] POST /videos - Upload video
+- [ ] GET /videos/:videoId/stream - Video streaming
+
+### Image
+- [ ] POST /images - Upload image
 
 ## Potential Refactoring or Updates:
 
@@ -252,3 +271,4 @@
 - [x] Fix infinite calls to Prisma repositories in some mapper usage scenarios.
 - [x] Introduce domain events for Prisma repositories.
 - [ ] Implement mappers for mapping domain entities to DTOs.
+- [ ] Implement pagination.
