@@ -1,35 +1,32 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Video } from '@/domain/course-management/enterprise/entities/video'
-import { type FilesRepository } from '@/domain/storage/application/repositories/files-repository'
-import { type Prisma, type Video as PrismaVideo } from '@prisma/client'
+import { type Prisma } from '@prisma/client'
 
 export class VideoMapper {
-  constructor(
-    private readonly filesRepository: FilesRepository
-  ) {}
+  static toDomain(raw: Prisma.VideoGetPayload<{ include: { file: true } }>) {
+    if (!raw.file) {
+      return null
+    }
 
-  async toDomain(raw: PrismaVideo): Promise<Video | null> {
-    const video = await this.filesRepository.findByKey(raw.fileKey)
-
-    if (!video) {
+    if (raw.file.type !== 'video/mp4' && raw.file.type !== 'video/avi') {
       return null
     }
 
     return Video.create(
       {
-        videoName: video.fileName,
-        size: video.size,
-        body: video.body,
-        videoKey: video.fileKey,
-        videoType: video.fileType as 'video/mp4' | 'video/avi',
+        videoName: raw.file.name,
+        size: Number(raw.file.size),
+        body: raw.file.body,
+        videoKey: raw.fileKey,
+        videoType: raw.file.type,
         duration: Number(raw.duration),
-        storedAt: video.storedAt
+        storedAt: raw.file.storedAt
       },
       new UniqueEntityID(raw.id)
     )
   }
 
-  async toPrisma(video: Video): Promise<Prisma.VideoUncheckedCreateInput | null> {
+  static toPrisma(video: Video) {
     if (!video.videoKey) {
       return null
     }

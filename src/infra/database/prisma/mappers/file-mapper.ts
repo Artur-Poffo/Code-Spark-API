@@ -8,18 +8,12 @@ export class FileMapper {
     private readonly videosRepository: VideosRepository
   ) {}
 
-  async toDomain(raw: PrismaFile): Promise<File | null> {
-    const video = await this.videosRepository.findByVideoKey(raw.key)
-
-    if (!video) {
-      return null
-    }
-
+  static toDomain(raw: PrismaFile): File | null {
     return File.create(
       {
         fileName: raw.name,
         fileKey: raw.key,
-        body: video.body,
+        body: raw.body,
         fileType: raw.type,
         size: Number(raw.size),
         storedAt: raw.storedAt
@@ -35,6 +29,7 @@ export class FileMapper {
       id: file.id.toString(),
       name: file.fileName,
       key: file.fileKey,
+      body: file.body,
       type: file.fileType,
       size: file.size,
       storedAt: file.storedAt,

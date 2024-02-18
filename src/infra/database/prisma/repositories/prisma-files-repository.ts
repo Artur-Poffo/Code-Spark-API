@@ -1,7 +1,7 @@
 import { type FilesRepository } from '@/domain/storage/application/repositories/files-repository'
 import { type File } from '@/domain/storage/enterprise/entities/file'
 import { prisma } from '..'
-import { type FileMapper } from './../mappers/file-mapper'
+import { FileMapper } from './../mappers/file-mapper'
 
 export class PrismaFilesRepository implements FilesRepository {
   constructor(
@@ -19,7 +19,7 @@ export class PrismaFilesRepository implements FilesRepository {
       return null
     }
 
-    const domainFile = await this.fileMapper.toDomain(file)
+    const domainFile = FileMapper.toDomain(file)
 
     return domainFile
   }
@@ -35,7 +35,7 @@ export class PrismaFilesRepository implements FilesRepository {
       return null
     }
 
-    const domainFile = await this.fileMapper.toDomain(file)
+    const domainFile = FileMapper.toDomain(file)
 
     return domainFile
   }

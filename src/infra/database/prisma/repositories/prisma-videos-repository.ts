@@ -2,17 +2,16 @@ import { DomainEvents } from '@/core/events/domain-events'
 import { type VideosRepository } from '@/domain/course-management/application/repositories/videos-repository'
 import { type Video } from '@/domain/course-management/enterprise/entities/video'
 import { prisma } from '..'
-import { type VideoMapper } from '../mappers/video-mapper'
+import { VideoMapper } from './../mappers/video-mapper'
 
 export class PrismaVideosRepository implements VideosRepository {
-  constructor(
-    private readonly videoMapper: VideoMapper
-  ) {}
-
   async findById(id: string): Promise<Video | null> {
     const video = await prisma.video.findUnique({
       where: {
         id
+      },
+      include: {
+        file: true
       }
     })
 
@@ -20,7 +19,7 @@ export class PrismaVideosRepository implements VideosRepository {
       return null
     }
 
-    const domainVideo = await this.videoMapper.toDomain(video)
+    const domainVideo = VideoMapper.toDomain(video)
 
     return domainVideo
   }
@@ -29,6 +28,9 @@ export class PrismaVideosRepository implements VideosRepository {
     const video = await prisma.video.findUnique({
       where: {
         fileKey: key
+      },
+      include: {
+        file: true
       }
     })
 
@@ -36,7 +38,7 @@ export class PrismaVideosRepository implements VideosRepository {
       return null
     }
 
-    const domainVideo = await this.videoMapper.toDomain(video)
+    const domainVideo = VideoMapper.toDomain(video)
 
     return domainVideo
   }
@@ -45,6 +47,9 @@ export class PrismaVideosRepository implements VideosRepository {
     const video = await prisma.video.findUnique({
       where: {
         id: videoId
+      },
+      include: {
+        file: true
       }
     })
 
@@ -63,13 +68,13 @@ export class PrismaVideosRepository implements VideosRepository {
       }
     })
 
-    const domainVideo = await this.videoMapper.toDomain(video)
+    const domainVideo = VideoMapper.toDomain(video)
 
     return domainVideo
   }
 
   async create(video: Video): Promise<Video | null> {
-    const infraVideo = await this.videoMapper.toPrisma(video)
+    const infraVideo = VideoMapper.toPrisma(video)
 
     if (!infraVideo) {
       return null
