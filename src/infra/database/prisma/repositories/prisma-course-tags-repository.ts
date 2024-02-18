@@ -20,6 +20,23 @@ export class PrismaCourseTagsRepository implements CourseTagsRepository {
     return domainCourseTag
   }
 
+  async findByCourseIdAndTagId(courseId: string, tagId: string): Promise<CourseTag | null> {
+    const courseTag = await prisma.courseTag.findFirst({
+      where: {
+        courseId,
+        tagId
+      }
+    })
+
+    if (!courseTag) {
+      return null
+    }
+
+    const domainCourseTag = CourseTagMapper.toDomain(courseTag)
+
+    return domainCourseTag
+  }
+
   async findManyByCourseId(courseId: string): Promise<CourseTag[]> {
     const courseTags = await prisma.courseTag.findMany({
       where: {
@@ -59,5 +76,13 @@ export class PrismaCourseTagsRepository implements CourseTagsRepository {
     })
 
     return courseTag
+  }
+
+  async delete(courseTag: CourseTag): Promise<void> {
+    await prisma.courseTag.delete({
+      where: {
+        id: courseTag.id.toString()
+      }
+    })
   }
 }

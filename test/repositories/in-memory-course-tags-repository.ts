@@ -14,6 +14,22 @@ export class InMemoryCourseTagsRepository implements CourseTagsRepository {
     return courseTag
   }
 
+  async findByCourseIdAndTagId(courseId: string, tagId: string): Promise<CourseTag | null> {
+    const courseTag = this.items.find(courseTagToFind => {
+      if (courseTagToFind.courseId.toString() === courseId && courseTagToFind.tagId.toString() === tagId) {
+        return courseTagToFind
+      }
+
+      return undefined
+    })
+
+    if (!courseTag) {
+      return null
+    }
+
+    return courseTag
+  }
+
   async findManyByTagId(tagId: string): Promise<CourseTag[]> {
     return this.items.filter(courseTagToCompare => courseTagToCompare.tagId.toString() === tagId)
   }
@@ -29,5 +45,10 @@ export class InMemoryCourseTagsRepository implements CourseTagsRepository {
   async create(courseTag: CourseTag): Promise<CourseTag> {
     this.items.push(courseTag)
     return courseTag
+  }
+
+  async delete(courseTag: CourseTag): Promise<void> {
+    const courseTagIndex = this.items.indexOf(courseTag)
+    this.items.splice(courseTagIndex, 1)
   }
 }
