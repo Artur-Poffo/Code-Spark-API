@@ -28,4 +28,9 @@ export class InMemoryCertificatesRepository implements CertificatesRepository {
     this.items.push(certificate)
     return certificate
   }
+
+  async delete(certificate: Certificate): Promise<void> {
+    const certificateIndex = this.items.indexOf(certificate)
+    this.items.splice(certificateIndex, 1)
+  }
 }

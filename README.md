@@ -211,7 +211,7 @@
 
 ### Certificate
 - [ ] POST /courses/:courseId/certificates - Add certificate to course
-- [ ] DELETE /courses/:courseId/certificates - Remove certificate from course - make use case
+- [ ] DELETE /courses/:courseId/certificates - Remove certificate from course
 
 ### StudentCertificate
 - [ ] GET /enrollments/:enrollmentId/certificate - Issue student certificate
