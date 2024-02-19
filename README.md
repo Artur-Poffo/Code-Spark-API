@@ -184,7 +184,7 @@
 ### Users
 - [x] GET /users/:userId - Get user details
 - [x] POST /users - Register user
-- [ ] PUT /users/:userId - Update user
+- [x] PUT /users/:userId - Update user
 - [ ] DELETE /users/:userId - Delete user
 
 ### Sessions
@@ -273,3 +273,4 @@
 - [ ] Implement mappers for mapping domain entities to DTOs.
 - [ ] Implement pagination.
 - [ ] Implement E2E tests.
+- [ ] Implement register user validations, like: email and cpf.

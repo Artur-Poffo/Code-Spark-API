@@ -14,8 +14,8 @@
     "prisma:init": "prisma migrate deploy && prisma generate",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
-    "test:e2e": "vitest run --config ./vitest.config.e2e.ts",
-    "test:e2e:watch": "vitest --config ./vitest.config.e2e.ts",
+    "test:e2e": "vitest run --config ./vitest.config.e2e.mts",
+    "test:e2e:watch": "vitest --config ./vitest.config.e2e.mts",
     "test:cov": "vitest run --coverage",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix"
   },

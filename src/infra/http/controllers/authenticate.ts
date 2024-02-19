@@ -3,13 +3,13 @@ import { makeAuthenticateUserUseCase } from '@/infra/use-cases/factories/make-au
 import { type FastifyReply, type FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
-const authenticateBodySchema = z.object({
+const authenticateUserBodySchema = z.object({
   email: z.string().email(),
   password: z.string()
 })
 
-export async function authenticateController(request: FastifyRequest, reply: FastifyReply) {
-  const { email, password } = authenticateBodySchema.parse(request.body)
+export async function authenticateUserController(request: FastifyRequest, reply: FastifyReply) {
+  const { email, password } = authenticateUserBodySchema.parse(request.body)
 
   const authenticateUserUseCase = makeAuthenticateUserUseCase(reply)
 
