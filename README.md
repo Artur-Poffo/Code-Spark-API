@@ -183,7 +183,7 @@
 
 ### Users
 - [ ] GET /users/:userId - Get user details
-- [ ] POST /users - Register user
+- [x] POST /users - Register user
 - [ ] PUT /users/:userId - Update user
 - [ ] DELETE /users/:userId - Delete user
 
