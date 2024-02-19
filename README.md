@@ -62,8 +62,8 @@
 - [ ] File upload/storage on Cloudflare R2.
 - [x] User's password must be encrypted.
 - [x] Application data must be persisted in a PostgreSQL database with Docker.
-- [ ] User must be identified by JWT.
-- [ ] JWT must use the RS256 algorithm.
+- [x] User must be identified by JWT.
+- [x] JWT must use the RS256 algorithm.
 
 ## Initial Entities (Domain)
 
@@ -182,13 +182,13 @@
 ## Initial Routes (must have changes)
 
 ### Users
-- [ ] GET /users/:userId - Get user details
+- [x] GET /users/:userId - Get user details
 - [x] POST /users - Register user
 - [ ] PUT /users/:userId - Update user
 - [ ] DELETE /users/:userId - Delete user
 
 ### Sessions
-- [ ] POST /sessions - User authentication
+- [x] POST /sessions - User authentication
 
 ### Students
 - [ ] GET /courses/:courseId/students - Get students enrolled in course
@@ -272,3 +272,4 @@
 - [x] Introduce domain events for Prisma repositories.
 - [ ] Implement mappers for mapping domain entities to DTOs.
 - [ ] Implement pagination.
+- [ ] Implement E2E tests.

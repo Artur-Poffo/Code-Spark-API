@@ -2,6 +2,7 @@ import { left, right, type Either } from '@/core/either'
 import { WrongCredentialsError } from '@/core/errors/errors/wrong-credentials-error'
 import { type UseCase } from '@/core/use-cases/use-case'
 import { type HashComparer } from '@/domain/course-management/application/cryptography/hash-comparer'
+import { Student } from '../../enterprise/entities/student'
 import { type Encrypter } from './../cryptography/encrypter'
 import { type UsersRepository } from './../repositories/users-repository'
 
@@ -40,8 +41,11 @@ export class AuthenticateUserUseCase implements UseCase<AuthenticateUserUseCaseR
       return left(new WrongCredentialsError())
     }
 
+    const isAStudent = user instanceof Student
+
     const accessToken = await this.encrypter.encrypt({
-      sub: user.id.toString()
+      sub: user.id.toString(),
+      role: isAStudent ? 'STUDENT' : 'INSTRUCTOR'
     })
 
     return right({

@@ -34,7 +34,7 @@ beforeAll(async () => {
 
   DomainEvents.shouldRun = false
 
-  execSync('yarn prisma:init')
+  execSync('yarn prisma migrate deploy')
 })
 
 afterAll(async () => {
