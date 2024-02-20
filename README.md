@@ -205,7 +205,7 @@
 - [ ] GET /courses/:courseId/metrics - Get course metrics for a dashboard
 - [ ] GET /courses - Get recent courses with instructor and evaluation average
 - [ ] GET /courses/filter - Filter courses by name or tags
-- [ ] POST /courses - Register course
+- [x] POST /courses - Register course
 - [ ] PUT /courses/:courseId - Update course details
 - [ ] DELETE /courses/:courseId - Delete course
 
