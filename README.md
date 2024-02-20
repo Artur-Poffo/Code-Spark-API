@@ -185,7 +185,7 @@
 - [x] GET /users/:userId - Get user details
 - [x] POST /users - Register user
 - [x] PUT /users/:userId - Update user
-- [ ] DELETE /users/:userId - Delete user
+- [x] DELETE /users/:userId - Delete user
 
 ### Sessions
 - [x] POST /sessions - User authentication
