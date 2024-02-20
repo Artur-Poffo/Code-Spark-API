@@ -202,7 +202,7 @@
 - [x] GET /courses/:courseId - Get course details
 - [ ] GET /courses/:courseId/enrollments/:enrollmentId/progress - Get course details with student progress
 - [ ] GET /courses/:courseId/stats - Get course statistics, like duration and number of classes
-- [ ] GET /courses/:courseId/metrics - Get course metrics for a dashboard
+- [x] GET /courses/:courseId/metrics - Get course metrics for a dashboard
 - [ ] GET /courses - Get recent courses with instructor and evaluation average
 - [x] GET /courses/filter/name?q="" - Filter courses by name
 - [x] GET /courses/filter/tags?q="" - Filter courses by tags

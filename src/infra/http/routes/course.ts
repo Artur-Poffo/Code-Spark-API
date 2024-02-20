@@ -2,6 +2,7 @@ import { type FastifyInstance } from 'fastify'
 import { deleteCourseController } from '../controllers/delete-course'
 import { editCourseDetailsController } from '../controllers/edit-course-details'
 import { getCourseDetailsController } from '../controllers/get-course-details'
+import { getCourseMetricsController } from '../controllers/get-course-metrics'
 import { queryCoursesByNameController } from '../controllers/query-courses-by-name'
 import { queryCoursesByTagController } from '../controllers/query-courses-by-tags'
 import { registerCourseController } from '../controllers/register-course'
@@ -12,6 +13,8 @@ export async function courseRoutes(app: FastifyInstance) {
   app.get('/courses/:courseId', getCourseDetailsController)
   app.get('/courses/filter/name', queryCoursesByNameController)
   app.get('/courses/filter/tags', queryCoursesByTagController)
+
+  app.get('/courses/:courseId/metrics', { onRequest: [verifyJwt, verifyUserRole('INSTRUCTOR')] }, getCourseMetricsController)
 
   app.post('/courses', { onRequest: [verifyJwt, verifyUserRole('INSTRUCTOR')] }, registerCourseController)
 
