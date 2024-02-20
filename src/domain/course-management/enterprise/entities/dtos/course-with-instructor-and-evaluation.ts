@@ -1,8 +1,8 @@
 import { type CourseDTO } from './course'
 import { type InstructorDTO } from './instructor'
 
-export interface CourseWithInstructorAndEvaluation {
+export interface CourseWithInstructorAndEvaluationDTO {
   course: CourseDTO
   instructor: InstructorDTO
-  evaluationAverage: number
+  evaluationsAverage: number
 }

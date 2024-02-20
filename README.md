@@ -199,12 +199,13 @@
 - [ ] GET /instructors/:instructorId/courses - Get instructor courses with instructor and evaluations
 
 ### Courses
-- [ ] GET /courses/:courseId - Get course details
+- [x] GET /courses/:courseId - Get course details
 - [ ] GET /courses/:courseId/enrollments/:enrollmentId/progress - Get course details with student progress
 - [ ] GET /courses/:courseId/stats - Get course statistics, like duration and number of classes
 - [ ] GET /courses/:courseId/metrics - Get course metrics for a dashboard
 - [ ] GET /courses - Get recent courses with instructor and evaluation average
-- [ ] GET /courses/filter - Filter courses by name or tags
+- [x] GET /courses/filter/name?q="" - Filter courses by name
+- [ ] GET /courses/filter/tags?q="" - Filter courses by tags
 - [x] POST /courses - Register course
 - [ ] PUT /courses/:courseId - Update course details
 - [ ] DELETE /courses/:courseId - Delete course
@@ -271,6 +272,7 @@
 - [x] Fix infinite calls to Prisma repositories in some mapper usage scenarios.
 - [x] Introduce domain events for Prisma repositories.
 - [ ] Implement mappers for mapping domain entities to DTOs.
+- [ ] Abstract creation and instances of DTOs with factories.
 - [ ] Implement pagination.
 - [ ] Implement E2E tests.
-- [ ] Implement register user validations, like: email and cpf.
+- [ ] Implement register user validations, like: email and cpf. - Could it be a value object?
