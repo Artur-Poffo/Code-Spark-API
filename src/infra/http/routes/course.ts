@@ -1,6 +1,7 @@
 import { type FastifyInstance } from 'fastify'
 import { deleteCourseController } from '../controllers/delete-course'
 import { editCourseDetailsController } from '../controllers/edit-course-details'
+import { fetchRecentCoursesController } from '../controllers/fetch-recent-courses'
 import { getCourseDetailsController } from '../controllers/get-course-details'
 import { getCourseMetricsController } from '../controllers/get-course-metrics'
 import { getCourseStatsController } from '../controllers/get-course-stats'
@@ -11,6 +12,7 @@ import { verifyJwt } from '../middlewares/verify-jwt'
 import { verifyUserRole } from '../middlewares/verify-user-role'
 
 export async function courseRoutes(app: FastifyInstance) {
+  app.get('/courses', fetchRecentCoursesController)
   app.get('/courses/:courseId', getCourseDetailsController)
   app.get('/courses/filter/name', queryCoursesByNameController)
   app.get('/courses/filter/tags', queryCoursesByTagController)
