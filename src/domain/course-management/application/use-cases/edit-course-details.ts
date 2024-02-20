@@ -51,6 +51,8 @@ export class EditCourseDetailsUseCase implements UseCase<EditCourseDetailsUseCas
     course.coverImageKey = coverImageKey ?? course.coverImageKey
     course.bannerImageKey = bannerImageKey ?? course.bannerImageKey
 
+    await this.coursesRepository.save(course)
+
     return right({
       course
     })

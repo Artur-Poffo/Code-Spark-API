@@ -45,10 +45,12 @@ export async function editUserDetailsController(request: FastifyRequest, reply: 
     }
 
     const studentMapper = makeStudentMapper()
-    const user = await studentMapper.toPrisma(result.value.student)
+    const { student } = result.value
+
+    const infraUser = await studentMapper.toPrisma(student)
 
     return await reply.status(200).send({
-      user: UserPresenter.toHTTP(user)
+      user: UserPresenter.toHTTP(infraUser)
     })
   }
 
@@ -76,10 +78,12 @@ export async function editUserDetailsController(request: FastifyRequest, reply: 
     }
 
     const instructorMapper = makeInstructorMapper()
-    const user = await instructorMapper.toPrisma(result.value.instructor)
+    const { instructor } = result.value
+
+    const infraUser = await instructorMapper.toPrisma(instructor)
 
     return await reply.status(200).send({
-      user: UserPresenter.toHTTP(user)
+      user: UserPresenter.toHTTP(infraUser)
     })
   }
 }
