@@ -5,6 +5,7 @@ import fastify from 'fastify'
 import { readFileSync } from 'fs'
 import { ZodError } from 'zod'
 import { env } from './env'
+import { courseRoutes } from './http/routes/course'
 import { userRoutes } from './http/routes/user'
 
 export const app = fastify()
@@ -36,6 +37,7 @@ app.register(fastifyCookie)
 // API Routes
 
 app.register(userRoutes)
+app.register(courseRoutes)
 
 // Custom error handler
 

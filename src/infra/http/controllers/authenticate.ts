@@ -31,8 +31,6 @@ export async function authenticateUserController(request: FastifyRequest, reply:
 
   const { accessToken } = result.value
 
-  console.log(accessToken)
-
   return await
   reply
     .status(200)
