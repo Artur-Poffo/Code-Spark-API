@@ -1,4 +1,5 @@
 import { type FastifyInstance } from 'fastify'
+import { deleteCourseController } from '../controllers/delete-course'
 import { editCourseDetailsController } from '../controllers/edit-course-details'
 import { getCourseDetailsController } from '../controllers/get-course-details'
 import { queryCoursesByNameController } from '../controllers/query-courses-by-name'
@@ -15,4 +16,6 @@ export async function courseRoutes(app: FastifyInstance) {
   app.post('/courses', { onRequest: [verifyJwt, verifyUserRole('INSTRUCTOR')] }, registerCourseController)
 
   app.put('/courses/:courseId', { onRequest: [verifyJwt, verifyUserRole('INSTRUCTOR')] }, editCourseDetailsController)
+
+  app.delete('/courses/:courseId', { onRequest: [verifyJwt, verifyUserRole('INSTRUCTOR')] }, deleteCourseController)
 }

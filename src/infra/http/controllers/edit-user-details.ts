@@ -22,8 +22,6 @@ export async function editUserDetailsController(request: FastifyRequest, reply: 
   if (role === 'STUDENT') {
     const editStudentDetailsUseCase = makeEditStudentDetailsUseCase()
 
-    console.log(request.user)
-
     const result = await editStudentDetailsUseCase.exec({
       email,
       age,

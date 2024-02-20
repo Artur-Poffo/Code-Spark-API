@@ -207,8 +207,8 @@
 - [x] GET /courses/filter/name?q="" - Filter courses by name
 - [x] GET /courses/filter/tags?q="" - Filter courses by tags
 - [x] POST /courses - Register course
-- [ ] PUT /courses/:courseId - Update course details
-- [ ] DELETE /courses/:courseId - Delete course
+- [x] PUT /courses/:courseId - Update course details
+- [x] DELETE /courses/:courseId - Delete course
 
 ### Certificate
 - [ ] POST /courses/:courseId/certificates - Add certificate to course
