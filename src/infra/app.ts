@@ -2,10 +2,12 @@ import fastifyCookie from '@fastify/cookie'
 import fastifyCors from '@fastify/cors'
 import fastifyJwt from '@fastify/jwt'
 import fastify from 'fastify'
+import multer from 'fastify-multer'
 import { readFileSync } from 'fs'
 import { ZodError } from 'zod'
 import { env } from './env'
 import { courseRoutes } from './http/routes/course'
+import { fileRoutes } from './http/routes/file'
 import { userRoutes } from './http/routes/user'
 
 export const app = fastify()
@@ -34,10 +36,15 @@ app.register(fastifyJwt, {
 
 app.register(fastifyCookie)
 
+export const upload = multer()
+
+app.register(multer.contentParser)
+
 // API Routes
 
 app.register(userRoutes)
 app.register(courseRoutes)
+app.register(fileRoutes)
 
 // Custom error handler
 
