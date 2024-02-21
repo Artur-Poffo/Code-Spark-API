@@ -1,5 +1,5 @@
-import { makeOnImageUploaded } from '@/domain/storage/application/subscribers/factories/make-on-image-uploaded'
 import { upload } from '@/infra/app'
+import { makeOnImageUploaded } from '@/infra/events/factories/make-on-image-uploaded'
 import { type FastifyInstance } from 'fastify'
 import { uploadImageController } from '../controllers/upload-image'
 import { verifyJwt } from '../middlewares/verify-jwt'

@@ -11,13 +11,13 @@ interface MulterRequest extends FastifyRequest {
 }
 
 export async function uploadImageController(request: MulterRequest, reply: FastifyReply) {
-  const uploadImageUseCase = makeUploadImageUseCase()
-
   if (!request.file) {
     return reply.status(404).send({
       message: 'Image required'
     })
   }
+
+  const uploadImageUseCase = makeUploadImageUseCase()
 
   const result = await uploadImageUseCase.exec({
     body: request.file.buffer,

@@ -9,6 +9,7 @@ import { env } from './env'
 import { courseRoutes } from './http/routes/course'
 import { imageRoutes } from './http/routes/image'
 import { userRoutes } from './http/routes/user'
+import { videoRoutes } from './http/routes/video'
 
 export const app = fastify()
 
@@ -45,6 +46,7 @@ app.register(multer.contentParser)
 app.register(userRoutes)
 app.register(courseRoutes)
 app.register(imageRoutes)
+app.register(videoRoutes)
 
 // Custom error handler
 

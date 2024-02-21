@@ -254,7 +254,7 @@
 - [ ] GET /videos/:videoId/stream - Video streaming
 
 ### Image
-- [ ] POST /images - Upload image
+- [x] POST /images - Upload image
 
 ## Potential Refactoring or Updates:
 
