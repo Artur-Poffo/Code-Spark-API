@@ -276,3 +276,5 @@
 - [ ] Implement pagination.
 - [ ] Implement E2E tests.
 - [ ] Implement register user validations, like: email and cpf. - Could it be a value object?
+- [ ] Refactor error handling in controllers
+- [ ] Refactor the event handler class instance

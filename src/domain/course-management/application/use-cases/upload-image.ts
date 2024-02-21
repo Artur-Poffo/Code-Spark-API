@@ -5,7 +5,7 @@ import { type ImagesRepository } from './../repositories/images-repository'
 
 interface UploadImageUseCaseRequest {
   imageName: string
-  imageType?: 'image/jpeg' | 'image/png'
+  imageType: 'image/jpeg' | 'image/png'
   body: Buffer
   size: number
 }

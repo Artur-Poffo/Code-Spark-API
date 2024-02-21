@@ -7,7 +7,7 @@ import { readFileSync } from 'fs'
 import { ZodError } from 'zod'
 import { env } from './env'
 import { courseRoutes } from './http/routes/course'
-import { fileRoutes } from './http/routes/file'
+import { imageRoutes } from './http/routes/image'
 import { userRoutes } from './http/routes/user'
 
 export const app = fastify()
@@ -44,7 +44,7 @@ app.register(multer.contentParser)
 
 app.register(userRoutes)
 app.register(courseRoutes)
-app.register(fileRoutes)
+app.register(imageRoutes)
 
 // Custom error handler
 
