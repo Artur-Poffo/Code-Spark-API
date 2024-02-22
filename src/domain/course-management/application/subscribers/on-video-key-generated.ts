@@ -18,8 +18,6 @@ export class OnVideoKeyGenerated implements EventHandler {
   }
 
   private async appendVideoKey({ file, video }: VideoKeyGeneratedEvent) {
-    console.log('dwadwa')
-
     await this.videosRepository.appendVideoKey(file.fileKey, video.id.toString())
   }
 }

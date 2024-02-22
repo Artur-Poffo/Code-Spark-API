@@ -18,8 +18,6 @@ export class OnImageKeyGenerated implements EventHandler {
   }
 
   private async appendImageKey({ file, image }: ImageKeyGeneratedEvent) {
-    console.log('dwadwa')
-
     await this.imagesRepository.appendImageKey(file.fileKey, image.id.toString())
   }
 }

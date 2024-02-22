@@ -59,7 +59,7 @@
 
 ## Non-Functional Requirements
 
-- [ ] File upload/storage on Cloudflare R2.
+- [x] File upload/storage on Cloudflare R2.
 - [x] User's password must be encrypted.
 - [x] Application data must be persisted in a PostgreSQL database with Docker.
 - [x] User must be identified by JWT.
@@ -219,7 +219,7 @@
 
 ### Modules
 - [ ] GET /courses/:courseId/modules - Get course modules
-- [ ] POST /modules - Register module
+- [x] POST /modules - Register module
 - [ ] GET /modules/:moduleId/classes - Get classes from a module
 - [ ] PUT /modules/:moduleId - Update module details
 - [ ] DELETE /modules/:moduleId - Delete module
