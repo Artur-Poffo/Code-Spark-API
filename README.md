@@ -218,7 +218,7 @@
 - [ ] GET /enrollments/:enrollmentId/certificate - Issue student certificate
 
 ### Modules
-- [ ] GET /courses/:courseId/modules - Get course modules
+- [x] GET /courses/:courseId/modules - Get course modules
 - [x] POST /modules - Register module
 - [ ] GET /modules/:moduleId/classes - Get classes from a module
 - [ ] PUT /modules/:moduleId - Update module details

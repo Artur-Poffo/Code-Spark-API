@@ -37,7 +37,9 @@ export async function registerModuleToCourseController(request: FastifyRequest, 
     switch (error.constructor) {
       case ResourceNotFoundError:
         return await reply.status(404).send({ message: error.message })
-      case ModuleAlreadyExistsInThisCourseError || ModuleNumberIsAlreadyInUseError:
+      case ModuleAlreadyExistsInThisCourseError:
+        return await reply.status(409).send({ message: error.message })
+      case ModuleNumberIsAlreadyInUseError:
         return await reply.status(409).send({ message: error.message })
       case NotAllowedError:
         return await reply.status(401).send({ message: error.message })
