@@ -226,8 +226,8 @@
 
 ### Classes
 - [x] GET /courses/:courseId/classes - Get course classes
-- [ ] POST /modules/:moduleId/classes/video/:videoId - Register class
-- [ ] PUT /classes/:classId - Update class details
+- [x] POST /modules/:moduleId/classes/video/:videoId - Register class
+- [x] PUT /classes/:classId - Update class details
 - [ ] DELETE /classes/:classId - Delete class
 
 ### Tags
