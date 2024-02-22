@@ -40,6 +40,6 @@ export async function fetchCourseModulesController(request: FastifyRequest, repl
   )
 
   return await reply.status(200).send({
-    courses: infraModules.map(infraModule => ModulePresenter.toHTTP(infraModule))
+    modules: infraModules.map(infraModule => ModulePresenter.toHTTP(infraModule))
   })
 }

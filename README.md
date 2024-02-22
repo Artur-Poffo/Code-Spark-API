@@ -225,7 +225,7 @@
 - [ ] DELETE /modules/:moduleId - Delete module
 
 ### Classes
-- [ ] GET /courses/:courseId/classes - Get course classes
+- [x] GET /courses/:courseId/classes - Get course classes
 - [ ] POST /classes - Register class
 - [ ] PUT /classes/:classId - Update class details
 - [ ] DELETE /classes/:classId - Delete class
