@@ -228,7 +228,7 @@
 - [x] GET /courses/:courseId/classes - Get course classes
 - [x] POST /modules/:moduleId/classes/video/:videoId - Register class
 - [x] PUT /classes/:classId - Update class details
-- [ ] DELETE /classes/:classId - Delete class
+- [x] DELETE /classes/:classId - Delete class
 
 ### Tags
 - [ ] GET /tags - Get recent tags
