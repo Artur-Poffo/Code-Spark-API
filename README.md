@@ -222,11 +222,11 @@
 - [x] POST /modules - Register module
 - [x] GET /modules/:moduleId/classes - Get classes from a module
 - [x] PUT /modules/:moduleId - Update module details
-- [ ] DELETE /modules/:moduleId - Delete module
+- [x] DELETE /modules/:moduleId - Delete module
 
 ### Classes
 - [x] GET /courses/:courseId/classes - Get course classes
-- [ ] POST /classes - Register class
+- [ ] POST /modules/:moduleId/classes/video/:videoId - Register class
 - [ ] PUT /classes/:classId - Update class details
 - [ ] DELETE /classes/:classId - Delete class
 
