@@ -231,8 +231,8 @@
 - [x] DELETE /classes/:classId - Delete class
 
 ### Tags
-- [ ] GET /tags - Get recent tags
-- [ ] POST /tags - Register tag
+- [x] GET /tags - Get recent tags
+- [x] POST /tags - Register tag
 
 ### CourseTags
 - [ ] GET /courses/:courseId/tags - Get course tags
