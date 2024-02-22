@@ -10,6 +10,7 @@ import { classRoutes } from './http/routes/class'
 import { courseRoutes } from './http/routes/course'
 import { imageRoutes } from './http/routes/image'
 import { moduleRoutes } from './http/routes/module'
+import { tagRoutes } from './http/routes/tag'
 import { userRoutes } from './http/routes/user'
 import { videoRoutes } from './http/routes/video'
 
@@ -51,6 +52,7 @@ app.register(imageRoutes)
 app.register(videoRoutes)
 app.register(moduleRoutes)
 app.register(classRoutes)
+app.register(tagRoutes)
 
 // Custom error handler
 
