@@ -236,7 +236,7 @@
 
 ### CourseTags
 - [ ] GET /courses/:courseId/tags - Get course tags
-- [ ] POST /courses/:courseId/tags/:tagId - Attach tag to course
+- [x] POST /courses/:courseId/tags/:tagId - Attach tag to course
 - [ ] POST /courses/:courseId/tags/tag:id - Remove tag to course
 
 ### Evaluations

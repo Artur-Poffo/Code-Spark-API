@@ -8,6 +8,7 @@ import { ZodError } from 'zod'
 import { env } from './env'
 import { classRoutes } from './http/routes/class'
 import { courseRoutes } from './http/routes/course'
+import { courseTagRoutes } from './http/routes/course-tag'
 import { imageRoutes } from './http/routes/image'
 import { moduleRoutes } from './http/routes/module'
 import { tagRoutes } from './http/routes/tag'
@@ -53,6 +54,7 @@ app.register(videoRoutes)
 app.register(moduleRoutes)
 app.register(classRoutes)
 app.register(tagRoutes)
+app.register(courseTagRoutes)
 
 // Custom error handler
 

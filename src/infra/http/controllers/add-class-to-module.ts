@@ -3,11 +3,9 @@ import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-e
 import { ClassAlreadyExistsInThisModuleError } from '@/domain/course-management/application/use-cases/errors/class-already-exists-in-this-module-error'
 import { ClassNumberIsAlreadyInUseError } from '@/domain/course-management/application/use-cases/errors/class-number-is-already-in-use-error'
 import { ClassVideoRequiredError } from '@/domain/course-management/application/use-cases/errors/class-video-required-error'
-import { makeClassMapper } from '@/infra/database/prisma/mappers/factories/make-class-mapper'
 import { makeAddClassToModuleUseCase } from '@/infra/use-cases/factories/make-add-class-to-module-use-case'
 import { type FastifyReply, type FastifyRequest } from 'fastify'
 import { z } from 'zod'
-import { ClassPresenter } from '../presenters/class-presenter'
 
 const addClassToModuleBodySchema = z.object({
   name: z.string(),
@@ -56,12 +54,5 @@ export async function addClassToModuleController(request: FastifyRequest, reply:
     }
   }
 
-  const classMapper = makeClassMapper()
-  const { class: classToReply } = result.value
-
-  const infraClass = await classMapper.toPrisma(classToReply)
-
-  return await reply.status(200).send({
-    Class: ClassPresenter.toHTTP(infraClass)
-  })
+  return await reply.status(201).send()
 }
