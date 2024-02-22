@@ -250,7 +250,7 @@
 - [ ] DELETE /enrollments/students/:studentId/courses/:courseId - Cancel enrollment
 
 ### Video
-- [ ] POST /videos - Upload video
+- [x] POST /videos - Upload video
 - [ ] GET /videos/:videoId/stream - Video streaming
 
 ### Image

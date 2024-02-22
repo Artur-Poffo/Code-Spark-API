@@ -60,11 +60,7 @@ export class PrismaVideosRepository implements VideosRepository {
     await prisma.video.update({
       where: { id: videoId },
       data: {
-        file: {
-          update: {
-            key: videoKey
-          }
-        }
+        fileKey: videoKey
       }
     })
 
@@ -74,6 +70,9 @@ export class PrismaVideosRepository implements VideosRepository {
   }
 
   async create(video: Video): Promise<Video | null> {
+    // FIXME: Method returning null and not persisting video but uploading
+    DomainEvents.dispatchEventsForAggregate(video.id)
+
     const infraVideo = VideoMapper.toPrisma(video)
 
     if (!infraVideo) {
@@ -83,8 +82,6 @@ export class PrismaVideosRepository implements VideosRepository {
     await prisma.video.create({
       data: infraVideo
     })
-
-    DomainEvents.dispatchEventsForAggregate(video.id)
 
     return video
   }

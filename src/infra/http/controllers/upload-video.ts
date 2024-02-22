@@ -1,3 +1,4 @@
+import { GetVideoDuration } from '@/infra/storage/utils/get-video-duration'
 import { makeUploadVideoUseCase } from '@/infra/use-cases/factories/make-upload-video-use-case'
 import { type FastifyReply, type FastifyRequest } from 'fastify'
 
@@ -12,10 +13,12 @@ interface MulterRequest extends FastifyRequest {
 
 export async function uploadVideoController(request: MulterRequest, reply: FastifyReply) {
   if (!request.file) {
-    return reply.status(404).send({
+    return await reply.status(404).send({
       message: 'Video required'
     })
   }
+
+  const videoDuration = await new GetVideoDuration().getInSecondsByBuffer(request.file.buffer)
 
   const uploadVideoUseCase = makeUploadVideoUseCase()
 
@@ -24,14 +27,12 @@ export async function uploadVideoController(request: MulterRequest, reply: Fasti
     videoName: request.file.originalname,
     videoType: request.file.mimetype as 'video/mp4' | 'video/avi',
     size: request.file.size,
-    duration: 24
+    duration: videoDuration
   })
 
   if (result.isLeft()) {
-    return reply.status(500).send()
+    return await reply.status(500).send()
   }
 
-  reply.status(201).send({
-    video: result.value.video
-  })
+  return await reply.status(201).send()
 }

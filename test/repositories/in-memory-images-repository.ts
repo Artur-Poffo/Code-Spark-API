@@ -34,6 +34,9 @@ export class InMemoryImagesRepository implements ImagesRepository {
 
     if (!imageToAppendKey.imageKey) {
       imageToAppendKey.imageKey = imageKey
+      const imageIndex = this.items.indexOf(imageToAppendKey)
+
+      this.items[imageIndex] = imageToAppendKey
     }
 
     return imageToAppendKey

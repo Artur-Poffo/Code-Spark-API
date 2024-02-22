@@ -1,5 +1,9 @@
 import { AggregateRoot } from '@/core/entities/aggregate-root'
 import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { type Image } from '@/domain/course-management/enterprise/entities/image'
+import { type Video } from '@/domain/course-management/enterprise/entities/video'
+import { ImageKeyGeneratedEvent } from '../events/image-key-generated'
+import { VideoKeyGeneratedEvent } from '../events/video-key-generated'
 
 export interface FileProps {
   fileName: string
@@ -33,6 +37,14 @@ export class File extends AggregateRoot<FileProps> {
 
   get storedAt() {
     return this.props.storedAt
+  }
+
+  addImageDomainEvent(file: File, image: Image) {
+    file.addDomainEvent(new ImageKeyGeneratedEvent(file, image))
+  }
+
+  addVideoDomainEvent(file: File, video: Video) {
+    file.addDomainEvent(new VideoKeyGeneratedEvent(file, video))
   }
 
   static create(

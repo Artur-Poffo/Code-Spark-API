@@ -34,6 +34,9 @@ export class InMemoryVideosRepository implements VideosRepository {
 
     if (!videoToAppendKey.videoKey) {
       videoToAppendKey.videoKey = videoKey
+      const videoIndex = this.items.indexOf(videoToAppendKey)
+
+      this.items[videoIndex] = videoToAppendKey
     }
 
     return videoToAppendKey

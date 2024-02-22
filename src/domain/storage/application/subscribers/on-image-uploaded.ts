@@ -1,13 +1,11 @@
 import { DomainEvents } from '@/core/events/domain-events'
 import { type EventHandler } from '@/core/events/event-handler'
-import { type ImagesRepository } from '@/domain/course-management/application/repositories/images-repository'
 import { ImageUploadedEvent } from '@/domain/course-management/enterprise/events/image-uploaded'
 import { type UploadFileUseCase } from '../use-cases/upload-file'
 
 export class OnImageUploaded implements EventHandler {
   constructor(
-    private readonly uploadFileUseCase: UploadFileUseCase,
-    private readonly imagesRepository: ImagesRepository
+    private readonly uploadFileUseCase: UploadFileUseCase
   ) {
     this.setupSubscriptions()
   }
@@ -29,9 +27,10 @@ export class OnImageUploaded implements EventHandler {
     })
 
     if (result.isRight()) {
-      const { fileKey } = result.value.file
+      const { file } = result.value
+      file.addImageDomainEvent(file, image)
 
-      await this.imagesRepository.appendImageKey(fileKey, image.id.toString())
+      DomainEvents.dispatchEventsForAggregate(file.id)
     }
   }
 }

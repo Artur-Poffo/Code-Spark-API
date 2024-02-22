@@ -1,13 +1,11 @@
 import { DomainEvents } from '@/core/events/domain-events'
 import { type EventHandler } from '@/core/events/event-handler'
-import { type VideosRepository } from '@/domain/course-management/application/repositories/videos-repository'
 import { VideoUploadedEvent } from '@/domain/course-management/enterprise/events/video-uploaded'
 import { type UploadFileUseCase } from '../use-cases/upload-file'
 
 export class OnVideoUploaded implements EventHandler {
   constructor(
-    private readonly uploadFileUseCase: UploadFileUseCase,
-    private readonly videosRepository: VideosRepository
+    private readonly uploadFileUseCase: UploadFileUseCase
   ) {
     this.setupSubscriptions()
   }
@@ -29,9 +27,10 @@ export class OnVideoUploaded implements EventHandler {
     })
 
     if (result.isRight()) {
-      const { fileKey } = result.value.file
+      const { file } = result.value
+      file.addVideoDomainEvent(file, video)
 
-      await this.videosRepository.appendVideoKey(fileKey, video.id.toString())
+      DomainEvents.dispatchEventsForAggregate(file.id)
     }
   }
 }

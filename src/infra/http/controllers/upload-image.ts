@@ -12,7 +12,7 @@ interface MulterRequest extends FastifyRequest {
 
 export async function uploadImageController(request: MulterRequest, reply: FastifyReply) {
   if (!request.file) {
-    return reply.status(404).send({
+    return await reply.status(404).send({
       message: 'Image required'
     })
   }
@@ -27,10 +27,8 @@ export async function uploadImageController(request: MulterRequest, reply: Fasti
   })
 
   if (result.isLeft()) {
-    return reply.status(500).send()
+    return await reply.status(500).send()
   }
 
-  reply.status(201).send({
-    image: result.value.image
-  })
+  return await reply.status(201).send()
 }

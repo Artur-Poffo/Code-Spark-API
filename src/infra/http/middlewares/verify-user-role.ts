@@ -5,7 +5,7 @@ export function verifyUserRole(roleToVerify: 'STUDENT' | 'INSTRUCTOR') {
     const { role } = request.user
 
     if (role !== roleToVerify) {
-      return reply.status(401).send({ message: 'Unauthorized' })
+      return await reply.status(401).send({ message: 'Unauthorized' })
     }
   }
 }
