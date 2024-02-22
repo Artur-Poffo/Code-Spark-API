@@ -30,7 +30,7 @@ export class VideoMapper {
     return {
       id: video.id.toString(),
       duration: video.duration,
-      fileKey: video.videoKey ?? ''
+      fileKey: video.videoKey
     }
   }
 }

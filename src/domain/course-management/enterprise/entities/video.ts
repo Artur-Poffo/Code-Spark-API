@@ -9,7 +9,7 @@ export interface VideoProps {
   body: Buffer
   duration: number
   size: number
-  videoKey?: string
+  videoKey?: string | null
   storedAt: Date
 }
 

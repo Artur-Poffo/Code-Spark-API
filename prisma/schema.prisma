@@ -190,7 +190,7 @@ model Video {
 
   classes Class[]
 
-  fileKey String @unique() @map("file_key")
+  fileKey String? @unique() @map("file_key")
 
   @@map("videos")
 }

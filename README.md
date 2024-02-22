@@ -237,7 +237,7 @@
 ### CourseTags
 - [ ] GET /courses/:courseId/tags - Get course tags
 - [x] POST /courses/:courseId/tags/:tagId - Attach tag to course
-- [ ] POST /courses/:courseId/tags/tag:id - Remove tag to course
+- [x] POST /courses/:courseId/tags/:tagId - Remove tag to course
 
 ### Evaluations
 - [ ] GET /courses/:courseId/evaluation - Get course evaluation average
@@ -251,7 +251,6 @@
 
 ### Video
 - [x] POST /videos - Upload video
-- [ ] GET /videos/:videoId/stream - Video streaming
 
 ### Image
 - [x] POST /images - Upload image
@@ -272,7 +271,6 @@
 - [x] Fix infinite calls to Prisma repositories in some mapper usage scenarios.
 - [x] Introduce domain events for Prisma repositories.
 - [ ] Implement mappers for mapping domain entities to DTOs.
-- [ ] Abstract creation and instances of DTOs with factories.
 - [ ] Implement pagination.
 - [ ] Implement E2E tests.
 - [ ] Implement register user validations, like: email and cpf. - Could it be a value object?
