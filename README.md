@@ -220,8 +220,8 @@
 ### Modules
 - [x] GET /courses/:courseId/modules - Get course modules
 - [x] POST /modules - Register module
-- [ ] GET /modules/:moduleId/classes - Get classes from a module
-- [ ] PUT /modules/:moduleId - Update module details
+- [x] GET /modules/:moduleId/classes - Get classes from a module
+- [x] PUT /modules/:moduleId - Update module details
 - [ ] DELETE /modules/:moduleId - Delete module
 
 ### Classes
