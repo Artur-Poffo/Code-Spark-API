@@ -1,4 +1,5 @@
 import { OnFileUploaded } from '@/domain/course-management/application/subscribers/on-file-uploaded'
+import { GetVideoDuration } from '@/infra/storage/utils/get-video-duration'
 import { InMemoryVideosRepository } from '../../../../../test/repositories/in-memory-videos-repository'
 import { waitFor } from '../../../../../test/utils/wait-for'
 import { InMemoryFilesRepository } from './../../../../../test/repositories/in-memory-files-repository'
@@ -10,6 +11,7 @@ let inMemoryFilesRepository: InMemoryFilesRepository
 let inMemoryImagesRepository: InMemoryImagesRepository
 let inMemoryVideosRepository: InMemoryVideosRepository
 let fakeUploader: FakeUploader
+let getVideoDuration: GetVideoDuration
 let uploadFileUseCase: UploadFileUseCase
 
 describe('On file uploaded event', () => {
@@ -18,6 +20,7 @@ describe('On file uploaded event', () => {
     inMemoryImagesRepository = new InMemoryImagesRepository()
     inMemoryVideosRepository = new InMemoryVideosRepository()
     fakeUploader = new FakeUploader()
+    getVideoDuration = new GetVideoDuration()
     uploadFileUseCase = new UploadFileUseCase(
       inMemoryFilesRepository,
       fakeUploader
@@ -25,7 +28,8 @@ describe('On file uploaded event', () => {
 
     new OnFileUploaded(
       inMemoryImagesRepository,
-      inMemoryVideosRepository
+      inMemoryVideosRepository,
+      getVideoDuration
     )
   })
 

@@ -5,11 +5,13 @@ import { Image } from '../../enterprise/entities/image'
 import { Video } from '../../enterprise/entities/video'
 import { type ImagesRepository } from '../repositories/images-repository'
 import { type VideosRepository } from '../repositories/videos-repository'
+import { type GetVideoDuration } from './../../../../infra/storage/utils/get-video-duration'
 
 export class OnFileUploaded implements EventHandler {
   constructor(
     private readonly imagesRepository: ImagesRepository,
-    private readonly videosRepository: VideosRepository
+    private readonly videosRepository: VideosRepository,
+    private readonly getVideoDuration: GetVideoDuration
   ) {
     this.setupSubscriptions()
   }
@@ -34,13 +36,15 @@ export class OnFileUploaded implements EventHandler {
 
       await this.imagesRepository.create(image)
     } else if (/video\/(mp4|avi)/.test(file.fileType)) {
+      const duration = await this.getVideoDuration.getInSecondsByBuffer(file.body)
+
       const video = Video.create({
         body: file.body,
         videoName: file.fileName,
         size: file.size,
         videoKey: file.fileKey,
         videoType: file.fileType as 'video/mp4' | 'video/avi',
-        duration: 24,
+        duration: Math.round(duration),
         storedAt: file.storedAt
       })
 

@@ -196,7 +196,7 @@
 
 ### Instructors
 - [x] GET /courses/:courseId/instructors - Get course instructor details
-- [ ] GET /instructors/:instructorId/courses - Get instructor courses with instructor and evaluations
+- [x] GET /instructors/:instructorId/courses - Get instructor courses with instructor and evaluations
 
 ### Courses
 - [x] GET /courses/:courseId - Get course details

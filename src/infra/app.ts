@@ -14,6 +14,7 @@ import { enrollmentRoutes } from './http/routes/enrollment'
 import { evaluationRoutes } from './http/routes/evaluation'
 import { fileRoutes } from './http/routes/file'
 import { imageRoutes } from './http/routes/image'
+import { instructorRoutes } from './http/routes/instructor'
 import { moduleRoutes } from './http/routes/module'
 import { studentRoutes } from './http/routes/student'
 import { studentCertificateRoutes } from './http/routes/student-certificate'
@@ -48,13 +49,13 @@ app.register(fastifyJwt, {
 app.register(fastifyCookie)
 
 export const upload = multer()
-
 app.register(multer.contentParser)
 
 // API Routes
 
 app.register(userRoutes)
 app.register(studentRoutes)
+app.register(instructorRoutes)
 app.register(courseRoutes)
 app.register(fileRoutes)
 app.register(imageRoutes)
