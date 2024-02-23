@@ -211,7 +211,7 @@
 - [x] DELETE /courses/:courseId - Delete course
 
 ### Certificate
-- [ ] POST /courses/:courseId/certificates - Add certificate to course
+- [x] POST /courses/:courseId/certificates - Add certificate to course
 - [ ] DELETE /courses/:courseId/certificates - Remove certificate from course
 
 ### StudentCertificate

@@ -6,6 +6,7 @@ import multer from 'fastify-multer'
 import { readFileSync } from 'fs'
 import { ZodError } from 'zod'
 import { env } from './env'
+import { certificateRoutes } from './http/routes/certificate'
 import { classRoutes } from './http/routes/class'
 import { courseRoutes } from './http/routes/course'
 import { courseTagRoutes } from './http/routes/course-tag'
@@ -59,6 +60,7 @@ app.register(tagRoutes)
 app.register(courseTagRoutes)
 app.register(evaluationRoutes)
 app.register(enrollmentRoutes)
+app.register(certificateRoutes)
 
 // Custom error handler
 
