@@ -240,12 +240,12 @@
 - [x] POST /courses/:courseId/tags/:tagId - Remove tag to course
 
 ### Evaluations
-- [x] GET /courses/:courseId/evaluation - Get course evaluation average
+- [x] GET /courses/:courseId/evaluations/average - Get course evaluation average
 - [x] POST /evaluations - Register evaluation
 - [x] PUT /evaluations/:evaluationId - Update evaluation
 
 ### Enrollments
-- [ ] POST /enrollments - Register enrollment
+- [ ] POST /courses/:courseId/enroll - Enroll to course
 - [ ] GET /enrollments/students/:studentId/courses/:courseId - Get enrollment of a student on a course
 - [ ] DELETE /enrollments/students/:studentId/courses/:courseId - Cancel enrollment
 
