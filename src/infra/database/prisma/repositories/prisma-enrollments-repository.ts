@@ -3,7 +3,7 @@ import { type Enrollment } from '@/domain/course-management/enterprise/entities/
 import { type Student } from '@/domain/course-management/enterprise/entities/student'
 import { prisma } from '..'
 import { StudentMapper } from '../mappers/student-mapper'
-import { type EnrollmentMapper } from './../mappers/enrollment-mapeer'
+import { type EnrollmentMapper } from './../mappers/enrollment-mapper'
 
 export class PrismaEnrollmentsRepository implements EnrollmentsRepository {
   constructor(

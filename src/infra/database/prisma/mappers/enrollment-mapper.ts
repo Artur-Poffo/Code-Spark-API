@@ -24,7 +24,7 @@ export class EnrollmentMapper {
     )
   }
 
-  async toPrisma(enrollment: Enrollment): Promise<Prisma.EnrollmentUncheckedCreateInput | null> {
+  async toPrisma(enrollment: Enrollment): Promise<Prisma.EnrollmentUncheckedCreateInput> {
     const completedItemIds = [...enrollment.completedItems]
 
     return {

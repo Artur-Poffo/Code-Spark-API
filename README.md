@@ -38,7 +38,7 @@
 - [x] CRUDs for all main entities: course, module, class, user, etc.
 
 - [ ] Return information about a course with student progress in your modules and classes.
-- [ ] Video streaming to watch the classes.
+- [x] Video streaming to watch the classes.
 
 ## Business Rules
 
@@ -245,9 +245,9 @@
 - [x] PUT /evaluations/:evaluationId - Update evaluation
 
 ### Enrollments
-- [ ] POST /courses/:courseId/enroll - Enroll to course
-- [ ] GET /enrollments/students/:studentId/courses/:courseId - Get enrollment of a student on a course
-- [ ] DELETE /enrollments/students/:studentId/courses/:courseId - Cancel enrollment
+- [x] POST /courses/:courseId/enroll - Enroll to course
+- [x] GET /courses/:courseId/students/:studentId/enrollments - Get enrollment of a student on a course
+- [x] DELETE /enrollments/:enrollmentId - Cancel enrollment
 
 ### Video
 - [x] POST /videos - Upload video
