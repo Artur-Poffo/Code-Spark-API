@@ -251,7 +251,7 @@
 
 ### Video
 - [x] POST /videos - Upload video
-- [ ] GET /videos/:videoId - Get video details
+- [x] GET /videos/:videoId - Get video details
 
 ### Image
 - [x] POST /images - Upload image
