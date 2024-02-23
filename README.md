@@ -248,7 +248,7 @@
 - [x] POST /courses/:courseId/enroll - Enroll to course
 - [x] POST /enrollments/:enrollmentId/modules/:moduleId/complete - Mark module as completed
 - [x] POST /enrollments/:enrollmentId/classes/:classId/complete - Mark class as completed
-- [ ] POST /enrollments/:enrollmentId/complete - Mark enrollment as completed
+- [x] POST /enrollments/:enrollmentId/complete - Mark enrollment as completed
 - [x] GET /courses/:courseId/students/:studentId/enrollments - Get enrollment of a student on a course
 - [x] DELETE /enrollments/:enrollmentId - Cancel enrollment
 
