@@ -240,7 +240,7 @@
 - [x] POST /courses/:courseId/tags/:tagId - Remove tag to course
 
 ### Evaluations
-- [ ] GET /courses/:courseId/evaluation - Get course evaluation average
+- [x] GET /courses/:courseId/evaluation - Get course evaluation average
 - [x] POST /evaluations - Register evaluation
 - [ ] PUT /evaluations/:evaluationId - Update evaluation
 
