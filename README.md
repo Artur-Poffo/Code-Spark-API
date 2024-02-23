@@ -255,7 +255,7 @@
 
 ### Image
 - [x] POST /images - Upload image
-- [ ] GET /images/:imageId - Get image details
+- [x] GET /images/:imageId - Get image details
 
 ## Potential Refactoring or Updates:
 
