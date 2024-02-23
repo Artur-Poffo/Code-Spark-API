@@ -7,7 +7,6 @@ export interface EnrollmentsRepository {
   findManyByCourseId: (courseId: string) => Promise<Enrollment[]>
   findManyByStudentId: (studentId: string) => Promise<Enrollment[]>
   findManyStudentsByCourseId: (courseId: string) => Promise<Student[]>
-  markItemAsCompleted: (completedItemId: string, enrollment: Enrollment) => Promise<Enrollment | null>
   markAsCompleted: (enrollment: Enrollment) => Promise<Enrollment | null>
   countEnrollmentsByYear: (year: number) => Promise<number>
   create: (enrollment: Enrollment) => Promise<Enrollment | null>

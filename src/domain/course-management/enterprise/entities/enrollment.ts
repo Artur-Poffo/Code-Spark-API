@@ -5,7 +5,6 @@ import { type Optional } from '@/core/types/optional'
 export interface EnrollmentProps {
   studentId: UniqueEntityID
   courseId: UniqueEntityID
-  completedItems: UniqueEntityID[] // References for enrollment-completed-item entity
   ocurredAt: Date
   completedAt?: Date | null
 }
@@ -17,10 +16,6 @@ export class Enrollment extends Entity<EnrollmentProps> {
 
   get courseId() {
     return this.props.courseId
-  }
-
-  get completedItems() {
-    return this.props.completedItems
   }
 
   get ocurredAt() {
@@ -36,15 +31,14 @@ export class Enrollment extends Entity<EnrollmentProps> {
   }
 
   static create(
-    props: Optional<EnrollmentProps, 'ocurredAt' | 'completedAt' | 'completedItems'>,
+    props: Optional<EnrollmentProps, 'ocurredAt' | 'completedAt'>,
     id?: UniqueEntityID
   ) {
     const enrollment = new Enrollment(
       {
         ...props,
         ocurredAt: props.ocurredAt ?? new Date(),
-        completedAt: null,
-        completedItems: []
+        completedAt: null
       },
       id
     )

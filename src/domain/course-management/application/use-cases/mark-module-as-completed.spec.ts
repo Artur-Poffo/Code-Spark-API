@@ -76,8 +76,6 @@ describe('Mark module as completed use case', () => {
     const completedItem = makeEnrollmentCompletedItem({ enrollmentId: enrollment.id, itemId: classToAdd.id, type: 'CLASS' })
     await inMemoryEnrollmentCompletedItemsRepository.create(completedItem)
 
-    await inMemoryEnrollmentsRepository.markItemAsCompleted(completedItem.id.toString(), enrollment)
-
     const result = await sut.exec({
       enrollmentId: enrollment.id.toString(),
       moduleId: module.id.toString(),
@@ -146,8 +144,6 @@ describe('Mark module as completed use case', () => {
 
     const completedItem = makeEnrollmentCompletedItem({ enrollmentId: enrollment.id, itemId: classToAdd.id, type: 'CLASS' })
     await inMemoryEnrollmentCompletedItemsRepository.create(completedItem)
-
-    await inMemoryEnrollmentsRepository.markItemAsCompleted(completedItem.id.toString(), enrollment)
 
     const result = await sut.exec({
       enrollmentId: enrollment.id.toString(),

@@ -77,8 +77,6 @@ export class MarkClassAsCompletedUseCase implements UseCase<MarkClassAsCompleted
     })
     await this.enrollmentCompletedItemsRepository.create(completedItem)
 
-    await this.enrollmentsRepository.markItemAsCompleted(completedItem.id.toString(), enrollment)
-
     return right({
       class: classToMarkAsCompleted
     })

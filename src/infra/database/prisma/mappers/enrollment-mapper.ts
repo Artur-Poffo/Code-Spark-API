@@ -9,23 +9,19 @@ export class EnrollmentMapper {
   ) {}
 
   async toDomain(raw: PrismaEnrollment): Promise<Enrollment | null> {
-    const completedItems = await this.enrollmentCompletedItemsRepository.findAllByEnrollmentId(raw.id)
-    const completedItemIds = completedItems.map(completedItem => completedItem.id)
-
     return Enrollment.create(
       {
         courseId: new UniqueEntityID(raw.courseId),
         studentId: new UniqueEntityID(raw.studentId),
         completedAt: raw.completedAt,
-        ocurredAt: raw.ocurredAt,
-        completedItems: completedItemIds
+        ocurredAt: raw.ocurredAt
       },
       new UniqueEntityID(raw.id)
     )
   }
 
   async toPrisma(enrollment: Enrollment): Promise<Prisma.EnrollmentUncheckedCreateInput> {
-    const completedItemIds = [...enrollment.completedItems]
+    const completedItemIds = await this.enrollmentCompletedItemsRepository.findAllByEnrollmentId(enrollment.id.toString())
 
     return {
       id: enrollment.id.toString(),
@@ -34,7 +30,7 @@ export class EnrollmentMapper {
       completedAt: enrollment.completedAt,
       ocurredAt: enrollment.ocurredAt,
       enrollmentCompletedItems: {
-        connect: completedItemIds.map(completedItemId => ({ id: completedItemId.toString() })) as unknown as Prisma.EnrollmentCompletedItemWhereUniqueInput[]
+        connect: completedItemIds.map(completedItem => ({ id: completedItem.id.toString() })) as unknown as Prisma.EnrollmentCompletedItemWhereUniqueInput[]
       }
     }
   }

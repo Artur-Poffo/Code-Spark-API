@@ -96,8 +96,6 @@ export class MarkModuleAsCompletedUseCase implements UseCase<MarkModuleAsComplet
     })
     await this.enrollmentCompletedItemsRepository.create(completedItem)
 
-    await this.enrollmentsRepository.markItemAsCompleted(completedItem.id.toString(), enrollment)
-
     return right({
       module
     })

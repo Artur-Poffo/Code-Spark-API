@@ -80,11 +80,6 @@ describe('Mark course as completed use case', () => {
       inMemoryEnrollmentCompletedItemsRepository.create(secondCompletedItem)
     ])
 
-    await Promise.all([
-      inMemoryEnrollmentsRepository.markItemAsCompleted(firstCompletedItem.id.toString(), enrollment),
-      inMemoryEnrollmentsRepository.markItemAsCompleted(secondCompletedItem.id.toString(), enrollment)
-    ])
-
     const result = await sut.exec({
       enrollmentId: enrollment.id.toString(),
       studentId: student.id.toString()
@@ -153,8 +148,6 @@ describe('Mark course as completed use case', () => {
 
     const completedItem = makeEnrollmentCompletedItem({ enrollmentId: enrollment.id, itemId: classToAdd.id, type: 'CLASS' })
     await inMemoryEnrollmentCompletedItemsRepository.create(completedItem)
-
-    await inMemoryEnrollmentsRepository.markItemAsCompleted(completedItem.id.toString(), enrollment)
 
     const result = await sut.exec({
       enrollmentId: enrollment.id.toString(),
