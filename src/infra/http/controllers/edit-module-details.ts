@@ -54,6 +54,6 @@ export async function editModuleDetailsController(request: FastifyRequest, reply
   const infraModule = await moduleMapper.toPrisma(module)
 
   return await reply.status(200).send({
-    Module: ModulePresenter.toHTTP(infraModule)
+    module: ModulePresenter.toHTTP(infraModule)
   })
 }

@@ -235,13 +235,13 @@
 - [x] POST /tags - Register tag
 
 ### CourseTags
-- [ ] GET /courses/:courseId/tags - Get course tags
+- [x] GET /courses/:courseId/tags - Get course tags
 - [x] POST /courses/:courseId/tags/:tagId - Attach tag to course
 - [x] POST /courses/:courseId/tags/:tagId - Remove tag to course
 
 ### Evaluations
 - [ ] GET /courses/:courseId/evaluation - Get course evaluation average
-- [ ] POST /evaluations - Register evaluation
+- [x] POST /evaluations - Register evaluation
 - [ ] PUT /evaluations/:evaluationId - Update evaluation
 
 ### Enrollments

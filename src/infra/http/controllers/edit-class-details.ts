@@ -56,6 +56,6 @@ export async function editClassDetailsController(request: FastifyRequest, reply:
   const infraClass = await classMapper.toPrisma(classToReply)
 
   return await reply.status(200).send({
-    Class: ClassPresenter.toHTTP(infraClass)
+    class: ClassPresenter.toHTTP(infraClass)
   })
 }
