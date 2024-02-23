@@ -14,7 +14,7 @@ const editModuleDetailsBodySchema = z.object({
 })
 
 const editModuleDetailsParamsSchema = z.object({
-  moduleId: z.string()
+  moduleId: z.string().uuid()
 })
 
 export async function editModuleDetailsController(request: FastifyRequest, reply: FastifyReply) {

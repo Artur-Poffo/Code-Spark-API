@@ -5,7 +5,7 @@ import { type FastifyReply, type FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
 const deleteModuleParamsSchema = z.object({
-  moduleId: z.string()
+  moduleId: z.string().uuid()
 })
 
 export async function deleteModuleController(request: FastifyRequest, reply: FastifyReply) {

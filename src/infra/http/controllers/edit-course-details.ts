@@ -14,7 +14,7 @@ const editCourseDetailsBodySchema = z.object({
 })
 
 const editCourseDetailsParamsSchema = z.object({
-  courseId: z.string()
+  courseId: z.string().uuid()
 })
 
 export async function editCourseDetailsController(request: FastifyRequest, reply: FastifyReply) {

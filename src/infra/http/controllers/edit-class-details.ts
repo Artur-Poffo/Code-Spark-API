@@ -15,7 +15,7 @@ const editClassDetailsBodySchema = z.object({
 })
 
 const editClassDetailsParamsSchema = z.object({
-  classId: z.string()
+  classId: z.string().uuid()
 })
 
 export async function editClassDetailsController(request: FastifyRequest, reply: FastifyReply) {

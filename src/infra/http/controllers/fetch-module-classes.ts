@@ -7,7 +7,7 @@ import { z } from 'zod'
 import { ClassPresenter } from '../presenters/class-presenter'
 
 const fetchModuleClassesParamsSchema = z.object({
-  moduleId: z.string()
+  moduleId: z.string().uuid()
 })
 
 export async function fetchModuleClassesController(request: FastifyRequest, reply: FastifyReply) {

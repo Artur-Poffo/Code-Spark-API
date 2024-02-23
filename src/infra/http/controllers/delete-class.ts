@@ -5,7 +5,7 @@ import { type FastifyReply, type FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
 const deleteClassParamsSchema = z.object({
-  classId: z.string()
+  classId: z.string().uuid()
 })
 
 export async function deleteClassController(request: FastifyRequest, reply: FastifyReply) {

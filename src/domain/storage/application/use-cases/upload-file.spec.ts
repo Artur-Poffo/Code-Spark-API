@@ -1,6 +1,6 @@
+import { InvalidMimeTypeError } from '@/core/errors/errors/invalid-mime-type-error'
 import { InMemoryFilesRepository } from '../../../../../test/repositories/in-memory-files-repository'
 import { FakeUploader } from '../../../../../test/storage/fake-uploader'
-import { InvalidMimeTypeError } from './errors/invalid-mime-type-error'
 import { UploadFileUseCase } from './upload-file'
 
 let inMemoryFilesRepository: InMemoryFilesRepository
