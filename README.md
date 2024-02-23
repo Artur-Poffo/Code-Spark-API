@@ -191,7 +191,7 @@
 - [x] POST /sessions - User authentication
 
 ### Students
-- [ ] GET /courses/:courseId/students - Get students enrolled in course
+- [x] GET /courses/:courseId/students - Get students enrolled in course
 - [ ] GET /students/:studentId/enrollments - Get student courses with instructor and evaluations
 
 ### Instructors
