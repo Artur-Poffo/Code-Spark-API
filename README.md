@@ -192,7 +192,7 @@
 
 ### Students
 - [x] GET /courses/:courseId/students - Get students enrolled in course
-- [ ] GET /students/:studentId/enrollments - Get student courses with instructor and evaluations
+- [x] GET /students/:studentId/enrollments - Get student courses with instructor and evaluations
 
 ### Instructors
 - [ ] GET /courses/:courseId/instructor - Get course instructor details
