@@ -242,7 +242,7 @@
 ### Evaluations
 - [x] GET /courses/:courseId/evaluation - Get course evaluation average
 - [x] POST /evaluations - Register evaluation
-- [ ] PUT /evaluations/:evaluationId - Update evaluation
+- [x] PUT /evaluations/:evaluationId - Update evaluation
 
 ### Enrollments
 - [ ] POST /enrollments - Register enrollment
