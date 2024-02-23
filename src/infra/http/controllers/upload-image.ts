@@ -1,5 +1,8 @@
+import { InvalidMimeTypeError } from '@/core/errors/errors/invalid-mime-type-error'
 import { makeUploadImageUseCase } from '@/infra/use-cases/factories/make-upload-image-use-case'
 import { type FastifyReply, type FastifyRequest } from 'fastify'
+import { ImagePresenter } from '../presenters/image-presenter'
+import { ImageMapper } from './../../database/prisma/mappers/image-mapper'
 
 interface MulterRequest extends FastifyRequest {
   file?: {
@@ -27,8 +30,19 @@ export async function uploadImageController(request: MulterRequest, reply: Fasti
   })
 
   if (result.isLeft()) {
-    return await reply.status(500).send()
+    const error = result.value
+
+    switch (error.constructor) {
+      case InvalidMimeTypeError:
+        return await reply.status(415).send({ message: error.message })
+      default:
+        return await reply.status(500).send({ message: error.message })
+    }
   }
 
-  return await reply.status(201).send()
+  const image = ImageMapper.toPrisma(result.value.image)
+
+  return await reply.status(201).send({
+    image: ImagePresenter.toHTTP(image)
+  })
 }

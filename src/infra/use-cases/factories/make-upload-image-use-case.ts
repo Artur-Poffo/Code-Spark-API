@@ -1,11 +1,11 @@
 import { UploadImageUseCase } from '@/domain/course-management/application/use-cases/upload-image'
-import { InMemoryImagesRepository } from '../../../../test/repositories/in-memory-images-repository'
+import { PrismaImagesRepository } from '@/infra/database/prisma/repositories/prisma-images-repository'
 
 export function makeUploadImageUseCase() {
-  const inMemoryImagesRepository = new InMemoryImagesRepository()
+  const prismaImagesRepository = new PrismaImagesRepository()
 
   const uploadImageUseCase = new UploadImageUseCase(
-    inMemoryImagesRepository
+    prismaImagesRepository
   )
 
   return uploadImageUseCase

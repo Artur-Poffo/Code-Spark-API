@@ -251,9 +251,11 @@
 
 ### Video
 - [x] POST /videos - Upload video
+- [ ] GET /videos/:videoId - Get video details
 
 ### Image
 - [x] POST /images - Upload image
+- [ ] GET /images/:imageId - Get image details
 
 ## Potential Refactoring or Updates:
 

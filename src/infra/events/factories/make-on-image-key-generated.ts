@@ -1,11 +1,11 @@
-import { InMemoryImagesRepository } from './../../../../test/repositories/in-memory-images-repository'
+import { PrismaImagesRepository } from '@/infra/database/prisma/repositories/prisma-images-repository'
 import { OnImageKeyGenerated } from './../../../domain/course-management/application/subscribers/on-image-key-generated'
 
 export function makeOnImageKeyGenerated() {
-  const inMemoryImagesRepository = new InMemoryImagesRepository()
+  const prismaImagesRepository = new PrismaImagesRepository()
 
   const onImageKeyGenerated = new OnImageKeyGenerated(
-    inMemoryImagesRepository
+    prismaImagesRepository
   )
 
   return onImageKeyGenerated

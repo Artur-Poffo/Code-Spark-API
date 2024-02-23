@@ -1,9 +1,9 @@
 import { left, right, type Either } from '@/core/either'
+import { InvalidMimeTypeError } from '@/core/errors/errors/invalid-mime-type-error'
 import { type UseCase } from '@/core/use-cases/use-case'
 import { File } from '../../enterprise/entities/file'
 import { type FilesRepository } from '../repositories/files-repository'
 import { type Uploader } from '../upload/uploader'
-import { InvalidMimeTypeError } from './errors/invalid-mime-type-error'
 
 interface UploadFileUseCaseRequest {
   fileName: string
