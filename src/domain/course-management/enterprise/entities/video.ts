@@ -1,7 +1,6 @@
-import { AggregateRoot } from '@/core/entities/aggregate-root'
+import { Entity } from '@/core/entities/entity'
 import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { type Optional } from '@/core/types/optional'
-import { VideoUploadedEvent } from '../events/video-uploaded'
 
 export interface VideoProps {
   videoName: string
@@ -13,7 +12,7 @@ export interface VideoProps {
   storedAt: Date
 }
 
-export class Video extends AggregateRoot<VideoProps> {
+export class Video extends Entity<VideoProps> {
   get videoName() {
     return this.props.videoName
   }
@@ -58,12 +57,6 @@ export class Video extends AggregateRoot<VideoProps> {
       },
       id
     )
-
-    const isNewVideo = !id
-
-    if (isNewVideo) {
-      video.addDomainEvent(new VideoUploadedEvent(video))
-    }
 
     return video
   }

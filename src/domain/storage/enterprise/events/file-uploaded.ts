@@ -1,17 +1,17 @@
 import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { type DomainEvent } from '@/core/events/domain-event'
-import { type Image } from '../entities/image'
+import { type File } from '../entities/file'
 
-export class ImageUploadedEvent implements DomainEvent {
-  public image: Image
+export class FileUploadedEvent implements DomainEvent {
+  public file: File
   public ocurredAt: Date
 
-  constructor(image: Image) {
-    this.image = image
+  constructor(file: File) {
+    this.file = file
     this.ocurredAt = new Date()
   }
 
   getAggregateId(): UniqueEntityID {
-    return this.image.id
+    return this.file.id
   }
 }

@@ -1,4 +1,3 @@
-import { DomainEvents } from '@/core/events/domain-events'
 import { type ImagesRepository } from '@/domain/course-management/application/repositories/images-repository'
 import { type Image } from '@/domain/course-management/enterprise/entities/image'
 
@@ -44,8 +43,6 @@ export class InMemoryImagesRepository implements ImagesRepository {
 
   async create(image: Image): Promise<Image> {
     this.items.push(image)
-
-    DomainEvents.dispatchEventsForAggregate(image.id)
 
     return image
   }

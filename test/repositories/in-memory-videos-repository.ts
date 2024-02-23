@@ -1,4 +1,3 @@
-import { DomainEvents } from '@/core/events/domain-events'
 import { type VideosRepository } from '@/domain/course-management/application/repositories/videos-repository'
 import { type Video } from '@/domain/course-management/enterprise/entities/video'
 
@@ -44,8 +43,6 @@ export class InMemoryVideosRepository implements VideosRepository {
 
   async create(video: Video): Promise<Video> {
     this.items.push(video)
-
-    DomainEvents.dispatchEventsForAggregate(video.id)
 
     return video
   }

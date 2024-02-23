@@ -3,7 +3,6 @@ export interface UploadParams {
   fileType: string
   body: Buffer
   size: number
-  storedAt: Date
 }
 
 export interface Uploader {

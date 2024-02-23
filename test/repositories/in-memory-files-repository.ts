@@ -1,3 +1,4 @@
+import { DomainEvents } from '@/core/events/domain-events'
 import { type FilesRepository } from '@/domain/storage/application/repositories/files-repository'
 import { type File } from '@/domain/storage/enterprise/entities/file'
 
@@ -26,6 +27,9 @@ export class InMemoryFilesRepository implements FilesRepository {
 
   async create(file: File): Promise<File> {
     this.items.push(file)
+
+    DomainEvents.dispatchEventsForAggregate(file.id)
+
     return file
   }
 }

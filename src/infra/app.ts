@@ -12,6 +12,7 @@ import { courseRoutes } from './http/routes/course'
 import { courseTagRoutes } from './http/routes/course-tag'
 import { enrollmentRoutes } from './http/routes/enrollment'
 import { evaluationRoutes } from './http/routes/evaluation'
+import { fileRoutes } from './http/routes/file'
 import { imageRoutes } from './http/routes/image'
 import { moduleRoutes } from './http/routes/module'
 import { studentCertificateRoutes } from './http/routes/student-certificate'
@@ -53,6 +54,7 @@ app.register(multer.contentParser)
 
 app.register(userRoutes)
 app.register(courseRoutes)
+app.register(fileRoutes)
 app.register(imageRoutes)
 app.register(videoRoutes)
 app.register(moduleRoutes)

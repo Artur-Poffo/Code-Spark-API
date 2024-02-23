@@ -1,4 +1,3 @@
-import { DomainEvents } from '@/core/events/domain-events'
 import { type VideosRepository } from '@/domain/course-management/application/repositories/videos-repository'
 import { type Video } from '@/domain/course-management/enterprise/entities/video'
 import { prisma } from '..'
@@ -79,8 +78,6 @@ export class PrismaVideosRepository implements VideosRepository {
     await prisma.video.create({
       data: infraVideo
     })
-
-    DomainEvents.dispatchEventsForAggregate(video.id)
 
     return video
   }

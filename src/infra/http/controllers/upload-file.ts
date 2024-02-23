@@ -1,8 +1,8 @@
 import { InvalidMimeTypeError } from '@/core/errors/errors/invalid-mime-type-error'
-import { makeUploadImageUseCase } from '@/infra/use-cases/factories/make-upload-image-use-case'
+import { makeFileMapper } from '@/infra/database/prisma/mappers/factories/make-file-mapper'
+import { makeUploadFileUseCase } from '@/infra/use-cases/factories/make-upload-file-use-case'
 import { type FastifyReply, type FastifyRequest } from 'fastify'
-import { ImagePresenter } from '../presenters/image-presenter'
-import { ImageMapper } from './../../database/prisma/mappers/image-mapper'
+import { FilePresenter } from '../presenters/file-presenter'
 
 interface MulterRequest extends FastifyRequest {
   file?: {
@@ -13,19 +13,19 @@ interface MulterRequest extends FastifyRequest {
   }
 }
 
-export async function uploadImageController(request: MulterRequest, reply: FastifyReply) {
+export async function uploadFileController(request: MulterRequest, reply: FastifyReply) {
   if (!request.file) {
     return await reply.status(404).send({
-      message: 'Image required'
+      message: 'File required'
     })
   }
 
-  const uploadImageUseCase = makeUploadImageUseCase()
+  const uploadFileUseCase = makeUploadFileUseCase()
 
-  const result = await uploadImageUseCase.exec({
+  const result = await uploadFileUseCase.exec({
     body: request.file.buffer,
-    imageName: request.file.originalname,
-    imageType: request.file.mimetype as 'image/jpeg' | 'image/png',
+    fileName: request.file.originalname,
+    fileType: request.file.mimetype,
     size: request.file.size
   })
 
@@ -40,9 +40,10 @@ export async function uploadImageController(request: MulterRequest, reply: Fasti
     }
   }
 
-  const image = ImageMapper.toPrisma(result.value.image)
+  const fileMapper = makeFileMapper()
+  const file = await fileMapper.toPrisma(result.value.file)
 
   return await reply.status(201).send({
-    image: ImagePresenter.toHTTP(image)
+    file: FilePresenter.toHTTP(file)
   })
 }

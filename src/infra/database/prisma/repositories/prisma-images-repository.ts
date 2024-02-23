@@ -1,4 +1,3 @@
-import { DomainEvents } from '@/core/events/domain-events'
 import { type ImagesRepository } from '@/domain/course-management/application/repositories/images-repository'
 import { type Image } from '@/domain/course-management/enterprise/entities/image'
 import { prisma } from '..'
@@ -75,8 +74,6 @@ export class PrismaImagesRepository implements ImagesRepository {
     await prisma.image.create({
       data: infraImage
     })
-
-    DomainEvents.dispatchEventsForAggregate(image.id)
 
     return image
   }
