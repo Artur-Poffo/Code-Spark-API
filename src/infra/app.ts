@@ -14,6 +14,7 @@ import { enrollmentRoutes } from './http/routes/enrollment'
 import { evaluationRoutes } from './http/routes/evaluation'
 import { imageRoutes } from './http/routes/image'
 import { moduleRoutes } from './http/routes/module'
+import { studentCertificateRoutes } from './http/routes/student-certificate'
 import { tagRoutes } from './http/routes/tag'
 import { userRoutes } from './http/routes/user'
 import { videoRoutes } from './http/routes/video'
@@ -61,6 +62,7 @@ app.register(courseTagRoutes)
 app.register(evaluationRoutes)
 app.register(enrollmentRoutes)
 app.register(certificateRoutes)
+app.register(studentCertificateRoutes)
 
 // Custom error handler
 

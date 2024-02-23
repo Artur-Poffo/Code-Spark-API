@@ -48,6 +48,12 @@ export class DeleteCourseCertificateUseCase implements UseCase<DeleteCourseCerti
       return left(new NotAllowedError())
     }
 
+    const certificatePertenceToCourse = certificate.courseId.toString() === courseId
+
+    if (!certificatePertenceToCourse) {
+      return left(new NotAllowedError())
+    }
+
     await this.certificatesRepository.delete(certificate)
 
     return right({

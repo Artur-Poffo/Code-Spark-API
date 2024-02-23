@@ -212,10 +212,10 @@
 
 ### Certificate
 - [x] POST /courses/:courseId/certificates - Add certificate to course
-- [ ] DELETE /courses/:courseId/certificates - Remove certificate from course
+- [x] DELETE /courses/:courseId/certificates - Remove certificate from course
 
 ### StudentCertificate
-- [ ] GET /enrollments/:enrollmentId/certificate - Issue student certificate
+- [x] POST /enrollments/:enrollmentId/certificates/issue - Issue student certificate
 
 ### Modules
 - [x] GET /courses/:courseId/modules - Get course modules
