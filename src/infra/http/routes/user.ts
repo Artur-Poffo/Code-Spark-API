@@ -12,7 +12,7 @@ export async function userRoutes(app: FastifyInstance) {
   app.post('/users', registerUserController)
   app.post('/sessions', authenticateUserController)
 
-  app.put('/users', { onRequest: verifyJwt }, editUserDetailsController)
+  app.put('/users', { onRequest: [verifyJwt] }, editUserDetailsController)
 
-  app.delete('/users', { onRequest: verifyJwt }, deleteUserController)
+  app.delete('/users', { onRequest: [verifyJwt] }, deleteUserController)
 }

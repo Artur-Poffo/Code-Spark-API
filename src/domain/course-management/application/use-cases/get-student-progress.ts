@@ -88,7 +88,7 @@ export class GetStudentProgressUseCase implements UseCase<GetStudentProgressUseC
     const completedModules = await this.enrollmentCompletedItemsRepository.findManyCompletedModulesByEnrollmentId(
       enrollmentId
     )
-    const completedModuleIds = completedModules.map(completedModule => completedModule.id.toString())
+    const completedModuleIds = completedModules.map(completedModule => completedModule.itemId.toString())
 
     const modulesProgression: ModuleWithStudentProgressDTO[] = []
 
