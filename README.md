@@ -250,6 +250,8 @@
 - [x] POST /enrollments/:enrollmentId/classes/:classId/complete - Mark class as completed
 - [x] POST /enrollments/:enrollmentId/complete - Mark enrollment as completed
 - [x] GET /courses/:courseId/students/:studentId/enrollments - Get enrollment of a student on a course
+- [x] GET /enrollments/:enrollmentId/classes/completed - Fetch enrollment completed classes
+- [ ] GET /enrollments/:enrollmentId/modules/completed - Fetch enrollment completed modules
 - [x] DELETE /enrollments/:enrollmentId - Cancel enrollment
 
 ### Video

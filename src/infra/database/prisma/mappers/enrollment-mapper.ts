@@ -8,7 +8,7 @@ export class EnrollmentMapper {
     private readonly enrollmentCompletedItemsRepository: EnrollmentCompletedItemsRepository
   ) {}
 
-  async toDomain(raw: PrismaEnrollment): Promise<Enrollment | null> {
+  async toDomain(raw: PrismaEnrollment): Promise<Enrollment> {
     return Enrollment.create(
       {
         courseId: new UniqueEntityID(raw.courseId),

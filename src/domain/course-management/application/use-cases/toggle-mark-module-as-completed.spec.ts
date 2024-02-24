@@ -16,7 +16,7 @@ import { InMemoryStudentsRepository } from '../../../../../test/repositories/in-
 import { InMemoryInstructorRepository } from './../../../../../test/repositories/in-memory-instructors-repository'
 import { InMemoryModulesRepository } from './../../../../../test/repositories/in-memory-modules-repository'
 import { AllClassesInTheModuleMustBeMarkedAsCompleted } from './errors/all-classes-in-the-module-must-be-marked-as-completed'
-import { MarkModuleAsCompletedUseCase } from './mark-module-as-completed'
+import { ToggleMarkModuleAsCompletedUseCase } from './toggle-mark-module-as-completed'
 
 let inMemoryEnrollmentCompletedItemsRepository: InMemoryEnrollmentCompletedItemsRepository
 let inMemoryEnrollmentsRepository: InMemoryEnrollmentsRepository
@@ -26,7 +26,7 @@ let inMemoryClassesRepository: InMemoryClassesRepository
 let inMemoryInstructorsRepository: InMemoryInstructorRepository
 let inMemoryModulesRepository: InMemoryModulesRepository
 let inMemoryCoursesRepository: InMemoryCoursesRepository
-let sut: MarkModuleAsCompletedUseCase
+let sut: ToggleMarkModuleAsCompletedUseCase
 
 describe('Mark module as completed use case', () => {
   beforeEach(() => {
@@ -45,7 +45,7 @@ describe('Mark module as completed use case', () => {
       inMemoryModulesRepository, inMemoryInstructorsRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository, inMemoryCourseTagsRepository
     )
 
-    sut = new MarkModuleAsCompletedUseCase(
+    sut = new ToggleMarkModuleAsCompletedUseCase(
       inMemoryEnrollmentsRepository, inMemoryModulesRepository, inMemoryClassesRepository, inMemoryStudentsRepository, inMemoryEnrollmentCompletedItemsRepository
     )
   })
@@ -89,6 +89,48 @@ describe('Mark module as completed use case', () => {
       })
     })
     expect(inMemoryEnrollmentCompletedItemsRepository.items).toHaveLength(2)
+  })
+
+  it('should be able to toggle mark a module of a enrollment as completed if it already marked as completed', async () => {
+    const instructor = makeInstructor()
+    await inMemoryInstructorsRepository.create(instructor)
+
+    const course = makeCourse({ instructorId: instructor.id })
+    await inMemoryCoursesRepository.create(course)
+
+    const module = makeModule({
+      name: 'John Doe Module',
+      courseId: course.id,
+      moduleNumber: 1
+    })
+    await inMemoryModulesRepository.create(module)
+
+    const classToAdd = makeClass({ name: 'John Doe Class', moduleId: module.id, classNumber: 1 })
+    await inMemoryClassesRepository.create(classToAdd)
+
+    const student = makeStudent()
+    await inMemoryStudentsRepository.create(student)
+
+    const enrollment = makeEnrollment({ studentId: student.id, courseId: course.id })
+    await inMemoryEnrollmentsRepository.create(enrollment)
+
+    const completedItem = makeEnrollmentCompletedItem({ enrollmentId: enrollment.id, itemId: classToAdd.id, type: 'CLASS' })
+    await inMemoryEnrollmentCompletedItemsRepository.create(completedItem)
+
+    await sut.exec({
+      enrollmentId: enrollment.id.toString(),
+      moduleId: module.id.toString(),
+      studentId: student.id.toString()
+    })
+
+    const result = await sut.exec({
+      enrollmentId: enrollment.id.toString(),
+      moduleId: module.id.toString(),
+      studentId: student.id.toString()
+    })
+
+    expect(result.isRight()).toBe(true)
+    expect(inMemoryEnrollmentCompletedItemsRepository.items).toHaveLength(1)
   })
 
   it('should not be able to mark a inexistent module of a enrollment as completed', async () => {

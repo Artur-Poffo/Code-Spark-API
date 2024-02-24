@@ -1,4 +1,4 @@
-import { MarkClassAsCompletedUseCase } from '@/domain/course-management/application/use-cases/mark-class-as-completed'
+import { ToggleMarkClassAsCompletedUseCase } from '@/domain/course-management/application/use-cases/toggle-mark-class-as-completed'
 import { makePrismaClassesRepository } from '@/infra/database/prisma/repositories/factories/make-prisma-classes-repository'
 import { makePrismaCoursesRepository } from '@/infra/database/prisma/repositories/factories/make-prisma-courses-repository'
 import { makePrismaEnrollmentsRepository } from '@/infra/database/prisma/repositories/factories/make-prisma-enrollments-repository'
@@ -6,7 +6,7 @@ import { makePrismaModulesRepository } from '@/infra/database/prisma/repositorie
 import { makePrismaStudentsRepository } from '@/infra/database/prisma/repositories/factories/make-prisma-students-repository'
 import { PrismaEnrollmentCompleteItemsRepository } from '@/infra/database/prisma/repositories/prisma-enrollment-completed-items-repository'
 
-export function makeMarkClassAsCompletedUseCase() {
+export function makeToggleMarkClassAsCompletedUseCase() {
   const prismaEnrollmentsRepository = makePrismaEnrollmentsRepository()
   const prismaCoursesRepository = makePrismaCoursesRepository()
   const prismaClassesRepository = makePrismaClassesRepository()
@@ -14,7 +14,7 @@ export function makeMarkClassAsCompletedUseCase() {
   const prismaStudentsRepository = makePrismaStudentsRepository()
   const prismaEnrollmentCompletedItemsRepository = new PrismaEnrollmentCompleteItemsRepository()
 
-  const markClassAsCompletedUseCase = new MarkClassAsCompletedUseCase(
+  const toggleMarkClassAsCompletedUseCase = new ToggleMarkClassAsCompletedUseCase(
     prismaEnrollmentsRepository,
     prismaCoursesRepository,
     prismaModulesRepository,
@@ -23,5 +23,5 @@ export function makeMarkClassAsCompletedUseCase() {
     prismaEnrollmentCompletedItemsRepository
   )
 
-  return markClassAsCompletedUseCase
+  return toggleMarkClassAsCompletedUseCase
 }

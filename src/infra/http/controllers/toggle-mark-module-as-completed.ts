@@ -1,22 +1,22 @@
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { AllClassesInTheModuleMustBeMarkedAsCompleted } from '@/domain/course-management/application/use-cases/errors/all-classes-in-the-module-must-be-marked-as-completed'
-import { makeMarkModuleAsCompletedUseCase } from '@/infra/use-cases/factories/make-mark-module-as-completed-use-case'
+import { makeToggleMarkModuleAsCompletedUseCase } from '@/infra/use-cases/factories/make-toggle-mark-module-as-completed-use-case'
 import { type FastifyReply, type FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
-const markModuleAsCompletedParamsSchema = z.object({
+const toggleMarkModuleAsCompletedParamsSchema = z.object({
   enrollmentId: z.string().uuid(),
   moduleId: z.string().uuid()
 })
 
-export async function markModuleAsCompletedController(request: FastifyRequest, reply: FastifyReply) {
-  const { enrollmentId, moduleId } = markModuleAsCompletedParamsSchema.parse(request.params)
+export async function toggleMarkModuleAsCompletedController(request: FastifyRequest, reply: FastifyReply) {
+  const { enrollmentId, moduleId } = toggleMarkModuleAsCompletedParamsSchema.parse(request.params)
   const { sub: studentId } = request.user
 
-  const markModuleAsCompletedUseCase = makeMarkModuleAsCompletedUseCase()
+  const toggleMarkModuleAsCompletedUseCase = makeToggleMarkModuleAsCompletedUseCase()
 
-  const result = await markModuleAsCompletedUseCase.exec({
+  const result = await toggleMarkModuleAsCompletedUseCase.exec({
     enrollmentId,
     moduleId,
     studentId
@@ -37,5 +37,5 @@ export async function markModuleAsCompletedController(request: FastifyRequest, r
     }
   }
 
-  return await reply.status(201).send()
+  return await reply.status(204).send()
 }

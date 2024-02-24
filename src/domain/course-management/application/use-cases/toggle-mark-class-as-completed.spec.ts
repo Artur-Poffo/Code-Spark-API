@@ -3,7 +3,6 @@ import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-e
 import { makeClass } from '../../../../../test/factories/make-class'
 import { makeCourse } from '../../../../../test/factories/make-course'
 import { makeEnrollment } from '../../../../../test/factories/make-enrollment'
-import { makeEnrollmentCompletedItem } from '../../../../../test/factories/make-enrollment-completed-item'
 import { makeInstructor } from '../../../../../test/factories/make-instructor'
 import { makeModule } from '../../../../../test/factories/make-module'
 import { makeStudent } from '../../../../../test/factories/make-student'
@@ -15,9 +14,7 @@ import { InMemoryEnrollmentsRepository } from '../../../../../test/repositories/
 import { InMemoryStudentsRepository } from '../../../../../test/repositories/in-memory-students-repository'
 import { InMemoryInstructorRepository } from './../../../../../test/repositories/in-memory-instructors-repository'
 import { InMemoryModulesRepository } from './../../../../../test/repositories/in-memory-modules-repository'
-import { AllModulesInTheCourseMustBeMarkedAsCompleted } from './errors/all-modules-in-the-course-must-be-marked-as-completed'
-import { ItemAlreadyCompletedError } from './errors/item-already-completed-error'
-import { MarkCourseAsCompletedUseCase } from './mark-course-as-completed'
+import { ToggleMarkClassAsCompletedUseCase } from './toggle-mark-class-as-completed'
 
 let inMemoryEnrollmentCompletedItemsRepository: InMemoryEnrollmentCompletedItemsRepository
 let inMemoryEnrollmentsRepository: InMemoryEnrollmentsRepository
@@ -27,9 +24,9 @@ let inMemoryClassesRepository: InMemoryClassesRepository
 let inMemoryInstructorsRepository: InMemoryInstructorRepository
 let inMemoryModulesRepository: InMemoryModulesRepository
 let inMemoryCoursesRepository: InMemoryCoursesRepository
-let sut: MarkCourseAsCompletedUseCase
+let sut: ToggleMarkClassAsCompletedUseCase
 
-describe('Mark course as completed use case', () => {
+describe('Toggle mark class as completed use case', () => {
   beforeEach(() => {
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
     inMemoryEnrollmentCompletedItemsRepository = new InMemoryEnrollmentCompletedItemsRepository()
@@ -46,12 +43,12 @@ describe('Mark course as completed use case', () => {
       inMemoryModulesRepository, inMemoryInstructorsRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository, inMemoryCourseTagsRepository
     )
 
-    sut = new MarkCourseAsCompletedUseCase(
-      inMemoryEnrollmentsRepository, inMemoryCoursesRepository, inMemoryModulesRepository, inMemoryStudentsRepository, inMemoryEnrollmentCompletedItemsRepository
+    sut = new ToggleMarkClassAsCompletedUseCase(
+      inMemoryEnrollmentsRepository, inMemoryCoursesRepository, inMemoryModulesRepository, inMemoryClassesRepository, inMemoryStudentsRepository, inMemoryEnrollmentCompletedItemsRepository
     )
   })
 
-  it('should be able to mark a enrollment of a student as completed', async () => {
+  it('should be able to mark a class of a enrollment as completed', async () => {
     const instructor = makeInstructor()
     await inMemoryInstructorsRepository.create(instructor)
 
@@ -73,25 +70,22 @@ describe('Mark course as completed use case', () => {
     const enrollment = makeEnrollment({ studentId: student.id, courseId: course.id })
     await inMemoryEnrollmentsRepository.create(enrollment)
 
-    const firstCompletedItem = makeEnrollmentCompletedItem({ enrollmentId: enrollment.id, itemId: classToMarkAsCompleted.id, type: 'CLASS' })
-    const secondCompletedItem = makeEnrollmentCompletedItem({ enrollmentId: enrollment.id, itemId: module.id, type: 'MODULE' })
-
-    await Promise.all([
-      inMemoryEnrollmentCompletedItemsRepository.create(firstCompletedItem),
-      inMemoryEnrollmentCompletedItemsRepository.create(secondCompletedItem)
-    ])
-
     const result = await sut.exec({
       enrollmentId: enrollment.id.toString(),
+      classId: classToMarkAsCompleted.id.toString(),
       studentId: student.id.toString()
     })
 
     expect(result.isRight()).toBe(true)
-    expect(inMemoryEnrollmentsRepository.items[0].completedAt).not.toBe(null)
-    expect(inMemoryEnrollmentCompletedItemsRepository.items).toHaveLength(2)
+    expect(result.value).toMatchObject({
+      class: expect.objectContaining({
+        name: 'John Doe Class'
+      })
+    })
+    expect(inMemoryEnrollmentCompletedItemsRepository.items).toHaveLength(1)
   })
 
-  it('should not be able to mark a enrollment of a student as completed twice', async () => {
+  it('should be able to toggle mark a class of a enrollment as completed if it already marked as completed', async () => {
     const instructor = makeInstructor()
     await inMemoryInstructorsRepository.create(instructor)
 
@@ -113,29 +107,23 @@ describe('Mark course as completed use case', () => {
     const enrollment = makeEnrollment({ studentId: student.id, courseId: course.id })
     await inMemoryEnrollmentsRepository.create(enrollment)
 
-    const firstCompletedItem = makeEnrollmentCompletedItem({ enrollmentId: enrollment.id, itemId: classToMarkAsCompleted.id, type: 'CLASS' })
-    const secondCompletedItem = makeEnrollmentCompletedItem({ enrollmentId: enrollment.id, itemId: module.id, type: 'MODULE' })
-
-    await Promise.all([
-      inMemoryEnrollmentCompletedItemsRepository.create(firstCompletedItem),
-      inMemoryEnrollmentCompletedItemsRepository.create(secondCompletedItem)
-    ])
-
     await sut.exec({
       enrollmentId: enrollment.id.toString(),
+      classId: classToMarkAsCompleted.id.toString(),
       studentId: student.id.toString()
     })
 
     const result = await sut.exec({
       enrollmentId: enrollment.id.toString(),
+      classId: classToMarkAsCompleted.id.toString(),
       studentId: student.id.toString()
     })
 
-    expect(result.isLeft()).toBe(true)
-    expect(result.value).toBeInstanceOf(ItemAlreadyCompletedError)
+    expect(result.isRight()).toBe(true)
+    expect(inMemoryEnrollmentCompletedItemsRepository.items).toHaveLength(0)
   })
 
-  it('should not be able to mark a inexistent enrollment of a student as completed', async () => {
+  it('should not be able to mark a inexistent class as completed', async () => {
     const instructor = makeInstructor()
     await inMemoryInstructorsRepository.create(instructor)
 
@@ -148,14 +136,15 @@ describe('Mark course as completed use case', () => {
     })
     await inMemoryModulesRepository.create(module)
 
-    const classToMarkAsCompleted = makeClass({ name: 'John Doe Class', moduleId: module.id, classNumber: 1 })
-    await inMemoryClassesRepository.create(classToMarkAsCompleted)
-
     const student = makeStudent()
     await inMemoryStudentsRepository.create(student)
 
+    const enrollment = makeEnrollment({ studentId: student.id, courseId: course.id })
+    await inMemoryEnrollmentsRepository.create(enrollment)
+
     const result = await sut.exec({
-      enrollmentId: 'inexistentEnrollmentId',
+      enrollmentId: enrollment.id.toString(),
+      classId: 'inexistentClassId',
       studentId: student.id.toString()
     })
 
@@ -163,7 +152,7 @@ describe('Mark course as completed use case', () => {
     expect(result.value).toBeInstanceOf(ResourceNotFoundError)
   })
 
-  it('should not be able to mark a enrollment of a student as completed if the student not is the owner of the enrollment', async () => {
+  it('should not be able to mark a class of a enrollment as completed if the student not is the owner of the enrollment', async () => {
     const instructor = makeInstructor()
     await inMemoryInstructorsRepository.create(instructor)
 
@@ -171,14 +160,13 @@ describe('Mark course as completed use case', () => {
     await inMemoryCoursesRepository.create(course)
 
     const module = makeModule({
-      name: 'John Doe Module',
       courseId: course.id,
       moduleNumber: 1
     })
     await inMemoryModulesRepository.create(module)
 
-    const classToAdd = makeClass({ name: 'John Doe Class', moduleId: module.id, classNumber: 1 })
-    await inMemoryClassesRepository.create(classToAdd)
+    const classToMarkAsCompleted = makeClass({ name: 'John Doe Class', moduleId: module.id, classNumber: 1 })
+    await inMemoryClassesRepository.create(classToMarkAsCompleted)
 
     const correctStudent = makeStudent()
     const wrongStudent = makeStudent()
@@ -191,48 +179,13 @@ describe('Mark course as completed use case', () => {
     const enrollment = makeEnrollment({ studentId: correctStudent.id, courseId: course.id })
     await inMemoryEnrollmentsRepository.create(enrollment)
 
-    const completedItem = makeEnrollmentCompletedItem({ enrollmentId: enrollment.id, itemId: classToAdd.id, type: 'CLASS' })
-    await inMemoryEnrollmentCompletedItemsRepository.create(completedItem)
-
     const result = await sut.exec({
       enrollmentId: enrollment.id.toString(),
+      classId: classToMarkAsCompleted.id.toString(),
       studentId: wrongStudent.id.toString()
     })
 
     expect(result.isLeft()).toBe(true)
     expect(result.value).toBeInstanceOf(NotAllowedError)
-  })
-
-  it('should not be able to mark a enrollment of a student as completed if any module within it is not completed', async () => {
-    const instructor = makeInstructor()
-    await inMemoryInstructorsRepository.create(instructor)
-
-    const course = makeCourse({ instructorId: instructor.id })
-    await inMemoryCoursesRepository.create(course)
-
-    const notCompletedModule = makeModule({
-      courseId: course.id,
-      moduleNumber: 1
-    })
-    await inMemoryModulesRepository.create(notCompletedModule)
-
-    const classToMarkAsCompleted = makeClass({ name: 'John Doe Class', moduleId: notCompletedModule.id, classNumber: 1 })
-    await inMemoryClassesRepository.create(classToMarkAsCompleted)
-
-    const student = makeStudent()
-    await inMemoryStudentsRepository.create(student)
-
-    const enrollment = makeEnrollment({ studentId: student.id, courseId: course.id })
-    await inMemoryEnrollmentsRepository.create(enrollment)
-
-    // Not mark module as completed
-
-    const result = await sut.exec({
-      enrollmentId: enrollment.id.toString(),
-      studentId: student.id.toString()
-    })
-
-    expect(result.isLeft()).toBe(true)
-    expect(result.value).toBeInstanceOf(AllModulesInTheCourseMustBeMarkedAsCompleted)
   })
 })

@@ -31,14 +31,13 @@ export class Enrollment extends Entity<EnrollmentProps> {
   }
 
   static create(
-    props: Optional<EnrollmentProps, 'ocurredAt' | 'completedAt'>,
+    props: Optional<EnrollmentProps, 'ocurredAt'>,
     id?: UniqueEntityID
   ) {
     const enrollment = new Enrollment(
       {
         ...props,
-        ocurredAt: props.ocurredAt ?? new Date(),
-        completedAt: null
+        ocurredAt: props.ocurredAt ?? new Date()
       },
       id
     )

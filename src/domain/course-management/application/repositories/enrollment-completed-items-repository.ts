@@ -2,8 +2,10 @@ import { type EnrollmentCompletedItem } from '../../enterprise/entities/enrollme
 
 export interface EnrollmentCompletedItemsRepository {
   findById: (id: string) => Promise<EnrollmentCompletedItem | null>
+  findByEnrollmentIdAndItemId: (enrollmentId: string, itemId: string) => Promise<EnrollmentCompletedItem | null>
   findManyCompletedClassesByEnrollmentId: (enrollmentId: string) => Promise<EnrollmentCompletedItem[]>
   findManyCompletedModulesByEnrollmentId: (enrollmentId: string) => Promise<EnrollmentCompletedItem[]>
   findAllByEnrollmentId: (enrollmentId: string) => Promise<EnrollmentCompletedItem[]>
   create: (completedItem: EnrollmentCompletedItem) => Promise<EnrollmentCompletedItem>
+  delete: (completedItem: EnrollmentCompletedItem) => Promise<void>
 }

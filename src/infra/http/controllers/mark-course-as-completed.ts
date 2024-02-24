@@ -1,6 +1,7 @@
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { AllModulesInTheCourseMustBeMarkedAsCompleted } from '@/domain/course-management/application/use-cases/errors/all-modules-in-the-course-must-be-marked-as-completed'
+import { ItemAlreadyCompletedError } from '@/domain/course-management/application/use-cases/errors/item-already-completed-error'
 import { makeMarkCourseAsCompletedUseCase } from '@/infra/use-cases/factories/make-mark-course-as-completed-use-case'
 import { type FastifyReply, type FastifyRequest } from 'fastify'
 import { z } from 'zod'
@@ -30,6 +31,8 @@ export async function markCourseAsCompletedController(request: FastifyRequest, r
         return await reply.status(401).send({ message: error.message })
       case AllModulesInTheCourseMustBeMarkedAsCompleted:
         return await reply.status(403).send({ message: error.message })
+      case ItemAlreadyCompletedError:
+        return await reply.status(409).send({ message: error.message })
       default:
         return await reply.status(500).send({ message: error.message })
     }

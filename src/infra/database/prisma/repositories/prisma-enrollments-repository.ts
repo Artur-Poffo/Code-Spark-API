@@ -93,23 +93,6 @@ export class PrismaEnrollmentsRepository implements EnrollmentsRepository {
     return students.map(student => StudentMapper.toDomain(student))
   }
 
-  async markItemAsCompleted(itemId: string, enrollment: Enrollment): Promise<Enrollment | null> {
-    // TODO: This is wrong but I'm out of time, I'll refactor it in the future
-    const infraEnrollment = await prisma.enrollment.findUnique({
-      where: {
-        id: enrollment.id.toString()
-      }
-    })
-
-    if (!infraEnrollment) {
-      return null
-    }
-
-    const domainEnrollment = await this.enrollmentMapper.toDomain(infraEnrollment)
-
-    return domainEnrollment
-  }
-
   async markAsCompleted(enrollment: Enrollment): Promise<Enrollment | null> {
     const infraEnrollment = await prisma.enrollment.update({
       where: {

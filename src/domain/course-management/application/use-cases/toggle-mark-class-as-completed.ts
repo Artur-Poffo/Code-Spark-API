@@ -11,20 +11,20 @@ import { type StudentsRepository } from '../repositories/students-repository'
 import { type ClassesRepository } from './../repositories/classes-repository'
 import { type ModulesRepository } from './../repositories/modules-repository'
 
-interface MarkClassAsCompletedUseCaseRequest {
+interface ToggleMarkClassAsCompletedUseCaseRequest {
   enrollmentId: string
   studentId: string
   classId: string
 }
 
-type MarkClassAsCompletedUseCaseResponse = Either<
+type ToggleMarkClassAsCompletedUseCaseResponse = Either<
 ResourceNotFoundError | NotAllowedError,
 {
   class: Class
 }
 >
 
-export class MarkClassAsCompletedUseCase implements UseCase<MarkClassAsCompletedUseCaseRequest, MarkClassAsCompletedUseCaseResponse> {
+export class ToggleMarkClassAsCompletedUseCase implements UseCase<ToggleMarkClassAsCompletedUseCaseRequest, ToggleMarkClassAsCompletedUseCaseResponse> {
   constructor(
     private readonly enrollmentsRepository: EnrollmentsRepository,
     private readonly coursesRepository: CoursesRepository,
@@ -38,7 +38,7 @@ export class MarkClassAsCompletedUseCase implements UseCase<MarkClassAsCompleted
     enrollmentId,
     studentId,
     classId
-  }: MarkClassAsCompletedUseCaseRequest): Promise<MarkClassAsCompletedUseCaseResponse> {
+  }: ToggleMarkClassAsCompletedUseCaseRequest): Promise<ToggleMarkClassAsCompletedUseCaseResponse> {
     const [enrollment, student, classToMarkAsCompleted] = await Promise.all([
       this.enrollmentsRepository.findById(enrollmentId),
       this.studentsRepository.findById(studentId),
@@ -53,6 +53,19 @@ export class MarkClassAsCompletedUseCase implements UseCase<MarkClassAsCompleted
 
     if (!studentIsTheEnrollmentOwner) {
       return left(new NotAllowedError())
+    }
+
+    const classAlreadyMarkedAsCompleted = await this.enrollmentCompletedItemsRepository.findByEnrollmentIdAndItemId(
+      enrollmentId,
+      classId
+    )
+
+    if (classAlreadyMarkedAsCompleted) {
+      await this.enrollmentCompletedItemsRepository.delete(classAlreadyMarkedAsCompleted)
+
+      return right({
+        class: classToMarkAsCompleted
+      })
     }
 
     const completeCourse = await this.coursesRepository.findCompleteCourseEntityById(enrollment.courseId.toString())

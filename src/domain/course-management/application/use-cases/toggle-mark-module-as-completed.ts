@@ -12,20 +12,20 @@ import { type StudentsRepository } from '../repositories/students-repository'
 import { type ModulesRepository } from './../repositories/modules-repository'
 import { AllClassesInTheModuleMustBeMarkedAsCompleted } from './errors/all-classes-in-the-module-must-be-marked-as-completed'
 
-interface MarkModuleAsCompletedUseCaseRequest {
+interface ToggleMarkModuleAsCompletedUseCaseRequest {
   enrollmentId: string
   studentId: string
   moduleId: string
 }
 
-type MarkModuleAsCompletedUseCaseResponse = Either<
+type ToggleMarkModuleAsCompletedUseCaseResponse = Either<
 ResourceNotFoundError | NotAllowedError | AllClassesInTheModuleMustBeMarkedAsCompleted,
 {
   module: Module
 }
 >
 
-export class MarkModuleAsCompletedUseCase implements UseCase<MarkModuleAsCompletedUseCaseRequest, MarkModuleAsCompletedUseCaseResponse> {
+export class ToggleMarkModuleAsCompletedUseCase implements UseCase<ToggleMarkModuleAsCompletedUseCaseRequest, ToggleMarkModuleAsCompletedUseCaseResponse> {
   constructor(
     private readonly enrollmentsRepository: EnrollmentsRepository,
     private readonly modulesRepository: ModulesRepository,
@@ -38,7 +38,7 @@ export class MarkModuleAsCompletedUseCase implements UseCase<MarkModuleAsComplet
     enrollmentId,
     studentId,
     moduleId
-  }: MarkModuleAsCompletedUseCaseRequest): Promise<MarkModuleAsCompletedUseCaseResponse> {
+  }: ToggleMarkModuleAsCompletedUseCaseRequest): Promise<ToggleMarkModuleAsCompletedUseCaseResponse> {
     const [enrollment, student, module] = await Promise.all([
       this.enrollmentsRepository.findById(enrollmentId),
       this.studentsRepository.findById(studentId),
@@ -53,6 +53,19 @@ export class MarkModuleAsCompletedUseCase implements UseCase<MarkModuleAsComplet
 
     if (!studentIsTheEnrollmentOwner) {
       return left(new NotAllowedError())
+    }
+
+    const moduleAlreadyMarkedAsCompleted = await this.enrollmentCompletedItemsRepository.findByEnrollmentIdAndItemId(
+      enrollmentId,
+      moduleId
+    )
+
+    if (moduleAlreadyMarkedAsCompleted) {
+      await this.enrollmentCompletedItemsRepository.delete(moduleAlreadyMarkedAsCompleted)
+
+      return right({
+        module
+      })
     }
 
     const courseModules = await this.modulesRepository.findManyByCourseId(enrollment.courseId.toString())
@@ -82,7 +95,7 @@ export class MarkModuleAsCompletedUseCase implements UseCase<MarkModuleAsComplet
     )
 
     const allClassesOfThisModuleIsCompleted = moduleClasses.every(classToCompare => {
-      return completedClasses.includes(classToCompare)
+      return completedClasses.some(completedClass => completedClass.id.toString() === classToCompare.id.toString())
     })
 
     if (!allClassesOfThisModuleIsCompleted) {

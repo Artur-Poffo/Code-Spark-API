@@ -10,6 +10,7 @@ import { type EnrollmentsRepository } from '../repositories/enrollments-reposito
 import { type StudentsRepository } from '../repositories/students-repository'
 import { type ModulesRepository } from './../repositories/modules-repository'
 import { AllModulesInTheCourseMustBeMarkedAsCompleted } from './errors/all-modules-in-the-course-must-be-marked-as-completed'
+import { ItemAlreadyCompletedError } from './errors/item-already-completed-error'
 
 interface MarkCourseAsCompletedUseCaseRequest {
   enrollmentId: string
@@ -17,7 +18,7 @@ interface MarkCourseAsCompletedUseCaseRequest {
 }
 
 type MarkCourseAsCompletedUseCaseResponse = Either<
-ResourceNotFoundError | NotAllowedError | AllModulesInTheCourseMustBeMarkedAsCompleted,
+ResourceNotFoundError | NotAllowedError | AllModulesInTheCourseMustBeMarkedAsCompleted | ItemAlreadyCompletedError,
 {
   course: CompleteCourseDTO
 }
@@ -51,6 +52,12 @@ export class MarkCourseAsCompletedUseCase implements UseCase<MarkCourseAsComplet
       return left(new NotAllowedError())
     }
 
+    const courseAlreadyMarkedAsCompleted = enrollment.completedAt
+
+    if (courseAlreadyMarkedAsCompleted) {
+      return left(new ItemAlreadyCompletedError())
+    }
+
     const completeCourse = await this.coursesRepository.findCompleteCourseEntityById(enrollment.courseId.toString())
 
     if (!completeCourse) {
@@ -75,7 +82,7 @@ export class MarkCourseAsCompletedUseCase implements UseCase<MarkCourseAsComplet
     )
 
     const allModulesOfThisCourseIsCompleted = courseModules.every(moduleToCompare => {
-      return completedModules.includes(moduleToCompare)
+      return completedModules.some(completedModule => completedModule.id.toString() === moduleToCompare.id.toString())
     })
 
     if (!allModulesOfThisCourseIsCompleted) {
