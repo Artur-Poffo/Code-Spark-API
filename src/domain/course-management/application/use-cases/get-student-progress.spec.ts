@@ -1,6 +1,11 @@
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
+import { makeClass } from '../../../../../test/factories/make-class'
 import { makeCourse } from '../../../../../test/factories/make-course'
+import { makeEnrollment } from '../../../../../test/factories/make-enrollment'
+import { makeEnrollmentCompletedItem } from '../../../../../test/factories/make-enrollment-completed-item'
 import { makeInstructor } from '../../../../../test/factories/make-instructor'
+import { makeModule } from '../../../../../test/factories/make-module'
+import { makeStudent } from '../../../../../test/factories/make-student'
 import { InMemoryClassesRepository } from '../../../../../test/repositories/in-memory-classes-repository'
 import { InMemoryCourseTagsRepository } from '../../../../../test/repositories/in-memory-course-tags-repository'
 import { InMemoryCoursesRepository } from '../../../../../test/repositories/in-memory-courses-repository'
@@ -9,7 +14,7 @@ import { InMemoryEnrollmentsRepository } from '../../../../../test/repositories/
 import { InMemoryInstructorRepository } from '../../../../../test/repositories/in-memory-instructors-repository'
 import { InMemoryModulesRepository } from '../../../../../test/repositories/in-memory-modules-repository'
 import { InMemoryStudentsRepository } from '../../../../../test/repositories/in-memory-students-repository'
-import { GetInstructorWithCoursesUseCase } from './get-instructor-with-courses'
+import { GetStudentProgressUseCase } from './get-student-progress'
 
 let inMemoryEnrollmentCompletedItemsRepository: InMemoryEnrollmentCompletedItemsRepository
 let inMemoryEnrollmentsRepository: InMemoryEnrollmentsRepository
@@ -19,9 +24,9 @@ let inMemoryClassesRepository: InMemoryClassesRepository
 let inMemoryInstructorsRepository: InMemoryInstructorRepository
 let inMemoryModulesRepository: InMemoryModulesRepository
 let inMemoryCoursesRepository: InMemoryCoursesRepository
-let sut: GetInstructorWithCoursesUseCase
+let sut: GetStudentProgressUseCase
 
-describe('Get instructors with their courses use case', () => {
+describe('Get student progress use case', () => {
   beforeEach(() => {
     inMemoryEnrollmentCompletedItemsRepository = new InMemoryEnrollmentCompletedItemsRepository()
     inMemoryClassesRepository = new InMemoryClassesRepository()
@@ -36,40 +41,70 @@ describe('Get instructors with their courses use case', () => {
     )
     inMemoryCoursesRepository = new InMemoryCoursesRepository(inMemoryModulesRepository, inMemoryInstructorsRepository, inMemoryEnrollmentsRepository, inMemoryStudentsRepository, inMemoryCourseTagsRepository)
 
-    sut = new GetInstructorWithCoursesUseCase(inMemoryCoursesRepository)
+    sut = new GetStudentProgressUseCase(
+      inMemoryEnrollmentsRepository,
+      inMemoryCoursesRepository,
+      inMemoryModulesRepository,
+      inMemoryEnrollmentCompletedItemsRepository
+    )
   })
 
-  it('should be able to get instructor info with their courses', async () => {
+  it('should be able to get student progress in a course', async () => {
     const instructor = makeInstructor()
     await inMemoryInstructorsRepository.create(instructor)
 
-    const firstCourse = makeCourse({ name: 'First Course', instructorId: instructor.id })
-    const secondCourse = makeCourse({ name: 'Second Course', instructorId: instructor.id })
+    const course = makeCourse({ name: 'First Course', instructorId: instructor.id })
+    await inMemoryCoursesRepository.create(course)
 
-    await Promise.all([
-      inMemoryCoursesRepository.create(firstCourse),
-      inMemoryCoursesRepository.create(secondCourse)
-    ])
+    const module = makeModule({
+      name: 'John Doe Module',
+      courseId: course.id,
+      moduleNumber: 1
+    })
+    await inMemoryModulesRepository.create(module)
+
+    const classToAdd = makeClass({ name: 'John Doe Class', moduleId: module.id, classNumber: 1 })
+    await inMemoryClassesRepository.create(classToAdd)
+
+    const student = makeStudent()
+    await inMemoryStudentsRepository.create(student)
+
+    const enrollment = makeEnrollment({ studentId: student.id, courseId: course.id })
+    await inMemoryEnrollmentsRepository.create(enrollment)
+
+    const completedItem = makeEnrollmentCompletedItem({ enrollmentId: enrollment.id, itemId: classToAdd.id, type: 'CLASS' })
+    await inMemoryEnrollmentCompletedItemsRepository.create(completedItem)
 
     const result = await sut.exec({
-      instructorId: instructor.id.toString()
+      enrollmentId: enrollment.id.toString(),
+      studentId: student.id.toString()
     })
 
     expect(result.isRight()).toBe(true)
     expect(result.value).toMatchObject({
-      instructorWithCourses: expect.objectContaining({
-        courses: expect.arrayContaining([
-          expect.objectContaining({
-            name: 'First Course'
-          })
-        ])
-      })
+      classes: expect.arrayContaining([
+        expect.objectContaining({
+          class: expect.objectContaining({
+            name: 'John Doe Class'
+          }),
+          completed: true
+        })
+      ]),
+      modules: expect.arrayContaining([
+        expect.objectContaining({
+          module: expect.objectContaining({
+            name: 'John Doe Module'
+          }),
+          completed: false
+        })
+      ])
     })
   })
 
-  it('should not be able to get a inexistent instructor info with their courses', async () => {
+  it('should not be able to get a student progress from a inexistent enrollment', async () => {
     const result = await sut.exec({
-      instructorId: 'inexistentInstructorId'
+      enrollmentId: 'inexistentEnrollmentId',
+      studentId: 'inexistentStudentId'
     })
 
     expect(result.isLeft()).toBe(true)

@@ -23,7 +23,7 @@ let inMemoryModulesRepository: InMemoryModulesRepository
 let inMemoryCoursesRepository: InMemoryCoursesRepository
 let sut: GetStudentWithCoursesUseCase
 
-describe('Get student with their courses', () => {
+describe('Get student with their courses use case', () => {
   beforeEach(() => {
     inMemoryEnrollmentCompletedItemsRepository = new InMemoryEnrollmentCompletedItemsRepository()
     inMemoryClassesRepository = new InMemoryClassesRepository()

@@ -57,8 +57,7 @@ export class IssueCertificateUseCase implements UseCase<IssueCertificateUseCaseR
       return left(new CertificateHasAlreadyBeenIssued())
     }
 
-    // FIXME: Fix this after completing the mark classes and modules as completed logic
-    const courseIsCompleted = !!enrollment.completedAt
+    const courseIsCompleted = enrollment.completedAt
 
     if (!courseIsCompleted) {
       return left(new CompleteTheCourseBeforeTheCertificateIIsIssuedError())
