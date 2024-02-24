@@ -101,6 +101,8 @@ model EnrollmentCompletedItem {
   itemId     String                       @map("item_id")
 
   enrollmentId String @map("enrollment_id")
+
+  @@map("enrollment_completed_items")
 }
 
 model Evaluation {
