@@ -9,7 +9,6 @@ export function makeEnrollment(
     {
       studentId: override.courseId ?? new UniqueEntityID(),
       courseId: override.courseId ?? new UniqueEntityID(),
-      completedItems: [],
       ocurredAt: override.ocurredAt ?? new Date(),
       completedAt: override.completedAt ?? null,
       ...override

@@ -20,6 +20,23 @@ export class PrismaEnrollmentCompleteItemsRepository implements EnrollmentComple
     return domainCompletedItem
   }
 
+  async findByEnrollmentIdAndItemId(enrollmentId: string, itemId: string): Promise<EnrollmentCompletedItem | null> {
+    const completedItem = await prisma.enrollmentCompletedItem.findFirst({
+      where: {
+        enrollmentId,
+        itemId
+      }
+    })
+
+    if (!completedItem) {
+      return null
+    }
+
+    const domainCompletedItem = EnrollmentCompletedItemMapper.toDomain(completedItem)
+
+    return domainCompletedItem
+  }
+
   async findManyCompletedClassesByEnrollmentId(enrollmentId: string): Promise<EnrollmentCompletedItem[]> {
     const completedItems = await prisma.enrollmentCompletedItem.findMany({
       where: {
@@ -66,5 +83,13 @@ export class PrismaEnrollmentCompleteItemsRepository implements EnrollmentComple
     })
 
     return completedItem
+  }
+
+  async delete(completedItem: EnrollmentCompletedItem): Promise<void> {
+    await prisma.enrollmentCompletedItem.delete({
+      where: {
+        id: completedItem.id.toString()
+      }
+    })
   }
 }

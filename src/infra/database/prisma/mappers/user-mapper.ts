@@ -1,3 +1,4 @@
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { type CoursesRepository } from '@/domain/course-management/application/repositories/courses-repository'
 import { type EnrollmentsRepository } from '@/domain/course-management/application/repositories/enrollments-repository'
 import { type EvaluationsRepository } from '@/domain/course-management/application/repositories/evaluations-repository'
@@ -31,7 +32,8 @@ export class UserMapper {
         bannerImageKey: raw.bannerImageKey,
         profileImageKey: raw.profileImageKey,
         registeredAt: raw.registeredAt
-      })
+      },
+      new UniqueEntityID(raw.id))
     }
 
     return Student.create({
@@ -44,7 +46,8 @@ export class UserMapper {
       bannerImageKey: raw.bannerImageKey,
       profileImageKey: raw.profileImageKey,
       registeredAt: raw.registeredAt
-    })
+    },
+    new UniqueEntityID(raw.id))
   }
 
   async toPrisma(user: User<StudentProps | InstructorProps>): Promise<Prisma.UserUncheckedCreateInput> {

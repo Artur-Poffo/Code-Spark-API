@@ -1,16 +1,15 @@
 import { left, right, type Either } from '@/core/either'
+import { InvalidMimeTypeError } from '@/core/errors/errors/invalid-mime-type-error'
 import { type UseCase } from '@/core/use-cases/use-case'
 import { File } from '../../enterprise/entities/file'
 import { type FilesRepository } from '../repositories/files-repository'
 import { type Uploader } from '../upload/uploader'
-import { InvalidMimeTypeError } from './errors/invalid-mime-type-error'
 
 interface UploadFileUseCaseRequest {
   fileName: string
   fileType: string
   body: Buffer
   size: number
-  storedAt: Date
 }
 
 type UploadFileUseCaseResponse = Either<
@@ -30,22 +29,20 @@ export class UploadFileUseCase implements UseCase<UploadFileUseCaseRequest, Uplo
     fileName,
     fileType,
     body,
-    size,
-    storedAt
+    size
   }: UploadFileUseCaseRequest): Promise<UploadFileUseCaseResponse> {
     if (!/image\/(jpeg|png)|video\/(mp4|avi)/.test(fileType)) {
       return left(new InvalidMimeTypeError(fileType))
     }
 
-    const { key } = await this.uploader.upload({ fileName, fileType, body, size, storedAt })
+    const { key } = await this.uploader.upload({ fileName, fileType, body, size })
 
     const file = File.create({
       fileName,
       fileType,
       body,
       fileKey: key,
-      size,
-      storedAt
+      size
     })
 
     await this.filesRepository.create(file)

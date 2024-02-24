@@ -59,6 +59,9 @@ describe('Edit course details use case', () => {
         name: 'New name'
       })
     })
+    expect(inMemoryCoursesRepository.items[0]).toMatchObject({
+      name: 'New name'
+    })
   })
 
   it('should not be able to edit course details of a inexistent course', async () => {

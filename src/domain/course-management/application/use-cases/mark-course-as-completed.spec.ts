@@ -16,6 +16,7 @@ import { InMemoryStudentsRepository } from '../../../../../test/repositories/in-
 import { InMemoryInstructorRepository } from './../../../../../test/repositories/in-memory-instructors-repository'
 import { InMemoryModulesRepository } from './../../../../../test/repositories/in-memory-modules-repository'
 import { AllModulesInTheCourseMustBeMarkedAsCompleted } from './errors/all-modules-in-the-course-must-be-marked-as-completed'
+import { ItemAlreadyCompletedError } from './errors/item-already-completed-error'
 import { MarkCourseAsCompletedUseCase } from './mark-course-as-completed'
 
 let inMemoryEnrollmentCompletedItemsRepository: InMemoryEnrollmentCompletedItemsRepository
@@ -80,11 +81,6 @@ describe('Mark course as completed use case', () => {
       inMemoryEnrollmentCompletedItemsRepository.create(secondCompletedItem)
     ])
 
-    await Promise.all([
-      inMemoryEnrollmentsRepository.markItemAsCompleted(firstCompletedItem.id.toString(), enrollment),
-      inMemoryEnrollmentsRepository.markItemAsCompleted(secondCompletedItem.id.toString(), enrollment)
-    ])
-
     const result = await sut.exec({
       enrollmentId: enrollment.id.toString(),
       studentId: student.id.toString()
@@ -93,6 +89,50 @@ describe('Mark course as completed use case', () => {
     expect(result.isRight()).toBe(true)
     expect(inMemoryEnrollmentsRepository.items[0].completedAt).not.toBe(null)
     expect(inMemoryEnrollmentCompletedItemsRepository.items).toHaveLength(2)
+  })
+
+  it('should not be able to mark a enrollment of a student as completed twice', async () => {
+    const instructor = makeInstructor()
+    await inMemoryInstructorsRepository.create(instructor)
+
+    const course = makeCourse({ instructorId: instructor.id })
+    await inMemoryCoursesRepository.create(course)
+
+    const module = makeModule({
+      courseId: course.id,
+      moduleNumber: 1
+    })
+    await inMemoryModulesRepository.create(module)
+
+    const classToMarkAsCompleted = makeClass({ name: 'John Doe Class', moduleId: module.id, classNumber: 1 })
+    await inMemoryClassesRepository.create(classToMarkAsCompleted)
+
+    const student = makeStudent()
+    await inMemoryStudentsRepository.create(student)
+
+    const enrollment = makeEnrollment({ studentId: student.id, courseId: course.id })
+    await inMemoryEnrollmentsRepository.create(enrollment)
+
+    const firstCompletedItem = makeEnrollmentCompletedItem({ enrollmentId: enrollment.id, itemId: classToMarkAsCompleted.id, type: 'CLASS' })
+    const secondCompletedItem = makeEnrollmentCompletedItem({ enrollmentId: enrollment.id, itemId: module.id, type: 'MODULE' })
+
+    await Promise.all([
+      inMemoryEnrollmentCompletedItemsRepository.create(firstCompletedItem),
+      inMemoryEnrollmentCompletedItemsRepository.create(secondCompletedItem)
+    ])
+
+    await sut.exec({
+      enrollmentId: enrollment.id.toString(),
+      studentId: student.id.toString()
+    })
+
+    const result = await sut.exec({
+      enrollmentId: enrollment.id.toString(),
+      studentId: student.id.toString()
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(ItemAlreadyCompletedError)
   })
 
   it('should not be able to mark a inexistent enrollment of a student as completed', async () => {
@@ -153,8 +193,6 @@ describe('Mark course as completed use case', () => {
 
     const completedItem = makeEnrollmentCompletedItem({ enrollmentId: enrollment.id, itemId: classToAdd.id, type: 'CLASS' })
     await inMemoryEnrollmentCompletedItemsRepository.create(completedItem)
-
-    await inMemoryEnrollmentsRepository.markItemAsCompleted(completedItem.id.toString(), enrollment)
 
     const result = await sut.exec({
       enrollmentId: enrollment.id.toString(),

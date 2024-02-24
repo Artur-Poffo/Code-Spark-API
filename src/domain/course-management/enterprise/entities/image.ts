@@ -1,18 +1,17 @@
-import { AggregateRoot } from '@/core/entities/aggregate-root'
+import { Entity } from '@/core/entities/entity'
 import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { type Optional } from '@/core/types/optional'
-import { ImageUploadedEvent } from '../events/image-uploaded'
 
 export interface ImageProps {
   imageName: string
   imageType: 'image/jpeg' | 'image/png'
   body: Buffer
   size: number
-  imageKey?: string
+  imageKey?: string | null
   storedAt: Date
 }
 
-export class Image extends AggregateRoot<ImageProps> {
+export class Image extends Entity<ImageProps> {
   get imageName() {
     return this.props.imageName
   }
@@ -53,12 +52,6 @@ export class Image extends AggregateRoot<ImageProps> {
       },
       id
     )
-
-    const isNewImage = !id
-
-    if (isNewImage) {
-      image.addDomainEvent(new ImageUploadedEvent(image))
-    }
 
     return image
   }

@@ -1,4 +1,4 @@
-import { EnrollmentMapper } from '../enrollment-mapeer'
+import { EnrollmentMapper } from '../enrollment-mapper'
 import { PrismaEnrollmentCompleteItemsRepository } from './../../repositories/prisma-enrollment-completed-items-repository'
 
 export function makeEnrollmentMapper() {

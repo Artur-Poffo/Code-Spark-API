@@ -14,6 +14,24 @@ export class InMemoryEnrollmentCompletedItemsRepository implements EnrollmentCom
     return completedItem
   }
 
+  async findByEnrollmentIdAndItemId(enrollmentId: string, itemId: string): Promise<EnrollmentCompletedItem | null> {
+    // eslint-disable-next-line array-callback-return
+    const completedItem = this.items.find(completeCourseItemToFind => {
+      if (
+        completeCourseItemToFind.enrollmentId.toString() === enrollmentId &&
+        completeCourseItemToFind.itemId.toString() === itemId
+      ) {
+        return completeCourseItemToFind
+      }
+    })
+
+    if (!completedItem) {
+      return null
+    }
+
+    return completedItem
+  }
+
   async findManyCompletedClassesByEnrollmentId(enrollmentId: string): Promise<EnrollmentCompletedItem[]> {
     const completedClassesOnEnrollment: EnrollmentCompletedItem[] = []
 
@@ -45,5 +63,10 @@ export class InMemoryEnrollmentCompletedItemsRepository implements EnrollmentCom
   async create(enrollmentCompletedItem: EnrollmentCompletedItem): Promise<EnrollmentCompletedItem> {
     this.items.push(enrollmentCompletedItem)
     return enrollmentCompletedItem
+  }
+
+  async delete(completedItem: EnrollmentCompletedItem): Promise<void> {
+    const completedItemIndex = this.items.indexOf(completedItem)
+    this.items.splice(completedItemIndex, 1)
   }
 }

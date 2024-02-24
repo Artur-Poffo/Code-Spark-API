@@ -17,6 +17,8 @@
         "@typescript-eslint/no-unused-expressions": "off",
         "no-new": "off",
         "no-self-assign": "off",
-        "@typescript-eslint/no-unsafe-argument": "off"
+        "@typescript-eslint/no-unsafe-argument": "off",
+        "@typescript-eslint/no-floating-promises": "off",
+        "no-constant-condition": "off"
     }
 }

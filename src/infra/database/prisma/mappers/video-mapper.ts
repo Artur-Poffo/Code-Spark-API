@@ -26,11 +26,7 @@ export class VideoMapper {
     )
   }
 
-  static toPrisma(video: Video) {
-    if (!video.videoKey) {
-      return null
-    }
-
+  static toPrisma(video: Video): Prisma.VideoUncheckedCreateInput {
     return {
       id: video.id.toString(),
       duration: video.duration,

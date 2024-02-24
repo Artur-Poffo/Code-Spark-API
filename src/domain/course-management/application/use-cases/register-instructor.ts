@@ -1,7 +1,6 @@
 import { left, right, type Either } from '@/core/either'
 import { type UseCase } from '@/core/use-cases/use-case'
-import { type Instructor } from '../../enterprise/entities/instructor'
-import { Student } from '../../enterprise/entities/student'
+import { Instructor } from '../../enterprise/entities/instructor'
 import { type HashGenerator } from '../cryptography/hash-generator'
 import { type InstructorsRepository } from '../repositories/instructors-repository'
 import { InstructorAlreadyExistsError } from './errors/instructor-already-exists-error'
@@ -48,7 +47,7 @@ export class RegisterInstructorUseCase implements UseCase<RegisterInstructorUseC
 
     const hashedPassword = await this.hashGenerator.hash(password)
 
-    const instructor = Student.create({
+    const instructor = Instructor.create({
       name,
       email,
       passwordHash: hashedPassword,

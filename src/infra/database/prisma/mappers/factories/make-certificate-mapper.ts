@@ -1,13 +1,13 @@
-import { InMemoryImagesRepository } from '../../../../../../test/repositories/in-memory-images-repository'
+import { PrismaImagesRepository } from '@/infra/database/prisma/repositories/prisma-images-repository'
 import { PrismaStudentCertificatesRepository } from '../../repositories/prisma-student-certificates-repository'
 import { CertificateMapper } from '../certificate-mapper'
 
 export function makeCertificateMapper() {
-  const inMemoryImagesRepository = new InMemoryImagesRepository()
+  const prismaImagesRepository = new PrismaImagesRepository()
   const prismaStudentCertificatesRepository = new PrismaStudentCertificatesRepository()
 
   const certificateMapper = new CertificateMapper(
-    inMemoryImagesRepository,
+    prismaImagesRepository,
     prismaStudentCertificatesRepository
   )
 

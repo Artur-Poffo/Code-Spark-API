@@ -1,3 +1,4 @@
+import { DomainEvents } from '@/core/events/domain-events'
 import { type FilesRepository } from '@/domain/storage/application/repositories/files-repository'
 import { type File } from '@/domain/storage/enterprise/entities/file'
 import { prisma } from '..'
@@ -46,6 +47,8 @@ export class PrismaFilesRepository implements FilesRepository {
     await prisma.file.create({
       data: infraFile
     })
+
+    DomainEvents.dispatchEventsForAggregate(file.id)
 
     return file
   }

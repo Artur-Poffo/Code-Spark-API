@@ -1,4 +1,3 @@
-import { DomainEvents } from '@/core/events/domain-events'
 import { type VideosRepository } from '@/domain/course-management/application/repositories/videos-repository'
 import { type Video } from '@/domain/course-management/enterprise/entities/video'
 
@@ -34,6 +33,9 @@ export class InMemoryVideosRepository implements VideosRepository {
 
     if (!videoToAppendKey.videoKey) {
       videoToAppendKey.videoKey = videoKey
+      const videoIndex = this.items.indexOf(videoToAppendKey)
+
+      this.items[videoIndex] = videoToAppendKey
     }
 
     return videoToAppendKey
@@ -41,8 +43,6 @@ export class InMemoryVideosRepository implements VideosRepository {
 
   async create(video: Video): Promise<Video> {
     this.items.push(video)
-
-    DomainEvents.dispatchEventsForAggregate(video.id)
 
     return video
   }

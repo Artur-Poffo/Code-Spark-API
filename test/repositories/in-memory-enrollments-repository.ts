@@ -60,19 +60,6 @@ export class InMemoryEnrollmentsRepository implements EnrollmentsRepository {
     return courseStudents
   }
 
-  async markItemAsCompleted(itemId: string, enrollment: Enrollment): Promise<Enrollment | null> {
-    const enrollmentCompletedItem = await this.inMemoryEnrollmentCompletedItemsRepository.findById(itemId)
-
-    if (!enrollmentCompletedItem) {
-      return null
-    }
-
-    enrollment.completedItems.push(enrollmentCompletedItem.id)
-    await this.save(enrollment)
-
-    return enrollment
-  }
-
   async markAsCompleted(enrollment: Enrollment): Promise<Enrollment> {
     enrollment.completedAt = new Date()
     await this.save(enrollment)

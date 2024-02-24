@@ -29,7 +29,7 @@ export class GetCourseEvaluationsAverageUseCase implements UseCase< GetCourseEva
       sumOfCourseEvaluations += courseEvaluation.value
     })
 
-    const courseEvaluationsAverage = sumOfCourseEvaluations / courseEvaluations.length
+    const courseEvaluationsAverage = (sumOfCourseEvaluations / courseEvaluations.length) || 0
 
     return right({
       evaluationsAverage: courseEvaluationsAverage

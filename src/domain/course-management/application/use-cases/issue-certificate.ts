@@ -57,7 +57,7 @@ export class IssueCertificateUseCase implements UseCase<IssueCertificateUseCaseR
       return left(new CertificateHasAlreadyBeenIssued())
     }
 
-    const courseIsCompleted = !!enrollment.completedAt
+    const courseIsCompleted = enrollment.completedAt
 
     if (!courseIsCompleted) {
       return left(new CompleteTheCourseBeforeTheCertificateIIsIssuedError())

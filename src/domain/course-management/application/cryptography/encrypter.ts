@@ -1,3 +1,8 @@
+export interface EncrypterProps {
+  role: 'STUDENT' | 'INSTRUCTOR'
+  sub: string
+}
+
 export interface Encrypter {
-  encrypt: (payload: Record<string, unknown>) => Promise<string>
+  encrypt: (payload: EncrypterProps) => Promise<string>
 }

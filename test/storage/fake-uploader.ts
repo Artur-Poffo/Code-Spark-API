@@ -5,7 +5,7 @@ import { randomUUID } from 'node:crypto'
 export class FakeUploader implements Uploader {
   public files: File[] = []
 
-  async upload({ fileName, fileType, body, size, storedAt }: UploadParams): Promise<{ key: string }> {
+  async upload({ fileName, fileType, body, size }: UploadParams): Promise<{ key: string }> {
     const key = randomUUID()
 
     const fileToUpload = File.create({
@@ -13,8 +13,7 @@ export class FakeUploader implements Uploader {
       fileType,
       body,
       fileKey: key,
-      size,
-      storedAt
+      size
     })
 
     this.files.push(fileToUpload)

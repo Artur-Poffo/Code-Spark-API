@@ -1,7 +1,10 @@
-import { type Encrypter } from '@/domain/course-management/application/cryptography/encrypter'
+import { type Encrypter, type EncrypterProps } from '@/domain/course-management/application/cryptography/encrypter'
+import { type FastifyReply } from 'fastify'
 
-export class FakeEncrypter implements Encrypter {
-  async encrypt(payload: Record<string, unknown>): Promise<string> {
-    return JSON.stringify(payload)
+export class JWTEncrypter implements Encrypter {
+  constructor(private readonly reply: FastifyReply) {}
+
+  async encrypt(payload: EncrypterProps): Promise<string> {
+    return await this.reply.jwtSign({ role: payload.role }, { sub: payload.sub })
   }
 }

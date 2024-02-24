@@ -178,7 +178,9 @@ model File {
   key      String   @unique()
   size     Decimal
   storedAt DateTime @default(now()) @map("stored_at")
-  video    Video?
+
+  video Video?
+  Image Image?
 
   @@map("files")
 }
@@ -190,7 +192,16 @@ model Video {
 
   classes Class[]
 
-  fileKey String @unique() @map("file_key")
+  fileKey String? @unique() @map("file_key")
 
   @@map("videos")
+}
+
+model Image {
+  id   String @id @default(uuid())
+  file File?  @relation(fields: [fileKey], references: [key])
+
+  fileKey String? @unique() @map("file_key")
+
+  @@map("images")
 }

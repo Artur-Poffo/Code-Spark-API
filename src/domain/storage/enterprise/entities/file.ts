@@ -1,5 +1,7 @@
 import { AggregateRoot } from '@/core/entities/aggregate-root'
 import { type UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { type Optional } from '@/core/types/optional'
+import { FileUploadedEvent } from '../events/file-uploaded'
 
 export interface FileProps {
   fileName: string
@@ -36,15 +38,22 @@ export class File extends AggregateRoot<FileProps> {
   }
 
   static create(
-    props: FileProps,
+    props: Optional<FileProps, 'storedAt'>,
     id?: UniqueEntityID
   ) {
     const file = new File(
       {
+        storedAt: new Date(),
         ...props
       },
       id
     )
+
+    const isNewFile = !id
+
+    if (isNewFile) {
+      file.addDomainEvent(new FileUploadedEvent(file))
+    }
 
     return file
   }

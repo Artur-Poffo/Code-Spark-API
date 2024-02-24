@@ -3,7 +3,7 @@ import { type Enrollment } from '@/domain/course-management/enterprise/entities/
 import { type Student } from '@/domain/course-management/enterprise/entities/student'
 import { prisma } from '..'
 import { StudentMapper } from '../mappers/student-mapper'
-import { type EnrollmentMapper } from './../mappers/enrollment-mapeer'
+import { type EnrollmentMapper } from './../mappers/enrollment-mapper'
 
 export class PrismaEnrollmentsRepository implements EnrollmentsRepository {
   constructor(
@@ -91,23 +91,6 @@ export class PrismaEnrollmentsRepository implements EnrollmentsRepository {
     })
 
     return students.map(student => StudentMapper.toDomain(student))
-  }
-
-  async markItemAsCompleted(itemId: string, enrollment: Enrollment): Promise<Enrollment | null> {
-    // TODO: This is wrong but I'm out of time, I'll refactor it in the future
-    const infraEnrollment = await prisma.enrollment.findUnique({
-      where: {
-        id: enrollment.id.toString()
-      }
-    })
-
-    if (!infraEnrollment) {
-      return null
-    }
-
-    const domainEnrollment = await this.enrollmentMapper.toDomain(infraEnrollment)
-
-    return domainEnrollment
   }
 
   async markAsCompleted(enrollment: Enrollment): Promise<Enrollment | null> {
