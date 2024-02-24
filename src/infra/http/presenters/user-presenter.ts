@@ -9,6 +9,7 @@ export class UserPresenter {
       cpf: user.cpf,
       age: user.age,
       summary: user.summary,
+      role: user.role,
       profileImageKey: user.profileImageKey,
       bannerImageKey: user.bannerImageKey,
       registeredAt: user.registeredAt
