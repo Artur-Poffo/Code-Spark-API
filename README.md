@@ -200,7 +200,6 @@
 
 ### Courses
 - [x] GET /courses/:courseId - Get course details
-- [ ] GET /courses/:courseId/enrollments/:enrollmentId/progress - Get course details with student progress
 - [x] GET /courses/:courseId/stats - Get course statistics, like duration and number of classes
 - [x] GET /courses/:courseId/metrics - Get course metrics for a dashboard
 - [x] GET /courses - Get recent courses with instructor and evaluation average
@@ -249,9 +248,10 @@
 - [x] POST /enrollments/:enrollmentId/modules/:moduleId/complete - Mark module as completed
 - [x] POST /enrollments/:enrollmentId/classes/:classId/complete - Mark class as completed
 - [x] POST /enrollments/:enrollmentId/complete - Mark enrollment as completed
+- [ ] GET /enrollments/:enrollmentId/progress - Get student enrollment progress
 - [x] GET /courses/:courseId/students/:studentId/enrollments - Get enrollment of a student on a course
 - [x] GET /enrollments/:enrollmentId/classes/completed - Fetch enrollment completed classes
-- [ ] GET /enrollments/:enrollmentId/modules/completed - Fetch enrollment completed modules
+- [x] GET /enrollments/:enrollmentId/modules/completed - Fetch enrollment completed modules
 - [x] DELETE /enrollments/:enrollmentId - Cancel enrollment
 
 ### Video

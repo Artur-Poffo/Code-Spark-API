@@ -6,8 +6,7 @@ import { z } from 'zod'
 import { EnrollmentCompletedItemPresenter } from '../presenters/enrollment-completed-item-presenter'
 
 const fetchEnrollmentCompletedClassesParamsSchema = z.object({
-  enrollmentId: z.string().uuid(),
-  classId: z.string().uuid()
+  enrollmentId: z.string().uuid()
 })
 
 export async function fetchEnrollmentCompletedClassesController(request: FastifyRequest, reply: FastifyReply) {

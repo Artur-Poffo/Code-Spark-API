@@ -5,7 +5,7 @@ export class EnrollmentCompletedItemPresenter {
     return {
       id: enrollmentCompletedItem.id,
       enrollmentId: enrollmentCompletedItem.enrollmentId,
-      itemUd: enrollmentCompletedItem.itemId,
+      itemId: enrollmentCompletedItem.itemId,
       itemType: enrollmentCompletedItem.itemType
     }
   }
