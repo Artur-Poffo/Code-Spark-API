@@ -27,6 +27,7 @@ export const app = fastify()
 // PLugins
 
 app.register(fastifyCors, {
+  origin: [env.CLIENT_URL],
   credentials: true,
   exposedHeaders: ['set-cookie']
 })

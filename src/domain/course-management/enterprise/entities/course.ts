@@ -59,8 +59,6 @@ export class Course extends Entity<CourseProps> {
     const course = new Course(
       {
         ...props,
-        coverImageKey: null,
-        bannerImageKey: null,
         createdAt: props.createdAt ?? new Date()
       },
       id
