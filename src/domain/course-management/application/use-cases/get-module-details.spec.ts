@@ -34,7 +34,7 @@ describe('Get module details use case', () => {
 
   it('should not be able to get module details of a inexistent module', async () => {
     const result = await sut.exec({
-      moduleId: 'inexistentCourseId'
+      moduleId: 'inexistentModuleId'
     })
 
     expect(result.isLeft()).toBe(true)
