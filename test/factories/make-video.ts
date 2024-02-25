@@ -11,6 +11,7 @@ export function makeVideo(
       videoName: faker.company.name(),
       videoType: 'video/mp4',
       body: Buffer.from(faker.lorem.slug()),
+      videoKey: override.videoKey ?? '12345-video.mp4',
       size: faker.number.int(),
       duration: faker.number.float(),
       ...override

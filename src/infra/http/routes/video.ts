@@ -3,5 +3,5 @@ import { getVideoDetailsController } from '../controllers/get-video-details'
 import { verifyJwt } from '../middlewares/verify-jwt'
 
 export async function videoRoutes(app: FastifyInstance) {
-  app.get('/videos/:videoId', { onRequest: [verifyJwt] }, getVideoDetailsController)
+  app.get('/videos/:videoKey', { onRequest: [verifyJwt] }, getVideoDetailsController)
 }

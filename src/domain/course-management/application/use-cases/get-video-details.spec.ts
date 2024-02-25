@@ -15,12 +15,12 @@ describe('Get video details use case', async () => {
   it('should be able to get video details', async () => {
     const name = 'john-doe-video.mp4'
 
-    const video = makeVideo({ videoName: name })
+    const video = makeVideo({ videoName: name, videoKey: '2332323-video.mp4' })
 
     await inMemoryVideosRepository.create(video)
 
     const result = await sut.exec({
-      videoId: video.id.toString()
+      fileKey: video.videoKey
     })
 
     expect(result.isRight()).toBe(true)
@@ -33,7 +33,7 @@ describe('Get video details use case', async () => {
 
   it('should not be able to get video details of a inexistent video', async () => {
     const result = await sut.exec({
-      videoId: 'inexistentVideoId'
+      fileKey: 'inexistentVideoId'
     })
 
     expect(result.isLeft()).toBe(true)

@@ -6,16 +6,16 @@ import { z } from 'zod'
 import { VideoPresenter } from '../presenters/video-presenter'
 
 const getVideoDetailsParamsSchema = z.object({
-  videoId: z.string().uuid()
+  fileKey: z.string()
 })
 
 export async function getVideoDetailsController(request: FastifyRequest, reply: FastifyReply) {
-  const { videoId } = getVideoDetailsParamsSchema.parse(request.params)
+  const { fileKey } = getVideoDetailsParamsSchema.parse(request.params)
 
   const getVideoInfoUseCase = makeGetVideoDetailsUseCase()
 
   const result = await getVideoInfoUseCase.exec({
-    videoId
+    fileKey
   })
 
   if (result.isLeft()) {

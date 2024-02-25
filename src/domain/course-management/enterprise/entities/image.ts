@@ -7,7 +7,7 @@ export interface ImageProps {
   imageType: 'image/jpeg' | 'image/png'
   body: Buffer
   size: number
-  imageKey?: string | null
+  imageKey: string
   storedAt: Date
 }
 

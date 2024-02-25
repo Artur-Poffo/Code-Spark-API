@@ -5,7 +5,7 @@ import { type Image } from '../../enterprise/entities/image'
 import { type ImagesRepository } from '../repositories/images-repository'
 
 interface GetImageDetailsUseCaseRequest {
-  imageId: string
+  fileKey: string
 }
 
 type GetImageDetailsUseCaseResponse = Either<
@@ -21,9 +21,9 @@ export class GetImageDetailsUseCase implements UseCase<GetImageDetailsUseCaseReq
   ) { }
 
   async exec({
-    imageId
+    fileKey
   }: GetImageDetailsUseCaseRequest): Promise<GetImageDetailsUseCaseResponse> {
-    const image = await this.imagesRepository.findById(imageId)
+    const image = await this.imagesRepository.findByImageKey(fileKey)
 
     if (!image) {
       return left(new ResourceNotFoundError())

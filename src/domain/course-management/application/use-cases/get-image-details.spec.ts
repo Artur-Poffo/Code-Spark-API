@@ -15,12 +15,12 @@ describe('Get image details use case', async () => {
   it('should be able to get image details', async () => {
     const name = 'john-doe-image.jpeg'
 
-    const image = makeImage({ imageName: name })
+    const image = makeImage({ imageName: name, imageKey: '23323232-image.jpeg' })
 
     await inMemoryImagesRepository.create(image)
 
     const result = await sut.exec({
-      imageId: image.id.toString()
+      fileKey: image.imageKey
     })
 
     expect(result.isRight()).toBe(true)
@@ -33,7 +33,7 @@ describe('Get image details use case', async () => {
 
   it('should not be able to get image details of a inexistent image', async () => {
     const result = await sut.exec({
-      imageId: 'inexistentImageId'
+      fileKey: 'inexistentImageId'
     })
 
     expect(result.isLeft()).toBe(true)

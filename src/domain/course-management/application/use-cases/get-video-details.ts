@@ -5,7 +5,7 @@ import { type Video } from '../../enterprise/entities/video'
 import { type VideosRepository } from '../repositories/videos-repository'
 
 interface GetVideoDetailsUseCaseRequest {
-  videoId: string
+  fileKey: string
 }
 
 type GetVideoDetailsUseCaseResponse = Either<
@@ -21,9 +21,9 @@ export class GetVideoDetailsUseCase implements UseCase<GetVideoDetailsUseCaseReq
   ) { }
 
   async exec({
-    videoId
+    fileKey
   }: GetVideoDetailsUseCaseRequest): Promise<GetVideoDetailsUseCaseResponse> {
-    const video = await this.videosRepository.findById(videoId)
+    const video = await this.videosRepository.findByVideoKey(fileKey)
 
     if (!video) {
       return left(new ResourceNotFoundError())

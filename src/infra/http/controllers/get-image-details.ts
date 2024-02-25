@@ -6,16 +6,16 @@ import { z } from 'zod'
 import { ImagePresenter } from '../presenters/image-presenter'
 
 const getImageDetailsParamsSchema = z.object({
-  imageId: z.string().uuid()
+  fileKey: z.string()
 })
 
 export async function getImageDetailsController(request: FastifyRequest, reply: FastifyReply) {
-  const { imageId } = getImageDetailsParamsSchema.parse(request.params)
+  const { fileKey } = getImageDetailsParamsSchema.parse(request.params)
 
   const getImageInfoUseCase = makeGetImageDetailsUseCase()
 
   const result = await getImageInfoUseCase.exec({
-    imageId
+    fileKey
   })
 
   if (result.isLeft()) {

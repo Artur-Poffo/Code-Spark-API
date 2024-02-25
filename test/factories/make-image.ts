@@ -11,6 +11,7 @@ export function makeImage(
       imageName: faker.company.name(),
       imageType: 'image/jpeg',
       body: Buffer.from(faker.lorem.slug()),
+      imageKey: override.imageKey ?? '12345-image.png',
       size: faker.number.int(),
       ...override
     },
