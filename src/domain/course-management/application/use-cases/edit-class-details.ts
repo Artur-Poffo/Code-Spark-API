@@ -92,6 +92,8 @@ export class EditClassDetailsUseCase implements UseCase<EditClassDetailsUseCaseR
 
     classToEdit.classNumber = classNumber ?? classToEdit.classNumber
 
+    await this.classesRepository.save(classToEdit)
+
     return right({
       class: classToEdit
     })
