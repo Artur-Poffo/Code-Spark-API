@@ -29,7 +29,8 @@ export class R2Storage implements Uploader {
     body
   }: UploadParams): Promise<{ key: string }> {
     const uploadId = randomUUID()
-    const uniqueFileName = `${uploadId}-${fileName}`
+    const uniqueFileName = `${uploadId}-${fileName}`.trim().replace(/ /g, '-').replace(/\(|\)/g, '')
+      .toLowerCase()
 
     await this.client.send(
       new PutObjectCommand({
