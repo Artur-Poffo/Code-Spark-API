@@ -50,6 +50,7 @@ export async function uploadFileController(request: MulterRequest, reply: Fastif
   const { file } = result.value
 
   if (file.fileType === 'video/mp4' || file.fileType === 'video/avi') {
+    await new Promise(resolve => setTimeout(resolve, 5000)) // TODO: Temporary solution due to lack of time, must be refactored
     const videoResult = await getVideoDetailsUseCase.exec({
       fileKey: file.fileKey
     })
@@ -71,6 +72,7 @@ export async function uploadFileController(request: MulterRequest, reply: Fastif
       file: VideoPresenter.toHTTP(video)
     })
   } else if (file.fileType === 'image/jpeg' || file.fileType === 'image/png') {
+    await new Promise(resolve => setTimeout(resolve, 5000)) // TODO: Temporary solution due to lack of time, must be refactored
     const imageResult = await getImageDetailsUseCase.exec({
       fileKey: result.value.file.fileKey
     })

@@ -1,6 +1,59 @@
-# Entra21 TCC - CodeSpark API
+<h1 align="center">
+  <a href="#">CodeSpark - Entra21 TCC 💻</a>
+</h1>
 
-## ⚠️ Temporary README
+<h3 align="center">
+  CodeSpark API
+</h3>
+
+<h4 align="center"> 
+	 Status: ⚠️ Under Development - MVP Completed ⚠️
+</h4>
+
+<p align="center">
+ <a href="#about">About</a> •
+ <a href="#potential-refactoring-or-updates">Potential Refactoring or Updates</a> •
+ <a href="#separation-of-initial-requirements">Separation of initial requirements</a> •
+ <a href="#api-routes">API Routes</a> • 
+ <a href="#how-it-works">How it works</a> • 
+ <a href="#tech-stack">Tech Stack</a> • 
+ <a href="#author">Author</a>
+</p>
+
+## About
+
+CodeSpark API - CodeSpark API is an API that follows good practices such as: DDD and clean architecture, it is an API responsible for a course platform, it contains a file upload system for Cloudflare R2 (it uses AWS S3 under the hood) and a class evaluation system
+
+It is a TCC project for the [Entra21 training program](https://www.entra21.com.br/) in Vue.js course
+
+---
+
+## Potential Refactoring or Updates
+
+> The API scaled more than we thought and that's why some things were left out even of the MVP, but we intend to continue with the project after the presentation
+
+- [x] Implement method for course repository.
+- [x] Refactor dependencies in all unit tests.
+- [x] Verify the usage of `Promise.all()` and apply destructuring where applicable.
+- [x] Review use cases and explore potential improvements.
+- [x] Ensure consistent usage of `new UniqueEntityId()` for entity IDs and rectify any inconsistencies.
+- [x] Evaluate the Enrollment entity for possible simplifications in managing modules and classes.
+- [x] Replace all asynchronous `forEach` loops with `Promise.all()` combined with asynchronous `map`.
+- [x] Update error handling in use cases.
+- [x] Implement sorting in `findMany` methods of Prisma repositories.
+- [x] Refactor database relation names.
+- [x] Revise mark as complete functionality for classes and modules system.
+- [x] Fix infinite calls to Prisma repositories in some mapper usage scenarios.
+- [x] Introduce domain events for Prisma repositories.
+- [ ] Implement mappers for mapping domain entities to DTOs.
+- [ ] Implement pagination.
+- [ ] Implement E2E tests.
+- [ ] Refactor error handling in controllers
+- [ ] Refactor the event handler class instance
+
+---
+
+## Separation of initial requirements
 
 ## Functional Requirements
 
@@ -37,7 +90,7 @@
 
 - [x] CRUDs for all main entities: course, module, class, user, etc.
 
-- [ ] Return information about a course with student progress in your modules and classes.
+- [x] Return information about a course with student progress in your modules and classes.
 - [x] Video streaming to watch the classes.
 
 ## Business Rules
@@ -65,121 +118,11 @@
 - [x] User must be identified by JWT.
 - [x] JWT must use the RS256 algorithm.
 
-## Initial Entities (Domain)
+---
 
-> It's just an `initial` abstraction, it will be increased, fields type are only primitive
+## API Routes
 
-### Course-Management Domain
-
-- [x] User
-- - name: string
-  - email: string
-  - passwordHash: string
-  - age: number
-  - cpf: string
-  - summary: string
-  - profileImageKey: string | null
-  - bannerImageKey: string | null
-  - registeredAt: date
-
-- [x] Student
-- - studentId: string
-  - ...patternData (User)
-
-- [x] Instructor
-- - instructorId: string
-  - ...patternData (User)
-
-- [x] Course
-- - id: string
-  - name: string
-  - description: string
-  - instructorId: string
-  - coverImageKey: string
-  - bannerImageKey: string
-  - createdAt: date
-
-- [x] Tag
-- - id: string
-  - value: string
-  - addedAt: Date
-
-- [x] CourseTag
-- - id: string
-  - courseId: string
-  - tagId: string
-
-- [x] Enrollment
-- - id: string
-  - studentId: string
-  - courseId: string
-  - completedClasses: string[] (Or a watched list 🤔)
-  - completedModules: string[] (Or a watched list 🤔)
-  - ocurredAt: date
-  - completedAt: date | null
-
-- [x] Evaluation
-- - id: string
-  - value: number (1 - 5)
-  - userId: string
-  - classId: string
-  - createdAt: date
-
-- [x] Module
-- - id: string
-  - name: string
-  - description: string
-  - moduleNumber: number
-  - courseId: string
-
-- [x] Image
-- - id: string
-  - imageName: string
-  - imageType: 'image/jpeg' | 'image/png'
-  - body: Buffer
-  - size: number
-  - storedAt: Date
-
-- [x] Certificate
-- - id: string
-  - imageId: string
-  - courseId: string
-
-- [x] StudentCertificate
-- - id: string
-  - certificateId: string
-  - studentId: string
-  - issuedAt: date
-
-- [x] Video
-- - id: string
-  - videoName: string
-  - videoType: 'video/mp4' | 'video/avi'
-  - body: Buffer
-  - duration: number
-  - size: number
-  - storedAt: Date
-
-- [x] Class
-- - id: string
-  - name: string
-  - description: string
-  - videoId: string
-  - classNumber: number
-  - moduleId: string
-
-  ## Storage Domain
-
-  - [x] File
-  - - id: string
-    - fileName: string
-    - filType: string
-    - body: Buffer
-    - fileKey: string
-    - size: number
-    - storedAt: Date
-
-## Initial Routes (must have changes)
+> This is just the initial documentation as we need to speed up development, it will be refactored after the project is presented
 
 ### Users
 - [x] GET /users/:userId - Get user details
@@ -254,32 +197,103 @@
 - [x] GET /enrollments/:enrollmentId/modules/completed - Fetch enrollment completed modules
 - [x] DELETE /enrollments/:enrollmentId - Cancel enrollment
 
+### File
+- [x] POST /files - Upload file (image or video), multipart/form-data
+
 ### Video
-- [x] POST /videos - Upload video
-- [x] GET /videos/:videoId - Get video details
+- [x] GET /videos/:fileKey - Get video details by fileKey
 
 ### Image
-- [x] POST /images - Upload image
-- [x] GET /images/:imageId - Get image details
+- [x] GET /images/:fileKey - Get image details by fileKey
 
-## Potential Refactoring or Updates:
+---
 
-- [x] Implement method for course repository.
-- [x] Refactor dependencies in all unit tests.
-- [x] Verify the usage of `Promise.all()` and apply destructuring where applicable.
-- [x] Review use cases and explore potential improvements.
-- [x] Ensure consistent usage of `new UniqueEntityId()` for entity IDs and rectify any inconsistencies.
-- [x] Evaluate the Enrollment entity for possible simplifications in managing modules and classes.
-- [x] Replace all asynchronous `forEach` loops with `Promise.all()` combined with asynchronous `map`.
-- [x] Update error handling in use cases.
-- [x] Implement sorting in `findMany` methods of Prisma repositories.
-- [x] Refactor database relation names.
-- [x] Revise mark as complete functionality for classes and modules system.
-- [x] Fix infinite calls to Prisma repositories in some mapper usage scenarios.
-- [x] Introduce domain events for Prisma repositories.
-- [ ] Implement mappers for mapping domain entities to DTOs.
-- [ ] Implement pagination.
-- [ ] Implement E2E tests.
-- [ ] Implement register user validations, like: email and cpf. - Could it be a value object?
-- [ ] Refactor error handling in controllers
-- [ ] Refactor the event handler class instance
+## How it works
+
+### Pre-requisites
+
+Before you begin, you will need to have the following tools installed on your machine:
+[Git](https://git-scm.com), [Node.js](https://nodejs.org/en/) and [yarn package manager](https://yarnpkg.com/).
+In addition, it is good to have an editor to work with the code like [VSCode](https://code.visualstudio.com/) and a REST client like [Insomnia](https://insomnia.rest/)
+
+You will also need to have [Docker](https://www.docker.com/) installed to run the
+postgres database with [Docker Compose](https://docs.docker.com/compose/)
+
+**it is very important that before running the project you configure the environment variables as indicated in the file: .env.example**
+
+#### Run the app
+
+```bash
+# Clone this repository
+$ git clone https://github.com/Artur-Poffo/Code-Spark-API.git
+
+# Access the project folder cmd/terminal
+$ cd Code-Spark-API
+
+# install the dependencies
+$ yarn
+
+# Inicialize the database
+$ yarn docker:init
+# This script should create and start a docker container with Postgres database
+
+# Then when you want to stop running docker, run:
+$ yarn docker:stop
+# Or just press Ctrl+c
+
+# When you want start the container again, run
+$ yarn docker:start
+
+# Remember to create the RSA keys for the JWT, instructions in the .env.example file
+
+# Run the application in development mode
+$ yarn start:dev
+
+# The server will start at port: 3333 - You can now test in Insomnia or another REST client: http://localhost:3333
+```
+
+#### Run tests
+
+```bash
+# Run unit tests
+$ yarn test:unit
+
+# Run unit tests in watch mode
+$ pnpm test:unit:watch
+
+# Run test coverage
+$ yarn test:cov
+```
+
+---
+
+## Tech Stack
+
+The following tools were used in the construction of the project:
+
+- **Node.js**
+- **TypeScript**
+- **tsx**
+- **tsup**
+- **Fastify**
+- **@Fastify/jwt**
+- **@Fastify/cookie**
+- **bcrypt**
+- **zod**
+- **prisma**
+- **vitest**
+- **supertest**
+- **Docker**
+
+> See the file  [package.json](https://github.com/Artur-Poffo/Code-Spark-API/blob/main/package.json)
+
+---
+
+## Author
+
+- _**Artur Poffo - Developer**_
+
+[![Linkedin Badge](https://img.shields.io/badge/-Artur-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/arturpoffo/)](https://www.linkedin.com/in/arturpoffo/)
+[![Gmail Badge](https://img.shields.io/badge/-arturpoffop@gmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:tgmarinho@gmail.com)](mailto:arturpoffop@gmail.com)
+
+---
