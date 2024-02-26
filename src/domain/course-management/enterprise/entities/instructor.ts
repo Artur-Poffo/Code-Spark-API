@@ -12,8 +12,6 @@ export class Instructor extends User<InstructorProps> {
     const instructor = new Instructor(
       {
         ...props,
-        profileImageKey: null,
-        bannerImageKey: null,
         registeredAt: props.registeredAt ?? new Date()
       },
       id

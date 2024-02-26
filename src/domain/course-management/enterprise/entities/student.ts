@@ -12,8 +12,6 @@ export class Student extends User<StudentProps> {
     const student = new Student(
       {
         ...props,
-        profileImageKey: null,
-        bannerImageKey: null,
         registeredAt: props.registeredAt ?? new Date()
       },
       id
