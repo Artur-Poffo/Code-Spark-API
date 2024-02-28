@@ -1,15 +1,15 @@
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { makeImage } from '../../../../../test/factories/make-image'
 import { InMemoryImagesRepository } from './../../../../../test/repositories/in-memory-images-repository'
-import { GetImageDetailsUseCase } from './get-image-details'
+import { GetImageDetailsByIdByIdUseCase } from './get-image-details-by-id'
 
 let inMemoryImagesRepository: InMemoryImagesRepository
-let sut: GetImageDetailsUseCase
+let sut: GetImageDetailsByIdByIdUseCase
 
 describe('Get image details use case', async () => {
   beforeEach(() => {
     inMemoryImagesRepository = new InMemoryImagesRepository()
-    sut = new GetImageDetailsUseCase(inMemoryImagesRepository)
+    sut = new GetImageDetailsByIdByIdUseCase(inMemoryImagesRepository)
   })
 
   it('should be able to get image details', async () => {
@@ -20,7 +20,7 @@ describe('Get image details use case', async () => {
     await inMemoryImagesRepository.create(image)
 
     const result = await sut.exec({
-      fileKey: image.imageKey
+      imageId: image.id.toString()
     })
 
     expect(result.isRight()).toBe(true)
@@ -33,7 +33,7 @@ describe('Get image details use case', async () => {
 
   it('should not be able to get image details of a inexistent image', async () => {
     const result = await sut.exec({
-      fileKey: 'inexistentImageKey'
+      imageId: 'inexistentImageId'
     })
 
     expect(result.isLeft()).toBe(true)

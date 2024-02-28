@@ -1,15 +1,15 @@
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { makeVideo } from '../../../../../test/factories/make-video'
 import { InMemoryVideosRepository } from './../../../../../test/repositories/in-memory-videos-repository'
-import { GetVideoDetailsUseCase } from './get-video-details'
+import { GetVideoDetailsByIdUseCase } from './get-video-details-by-id'
 
 let inMemoryVideosRepository: InMemoryVideosRepository
-let sut: GetVideoDetailsUseCase
+let sut: GetVideoDetailsByIdUseCase
 
 describe('Get video details use case', async () => {
   beforeEach(() => {
     inMemoryVideosRepository = new InMemoryVideosRepository()
-    sut = new GetVideoDetailsUseCase(inMemoryVideosRepository)
+    sut = new GetVideoDetailsByIdUseCase(inMemoryVideosRepository)
   })
 
   it('should be able to get video details', async () => {
@@ -20,7 +20,7 @@ describe('Get video details use case', async () => {
     await inMemoryVideosRepository.create(video)
 
     const result = await sut.exec({
-      fileKey: video.videoKey
+      videoId: video.id.toString()
     })
 
     expect(result.isRight()).toBe(true)
@@ -33,7 +33,7 @@ describe('Get video details use case', async () => {
 
   it('should not be able to get video details of a inexistent video', async () => {
     const result = await sut.exec({
-      fileKey: 'inexistentVideoKey'
+      videoId: 'inexistentVideoId'
     })
 
     expect(result.isLeft()).toBe(true)
